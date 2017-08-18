@@ -88,6 +88,10 @@
 							</div>
 							<div class="address-line">Address : <span class="address-txt"><?php echo ($customer_detail->address) ? $customer_detail->address : ''; ?></span>
 							</div>
+							<div class="return_lost">
+								<input type="radio" name="return_status" value="return" style="margin: -2px 0 0;" checked><span> Return </span> &nbsp;&nbsp;
+								<input type="radio" name="return_status" value="lost" style="margin: -2px 0 0;"> <span> Lost </span>
+							</div>
 						</div>
 						<div class="col-lg-6">
 							<div class="address-line">Date : <span class="deposit-date"><input type="text" name="date" id="datepicker" value="<?php echo $delivery_date; ?>" class="return_date" style="border-color: rgba(118, 118, 118, 0);height: 34px;margin: 0;"></span></div>
