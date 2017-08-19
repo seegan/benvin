@@ -24,7 +24,6 @@ function create_return() {
 	$params = array();
 	parse_str($_POST['data'], $params);
 
-	
 	$return_table 		= $wpdb->prefix.'shc_return';
 	$return_detail_table 	= $wpdb->prefix.'shc_return_detail';
 	$unloading_table 	= $wpdb->prefix.'shc_unloading';
@@ -37,11 +36,11 @@ function create_return() {
 	$transportation = (isset($params['transportation']) && $params['transportation'] != '') ? $params['transportation'] : 0.00;
 	$damage = (isset($params['damage']) && $params['damage'] != '') ? $params['damage'] : 0.00;
 	$total = (isset($params['total']) && $params['total'] != '') ? $params['total'] : 0.00;
-
+	$is_return = (isset($params['return_status']) && $params['return_status'] == 'return' ) ? 1 : 0;
 
 	if(isset($params['action']) && $params['action'] == 'new_return') {
 
-		$wpdb->insert($return_table, array('master_id' => $master_id, 'return_date' => $return_date) );
+		$wpdb->insert($return_table, array('master_id' => $master_id, 'return_date' => $return_date, 'is_return' => $is_return) );
 		$return_id = $wpdb->insert_id;
 
 		$wpdb->insert($unloading_table, array('return_id' => $return_id, 'master_id' => $master_id, 'unloading_charge' => $total, 'return_date' => $return_date ) );
@@ -74,7 +73,7 @@ function create_return() {
 
 		$return_id = isset($params['return_id']) ? $params['return_id'] : 0;
 
-		$wpdb->update($return_table, array('return_date' => $return_date), array('id' => $return_id) );
+		$wpdb->update($return_table, array('return_date' => $return_date, 'is_return' => $is_return), array('id' => $return_id) );
 		$wpdb->update($return_detail_table, array('active' => 0), array('return_id' => $return_id));
 
 
