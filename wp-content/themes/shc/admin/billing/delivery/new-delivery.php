@@ -121,7 +121,7 @@
 									<thead>
 										<tr>
 											<th rowspan="2" style="width:50px;" class="center-th"><div>S.No</div></th>
-											<th rowspan="2" class="center-th" style="min-width: 200px;"><div>Description</div></th>
+											<th rowspan="2" colspan="3" class="center-th" style="min-width: 200px;"><div>Description</div></th>
 											<th rowspan="2" class="center-th" style="width:100px;">
 												<div>Qty</div>
 											</th>
@@ -144,7 +144,7 @@
 												<input type="hidden" class="delivery_detail_id" name="delivery_detail_id" value="<?php echo $d_value->delivery_detail_id; ?>">
 												<input type="hidden" class="lot_id_orig" name="lot_id_orig" value="<?php echo $d_value->lot_id; ?>">
 											</td>
-											<td>
+											<td colspan="3">
 												<select name="lot_number" class="lot_id" tabindex="-1" aria-hidden="true" data-dvalue="<?php echo $d_value->lot_id; ?>" data-dtext="<?php echo $d_value->lot_no; ?>" data-dname="<?php echo $d_value->product_name; ?>" data-dtype="<?php echo $d_value->product_type; ?>"></select>
 											</td>
 											<td>
@@ -167,7 +167,7 @@
 												<input type="hidden" class="delivery_detail_id" name="delivery_detail_id" value="0">
 												<input type="hidden" class="lot_id_orig" name="lot_id_orig" value="0">
 											</td>
-											<td>
+											<td colspan="3">
 												<select name="lot_number" class="lot_id" tabindex="-1" aria-hidden="true"></select>
 											</td>
 											<td>
@@ -182,6 +182,48 @@
 									<?php
 										}
 									?>
+
+										<tr>
+											<td colspan="3">
+												<div style="width:400px;" class="align-txt">
+													<div style="float:left;width:150px;">Vehicle Number : </div>
+													<div>
+														<input type="text" class="vehicle_number" style="border: 0;border-bottom: 2px dotted;">
+													</div>
+												</div>
+											</td>
+											<td colspan="3">
+												
+											</td>
+										</tr>
+										<tr>
+											<td colspan="3">
+												<div style="width:400px;" class="align-txt">
+													<div style="float:left;width:150px;">Driver Name : </div>
+													<div>
+														<input type="text" class="driver_name" style="border: 0;border-bottom: 2px dotted;">
+													</div>
+												</div>
+											</td>
+											<td colspan="3">
+												
+											</td>
+										</tr>
+										<tr>
+											<td colspan="3">
+												<div style="width:400px;" class="align-txt">
+													<div style="float:left;width:150px;">Mobile Number : </div>
+													<div><input type="text" class="driver_mobile" style="border: 0;border-bottom: 2px dotted;"></div>
+												</div>
+											</td>
+											<td colspan="3">
+												
+											</td>
+										</tr>
+
+
+
+
 
 									</tbody>
 								</table>
