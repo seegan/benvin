@@ -27,6 +27,7 @@
 
 			if(isset($_GET['return_id'])) {
 				$return_items = (isset($return_data['return_detail']) && $return_data['return_detail'])  ? $return_data['return_detail'] : false;
+				$group_items = (isset($return_data['group_detail']) && $return_data['group_detail'])  ? $return_data['group_detail'] : false;
 				$return_detail = (isset($return_data['return_data']) && $return_data['return_data']) ? $return_data['return_data'] : false;
 
 				$return_date = (isset($return_data['return_data']->return_date)) ? date('Y-m-d', strtotime($return_data['return_data']->return_date)) : date('Y-m-d');
@@ -112,8 +113,9 @@
 							<div class="address-line">Phone : <span class="site-phone"><?php echo ($site_detail) ? $site_detail->phone_number : ''; ?></span></div>
 						</div>
 						<div class="col-lg-12">
-						
-							<div class="deposit-repeater return_detail" style="margin-top:20px;">
+
+
+							<div class="return_detail_group" style="margin-top:20px;">
 								<table class="table table-bordered" data-repeater-list="return_detail">
 									<thead>
 										<tr>
@@ -129,28 +131,27 @@
 									<?php
 
 
-										if($return_items  && count($return_items) > 0) {
+										if($group_items  && count($group_items) > 0) {
 											$i = 1;
-											foreach ($return_items as $r_value) {
+											foreach ($group_items as $g_value) {
 									?>
 										<tr class="div-table-row" data-repeater-item class="repeterin div-table-row" >
 											<td>
 												<div class="rowno align-txt"><?php echo $i; ?></div>
-												<input type="hidden" class="return_detail_id" name="return_detail_id" value="<?php echo $r_value->return_detail_id; ?>">
+												<input type="hidden" class="lot_id" name="lot_id" value="<?php echo $g_value->lot_id; ?>">
 											</td>
 											<td colspan="3">
 												<div class="align-txt">
-													<span><?php echo $r_value->product_name ?></span>
-													<span><?php echo $r_value->product_type ?></span>
+													<span><?php echo $g_value->product_name ?></span>
+													<span><?php echo $g_value->product_type ?></span>
 												</div>
 											</td>
 											<td>
 												<div class="align-txt">
-													<input type="text" name="qty" style="border-color: rgba(118, 118, 118, 0);height:34px;margin:0;" class="return_qty" value="<?php echo $r_value->qty; ?>" >
+													<input type="text" name="qty" style="border-color: rgba(118, 118, 118, 0);height:34px;margin:0;" class="return_qty" value="<?php echo $g_value->qty; ?>" >
 												</div>
 											</td>
 											<td>
-												<input type="hidden" name="unit_price" value="0" class="unit_price">
 												<a href="#" data-repeater-delete="" style="font-size: 16px;font-weight: bold; color: #ff0000;line-height: 30px;">x</a>
 												<input type="hidden" value="Delete">
 											</td>
@@ -204,6 +205,8 @@
 									</tbody>
 								</table>
 							</div>
+
+
 
 							<div style="float:right;">
 	                          	<?php 
