@@ -28,6 +28,19 @@ class BillReturn {
 		$return_table = $wpdb->prefix.'shc_return';
 		$return_detail = $wpdb->prefix.'shc_return_detail';
 
+
+
+
+/*( SELECT dd.* FROM ${delivery_detail} as dd JOIN ${delivery_table} as d ON d.id = dd.delivery_id  WHERE dd.master_id = ${master_id} AND dd.active = 1 AND d.active = 1 AND DATE(d.delivery_date) <= '${return_date}' ) as del
+
+LEFT JOIN
+
+(SELECT rd.delivery_detail_id, sum(rd.qty) tot_return FROM ${return_detail} as rd JOIN ${return_table} as r ON r.id= rd.return_id WHERE rd.master_id = ${master_id} AND rd.active = 1 AND r.active = 1 AND DATE(r.return_date) > '${return_date}' GROUP BY rd.delivery_detail_id) as ret
+
+ON del.id = ret.delivery_detail_id WHERE */
+
+
+
 	$return_query = "SELECT f.*, l.product_name, l.product_type FROM 
 
 ( SELECT del.*,
@@ -51,11 +64,11 @@ END )
 
 FROM 
 
-( SELECT dd.* FROM ${delivery_detail} as dd JOIN ${delivery_table} as d ON d.id = dd.delivery_id  WHERE dd.master_id = ${master_id} AND dd.active = 1 AND d.active = 1 AND DATE(d.delivery_date) <= '${return_date}' ) as del
+( SELECT dd.* FROM ${delivery_detail} as dd JOIN ${delivery_table} as d ON d.id = dd.delivery_id  WHERE dd.master_id = ${master_id} AND dd.active = 1 AND d.active = 1  ) as del
 
 LEFT JOIN
 
-(SELECT rd.delivery_detail_id, sum(rd.qty) tot_return FROM ${return_detail} as rd JOIN ${return_table} as r ON r.id= rd.return_id WHERE rd.master_id = ${master_id} AND rd.active = 1 AND r.active = 1 AND DATE(r.return_date) > '${return_date}' GROUP BY rd.delivery_detail_id) as ret
+(SELECT rd.delivery_detail_id, sum(rd.qty) tot_return FROM ${return_detail} as rd JOIN ${return_table} as r ON r.id= rd.return_id WHERE rd.master_id = ${master_id} AND rd.active = 1 AND r.active = 1 GROUP BY rd.delivery_detail_id) as ret
 
 ON del.id = ret.delivery_detail_id WHERE 
 
@@ -99,11 +112,11 @@ END )
 
 FROM 
 
-( SELECT dd.* FROM ${delivery_detail} as dd JOIN ${delivery_table} as d ON d.id = dd.delivery_id  WHERE dd.master_id = ${master_id} AND dd.active=1 AND d.active = 1 AND DATE(d.delivery_date) <= '${return_date}' ) as del
+( SELECT dd.* FROM ${delivery_detail} as dd JOIN ${delivery_table} as d ON d.id = dd.delivery_id  WHERE dd.master_id = ${master_id} AND dd.active=1 AND d.active = 1 ) as del
 
 LEFT JOIN
 
-(SELECT rd.delivery_detail_id, sum(rd.qty) tot_return FROM ${return_detail} as rd JOIN ${return_table} as r ON r.id= rd.return_id WHERE rd.master_id = ${master_id} AND rd.active = 1 AND r.active = 1 AND DATE(r.return_date) > '${return_date}' GROUP BY rd.delivery_detail_id) as ret
+(SELECT rd.delivery_detail_id, sum(rd.qty) tot_return FROM ${return_detail} as rd JOIN ${return_table} as r ON r.id= rd.return_id WHERE rd.master_id = ${master_id} AND rd.active = 1 AND r.active = 1 GROUP BY rd.delivery_detail_id) as ret
 
 ON del.id = ret.delivery_detail_id WHERE 
 
@@ -139,7 +152,7 @@ END )
 		
 
 		if($data['return_data'] = $wpdb->get_row($query)) {
-			$detail_query = "SELECT l.lot_no, l.product_name, l.product_type, f.* FROM ${lots_table} as l JOIN ( 
+			$return_detail_query = "SELECT l.lot_no, l.product_name, l.product_type, f.* FROM ${lots_table} as l JOIN ( 
     
     SELECT rd.id as return_detail_id, rd.lot_id, rd.qty FROM ${return_table} as r 
     
@@ -147,7 +160,17 @@ END )
 
 ) as f ON l.id = f.lot_id";
 
-			$data['return_detail'] = $wpdb->get_results($detail_query);
+
+			$group_detail_query = "SELECT l.lot_no, l.product_name, l.product_type, f.* FROM ${lots_table} as l JOIN ( 
+    
+    SELECT rd.lot_id, SUM(rd.qty) as qty  FROM ${return_table} as r 
+    
+    JOIN ${return_detail} rd ON r.id = rd.return_id WHERE r.id = ${return_id} AND rd.active = 1 AND r.active = 1 GROUP BY rd.lot_id
+
+) as f ON l.id = f.lot_id";
+
+			$data['return_detail'] = $wpdb->get_results($return_detail_query);
+			$data['group_detail'] = $wpdb->get_results($group_detail_query);
 			
 			return $data;
 		}

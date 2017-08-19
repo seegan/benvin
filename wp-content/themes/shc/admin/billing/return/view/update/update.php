@@ -8,6 +8,7 @@
 	$customer_id = '';
 	$site_id = '';
 
+	$return_detail = false;
 	$return_items = false;
 	$unloading_data = false;
 	$unloading_detail = false;
@@ -26,6 +27,7 @@
 
 			if(isset($_GET['return_id'])) {
 				$return_items = (isset($return_data['return_detail']) && $return_data['return_detail'])  ? $return_data['return_detail'] : false;
+				$return_detail = (isset($return_data['return_data']) && $return_data['return_data']) ? $return_data['return_data'] : false;
 
 				$return_date = (isset($return_data['return_data']->return_date)) ? date('Y-m-d', strtotime($return_data['return_data']->return_date)) : date('Y-m-d');
 				$return_time = (isset($return_data['return_data']->return_date)) ? date('H:i', strtotime($return_data['return_data']->return_date)) : date('H:i');
@@ -116,7 +118,7 @@
 									<thead>
 										<tr>
 											<th rowspan="2" style="width:50px;" class="center-th"><div>S.No</div></th>
-											<th rowspan="2" class="center-th" style="min-width: 200px;"><div>Description</div></th>
+											<th rowspan="2" colspan="3" class="center-th" style="min-width: 200px;"><div>Description</div></th>
 											<th rowspan="2" class="center-th" style="width:100px;">
 												<div>Qty</div>
 											</th>
@@ -136,7 +138,7 @@
 												<div class="rowno align-txt"><?php echo $i; ?></div>
 												<input type="hidden" class="return_detail_id" name="return_detail_id" value="<?php echo $r_value->return_detail_id; ?>">
 											</td>
-											<td>
+											<td colspan="3">
 												<div class="align-txt">
 													<span><?php echo $r_value->product_name ?></span>
 													<span><?php echo $r_value->product_type ?></span>
@@ -157,20 +159,45 @@
 												$i++;
 											}
 										}
+
 									?>
 										<tr>
+											<td colspan="2">
+												<div style="width:500px;" class="align-txt">
+													<div style="float:left;width:150px;">Vehicle Number : </div>
+													<div>
+													<input type="text" class="group_vehicle_number" name="vehicle_number" style="border: 0;border-bottom: 2px dotted;" value="<?php echo (isset($return_detail->vehicle_number)) ? $return_detail->vehicle_number : ''; ?>"></div>
+												</div>
+											</td>
 											<td colspan="2"><div class="align-txt"><div class="return-charge-txt">Unloading</div></div></td>
 											<td colspan="2"><div class="align-txt"><div class="return-charge-val">Rs. <input type="text" name="unloading" class="return-charge-input unloading" value="<?php echo getUnloadingData($_GET['return_id'], 'unloading') ?>"></div></div></td>
 										</tr>
 										<tr>
+											<td colspan="2">
+												<div style="width:500px;" class="align-txt">
+													<div style="float:left;width:150px;">Driver Name : </div>
+													<div>
+														<input type="text" class="group_driver_name" name="driver_name" style="border: 0;border-bottom: 2px dotted;" value="<?php echo (isset($return_detail->driver_name)) ? $return_detail->driver_name : ''; ?>">
+													</div>
+												</div>
+											</td>
 											<td colspan="2"><div class="align-txt"><div class="return-charge-txt">Transportation</div></div></td>
 											<td colspan="2"><div class="align-txt"><div class="return-charge-val">Rs. <input type="text" name="transportation" class="return-charge-input transportation" value="<?php echo getUnloadingData($_GET['return_id'], 'transportation') ?>"></div></div></td>
 										</tr>
 										<tr>
+											<td colspan="2">
+												<div style="width:500px;" class="align-txt">
+													<div style="float:left;width:150px;">Mobile Number : </div>
+													<div>
+														<input type="text" class="group_driver_mobile" name="driver_mobile" style="border: 0;border-bottom: 2px dotted;" value="<?php echo (isset($return_detail->driver_mobile)) ? $return_detail->driver_mobile : ''; ?>">
+													</div>
+												</div>
+											</td>
 											<td colspan="2"><div class="align-txt"><div class="return-charge-txt">Damage (as Per detail overleaf)</div></div></td>
 											<td colspan="2"><div class="align-txt"><div class="return-charge-val">Rs. <input type="text" name="damage" class="return-charge-input damage" value="<?php echo getUnloadingData($_GET['return_id'], 'damage') ?>"></div></div></td>
 										</tr>
 										<tr>
+											<td colspan="2"></td>
 											<td colspan="2"><div class="align-txt"><div class="return-charge-txt">Total</div></div></td>
 											<td colspan="2"><div class="align-txt"><div class="return-charge-val">Rs. <input type="text" name="total" class="return-charge-input total" value="<?php echo getUnloadingData($_GET['return_id'], 'total') ?>"></div></div></td>
 										</tr>

@@ -319,8 +319,12 @@
 													<div><input type="text" class="group_vehicle_number" name="vehicle_number" style="border: 0;border-bottom: 2px dotted;"></div>
 												</div>
 											</td>
-											<td colspan="2" style="width:300px;"><div class="align-txt"><div class="return-charge-txt">Unloading</div></div></td>
-											<td colspan="3"><div class="align-txt"><div class="return-charge-val">Rs. <input type="text" name="unloading" class="return-charge-input group_unloading"></div></div></td>
+											<td colspan="2" style="width:300px;">
+												<div class="align-txt"><div class="return-charge-txt">Unloading</div></div>
+											</td>
+											<td colspan="3">
+												<div class="align-txt"><div class="return-charge-val">Rs. <input type="text" name="unloading" class="return-charge-input group_unloading"></div></div>
+											</td>
 										</tr>
 										<tr>
 											<td colspan="3">
