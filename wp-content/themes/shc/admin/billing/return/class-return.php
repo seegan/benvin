@@ -28,10 +28,7 @@ class BillReturn {
 		$return_table = $wpdb->prefix.'shc_return';
 		$return_detail = $wpdb->prefix.'shc_return_detail';
 
-
-
 	$return_query = "SELECT f.*, l.product_name, l.product_type FROM 
-
 
 ( SELECT del.*,
 
@@ -50,7 +47,6 @@ ELSE ret.tot_return
 END )
     
 ) as return_pending
-
 
 
 FROM 

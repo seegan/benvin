@@ -112,7 +112,7 @@
 									<thead>
 										<tr>
 											<th rowspan="2" style="width:50px;" class="center-th"><div>S.No</div></th>
-											<th rowspan="2" class="center-th" style="min-width: 200px;"><div>Description</div></th>
+											<th rowspan="2" colspan="3" class="center-th" style="min-width: 200px;"><div>Description</div></th>
 											<th colspan="3" class="center-th" style="width:80px;">
 												<div>Qty</div>
 											</th>
@@ -135,7 +135,7 @@
 											<td>
 												<div class="rowno align-txt"><?php echo $i; ?></div>
 											</td>
-											<td>
+											<td colspan="3">
 												<div class="align-txt">
 													<span><?php echo $g_value->product_name ?></span>
 													<span><?php echo $g_value->product_type ?></span>
@@ -175,19 +175,38 @@
 										//echo (getUnloadingData('unloading'));
 									?>
 										<tr>
-											<td colspan="2"><div class="align-txt"><div class="return-charge-txt">Unloading</div></div></td>
+											<td colspan="2">
+												<div style="width:500px;" class="align-txt">
+													<div style="float:left;width:150px;">Vehicle Number : </div>
+													<div><input type="text" class="vehicle_number" style="border: 0;border-bottom: 2px dotted;"></div>
+												</div>
+											</td>
+											<td colspan="2" style="width:300px;"><div class="align-txt"><div class="return-charge-txt">Unloading</div></div></td>
 											<td colspan="3"><div class="align-txt"><div class="return-charge-val">Rs. <input type="text"  class="return-charge-input unloading"></div></div></td>
 										</tr>
 										<tr>
-											<td colspan="2"><div class="align-txt"><div class="return-charge-txt">Transportation</div></div></td>
+											<td colspan="2">
+												<div style="width:500px;" class="align-txt">
+													<div style="float:left;width:150px;">Driver Name : </div>
+													<div><input type="text" class="driver_name" style="border: 0;border-bottom: 2px dotted;"></div>
+												</div>
+											</td>
+											<td colspan="2" style="width:300px;"><div class="align-txt"><div class="return-charge-txt">Transportation</div></div></td>
 											<td colspan="3"><div class="align-txt"><div class="return-charge-val">Rs. <input type="text"  class="return-charge-input transportation"></div></div></td>
 										</tr>
 										<tr>
-											<td colspan="2"><div class="align-txt"><div class="return-charge-txt">Damage (as Per detail overleaf)</div></div></td>
+											<td colspan="2">
+												<div style="width:500px;" class="align-txt">
+													<div style="float:left;width:150px;">Mobile Number : </div>
+													<div><input type="text" class="driver_mobile" style="border: 0;border-bottom: 2px dotted;"></div>
+												</div>
+											</td>
+											<td colspan="2" style="width:300px;"><div class="align-txt"><div class="return-charge-txt">Damage (as Per detail overleaf)</div></div></td>
 											<td colspan="3"><div class="align-txt"><div class="return-charge-val">Rs. <input type="text"  class="return-charge-input damage"></div></div></td>
 										</tr>
 										<tr>
-											<td colspan="2"><div class="align-txt"><div class="return-charge-txt">Total</div></div></td>
+											<td colspan="2"><div style="width:500px;" class="align-txt"></div></td>
+											<td colspan="2" style="width:300px;"><div class="align-txt"><div class="return-charge-txt">Total</div></div></td>
 											<td colspan="3"><div class="align-txt"><div class="return-charge-val">Rs. <input type="text"  class="return-charge-input total"></div></div></td>
 										</tr>
 									</tbody>
@@ -226,7 +245,7 @@
 									<thead>
 										<tr>
 											<th rowspan="2" style="width:50px;" class="center-th"><div>S.No</div></th>
-											<th rowspan="2" class="center-th" style="min-width: 200px;"><div>Description</div></th>
+											<th rowspan="2" colspan="3" class="center-th" style="min-width: 200px;"><div>Description</div></th>
 											<th rowspan="2" class="center-th" style="width: 100px;"><div>Delivery Taken</div></th>
 											<th colspan="3" class="center-th" style="width:80px;">
 												<div>Qty</div>
@@ -240,8 +259,6 @@
 									</thead>
 									<tbody class="return-detail">
 									<?php
-
-
 										if($pending_items && isset($pending_items['pending_detail']) && count($pending_items['pending_detail']) > 0) {
 											$i = 1;
 											foreach ($pending_items['pending_detail'] as $p_value) {
@@ -251,7 +268,7 @@
 												<div class="rowno align-txt"><?php echo $i; ?></div>
 												<input type="hidden" class="delivery_detail_id" name="delivery_detail_id" value="<?php echo $p_value->id; ?>">
 											</td>
-											<td>
+											<td colspan="3">
 												<div class="align-txt">
 													<span><?php echo $p_value->product_name ?></span>
 													<span><?php echo $p_value->product_type ?></span>
@@ -296,19 +313,38 @@
 										//echo (getUnloadingData('unloading'));
 									?>
 										<tr>
-											<td colspan="3"><div class="align-txt"><div class="return-charge-txt">Unloading</div></div></td>
+											<td colspan="3">
+												<div style="width:500px;" class="align-txt">
+													<div style="float:left;width:150px;">Vehicle Number : </div>
+													<div><input type="text" class="group_vehicle_number" name="vehicle_number" style="border: 0;border-bottom: 2px dotted;"></div>
+												</div>
+											</td>
+											<td colspan="2" style="width:300px;"><div class="align-txt"><div class="return-charge-txt">Unloading</div></div></td>
 											<td colspan="3"><div class="align-txt"><div class="return-charge-val">Rs. <input type="text" name="unloading" class="return-charge-input group_unloading"></div></div></td>
 										</tr>
 										<tr>
-											<td colspan="3"><div class="align-txt"><div class="return-charge-txt">Transportation</div></div></td>
+											<td colspan="3">
+												<div style="width:500px;" class="align-txt">
+													<div style="float:left;width:150px;">Driver Name : </div>
+													<div><input type="text" class="group_driver_name" name="driver_name" style="border: 0;border-bottom: 2px dotted;"></div>
+												</div>
+											</td>
+											<td colspan="2" style="width:300px;"><div class="align-txt"><div class="return-charge-txt">Transportation</div></div></td>
 											<td colspan="3"><div class="align-txt"><div class="return-charge-val">Rs. <input type="text" name="transportation" class="return-charge-input group_transportation"></div></div></td>
 										</tr>
 										<tr>
-											<td colspan="3"><div class="align-txt"><div class="return-charge-txt">Damage (as Per detail overleaf)</div></div></td>
+											<td colspan="3">
+												<div style="width:500px;" class="align-txt">
+													<div style="float:left;width:150px;">Mobile Number : </div>
+													<div><input type="text" class="group_driver_mobile" name="driver_mobile" style="border: 0;border-bottom: 2px dotted;"></div>
+												</div>
+											</td>
+											<td colspan="2" style="width:300px;"><div class="align-txt"><div class="return-charge-txt">Damage (as Per detail overleaf)</div></div></td>
 											<td colspan="3"><div class="align-txt"><div class="return-charge-val">Rs. <input type="text" name="damage" class="return-charge-input group_damage"></div></div></td>
 										</tr>
 										<tr>
-											<td colspan="3"><div class="align-txt"><div class="return-charge-txt">Total</div></div></td>
+											<td colspan="3"></td>
+											<td colspan="2"><div class="align-txt"><div class="return-charge-txt">Total</div></div></td>
 											<td colspan="3"><div class="align-txt"><div class="return-charge-val">Rs. <input type="text" name="total" class="return-charge-input group_total"></div></div></td>
 										</tr>
 									</tbody>

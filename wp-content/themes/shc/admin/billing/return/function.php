@@ -37,10 +37,13 @@ function create_return() {
 	$damage = (isset($params['damage']) && $params['damage'] != '') ? $params['damage'] : 0.00;
 	$total = (isset($params['total']) && $params['total'] != '') ? $params['total'] : 0.00;
 	$is_return = (isset($params['return_status']) && $params['return_status'] == 'return' ) ? 1 : 0;
+	$vehicle_number = (isset($params['vehicle_number']) && $params['vehicle_number'] != '') ? $params['vehicle_number'] : '';
+	$driver_name = (isset($params['driver_name']) && $params['driver_name'] != '') ? $params['driver_name'] : '';
+	$driver_mobile = (isset($params['driver_mobile']) && $params['driver_mobile'] != '') ? $params['driver_mobile'] : '';
 
 	if(isset($params['action']) && $params['action'] == 'new_return') {
 
-		$wpdb->insert($return_table, array('master_id' => $master_id, 'return_date' => $return_date, 'is_return' => $is_return) );
+		$wpdb->insert($return_table, array('master_id' => $master_id, 'return_date' => $return_date, 'is_return' => $is_return, 'vehicle_number' => $vehicle_number, 'driver_name' => $driver_name, 'driver_mobile' => $driver_mobile) );
 		$return_id = $wpdb->insert_id;
 
 		$wpdb->insert($unloading_table, array('return_id' => $return_id, 'master_id' => $master_id, 'unloading_charge' => $total, 'return_date' => $return_date ) );
@@ -73,7 +76,7 @@ function create_return() {
 
 		$return_id = isset($params['return_id']) ? $params['return_id'] : 0;
 
-		$wpdb->update($return_table, array('return_date' => $return_date, 'is_return' => $is_return), array('id' => $return_id) );
+		$wpdb->update($return_table, array('return_date' => $return_date, 'is_return' => $is_return, 'vehicle_number' => $vehicle_number, 'driver_name' => $driver_name, 'driver_mobile' => $driver_mobile), array('id' => $return_id) );
 		$wpdb->update($return_detail_table, array('active' => 0), array('return_id' => $return_id));
 
 
