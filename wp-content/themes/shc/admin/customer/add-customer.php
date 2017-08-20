@@ -83,10 +83,10 @@
 														<div>Site Name</div>
 													</th>
 													<th>
-														<div>Phone Number</div>
+														<div>Contact Details</div>
 													</th>
-													<th>
-														<div>Site Address</div>
+													<th style="width: 300px;">
+														<div>GST Detail</div>
 													</th>
 													<th style="width:50px;">
 														<div>Action</div>
@@ -105,16 +105,24 @@
 													</td>
 													<td>
 														<div class="align-txt customer-phone-txt">
-															<input type="text" name="site_name" style="width:100%;" value="<?php echo $s_value->site_name;?>">
+															<input type="text" name="site_name" style="width:100%;" value="<?php echo $s_value->site_name;?>" placeholder="Site Name">
 														</div>
-													</td>
-													<td>
 														<div class="align-txt customer-phone-txt">
-															<input type="text" name="site_phone" style="width:100%;" value="<?php echo $s_value->phone_number;?>">
+															<input type="text" name="site_phone" style="width:100%;" value="<?php echo $s_value->phone_number;?>" placeholder="Site Phone Number">
 														</div>
+														<textarea name="site_address" style="width:100%;height:100px;" placeholder="Site Address"><?php echo $s_value->site_address;?></textarea>
 													</td>
 													<td>
-														<textarea name="site_address" style="width:100%;height:100px;"><?php echo $s_value->site_address;?></textarea>
+														<textarea name="extra_contact" style="width:100%;min-height:180px;" placeholder="Some Name : 987654321,"><?php echo $s_value->extra_contact;?></textarea>
+													</td>
+													<td>
+														<div>
+															GST Number : <input type="text" name="gst_number" placeholder="GST Number" value="<?php echo $s_value->gst_number;?>">
+														</div>
+														<div style="line-height: 45px;">
+															GST For : <input type="radio" name="gst_for" value="cgst" style="margin-top: -2px;" <?php echo ($s_value->gst_for == 'cgst') ? 'checked' : '';?>> CGST
+														<input type="radio" name="gst_for" value="igst" style="margin-top: -2px;" <?php echo ($s_value->gst_for == 'igst') ? 'checked' : '';?>> IGST
+														</div>
 													</td>
 													<td>
 														<div class="customer-phone-txt">
@@ -136,16 +144,26 @@
 													</td>
 													<td>
 														<div class="align-txt customer-phone-txt">
-															<input type="text" name="site_name" style="width:100%;" value="">
+															<input type="text" name="site_name" style="width:100%;" value="" placeholder="Site Name">
 														</div>
+														<div class="align-txt customer-phone-txt">
+															<input type="text" name="site_phone" style="width:100%;" value="" placeholder="Site Phone Number">
+														</div>
+														<textarea name="site_address" style="width:100%;height:100px;" placeholder="Site Address"></textarea>
 													</td>
 													<td>
 														<div class="align-txt customer-phone-txt">
-															<input type="text" name="site_phone" style="width:100%;" value="">
+															<textarea name="extra_contact" style="width:100%;min-height:180px;" placeholder="Some Name : 987654321,"></textarea>
 														</div>
 													</td>
 													<td>
-														<textarea name="site_address" style="width:100%;height:100px;"></textarea>
+														<div>
+															GST Number : <input type="text" name="gst_number" placeholder="GST Number" value="">
+														</div>
+														<div style="line-height: 45px;">
+															GST For : <input type="radio" name="gst_for" value="cgst" style="margin-top: -2px;" checked> CGST
+														<input type="radio" name="gst_for" value="igst" style="margin-top: -2px;"> IGST
+														</div>
 													</td>
 													<td>
 														<div class="customer-phone-txt">
@@ -173,6 +191,7 @@
 							if($site_detail) {
 						?>
 						<div class="col-lg-6">
+							<input type="hidden" value="without_special_price_lot" class="lot_search_action">
 							<div class="deposit-repeater special_price" style="margin-top:20px;">
 								<table class="table table-bordered" data-repeater-list="special_price">
 									<thead>
@@ -210,7 +229,7 @@
 											</td>
 											<td>
 												<select name="site_id" class="site_id">
-													<option <?php echo ($sp_value->site_id == 0) ? selected : ''; ?>>All Site</option>
+													<option <?php echo ($sp_value->site_id == 0) ? selected : '0'; ?>>All Site</option>
 													<?php 
 														if($site_detail) {
 															foreach ($site_detail as $d_value) {
@@ -245,7 +264,7 @@
 											</td>
 											<td>
 												<select name="site_id" class="site_id">
-													<option value="">All Site</option>
+													<option value="0">All Site</option>
 													<?php 
 														if($site_detail) {
 															foreach ($site_detail as $d_value) {

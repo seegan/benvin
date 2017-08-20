@@ -88,14 +88,14 @@ function create_site() {
 	$customer_id = $params['customer_id'];
 
 
-	$wpdb->update($site_table, array('active' => 0), array('customer_id' => $customer_id) );
+	//$wpdb->update($site_table, array('active' => 0), array('customer_id' => $customer_id) );
 	if(isset($params['site_address']) ) {
 		foreach ($params['site_address'] as $s_value) {
 
 			if($s_value['site_id'] == 0) {
-				$wpdb->insert($site_table, array('customer_id' => $customer_id, 'site_name' => $s_value['site_name'], 'site_address' => $s_value['site_address'], 'phone_number' => $s_value['site_phone']));
+				$wpdb->insert($site_table, array('customer_id' => $customer_id, 'site_name' => $s_value['site_name'], 'site_address' => $s_value['site_address'], 'phone_number' => $s_value['site_phone'], 'extra_contact' => $s_value['extra_contact'], 'gst_number' => $s_value['gst_number'] , 'gst_for' => $s_value['gst_for'] ));
 			} else {
-				$wpdb->update($site_table, array( 'site_address' => $s_value['site_address'], 'site_name' => $s_value['site_name'], 'phone_number' => $s_value['site_phone'], 'active' => 1), array('id' => $s_value['site_id']));
+				$wpdb->update($site_table, array( 'site_address' => $s_value['site_address'], 'site_name' => $s_value['site_name'], 'phone_number' => $s_value['site_phone'],'extra_contact' => $s_value['extra_contact'], 'gst_number' => $s_value['gst_number'] , 'gst_for' => $s_value['gst_for'], 'active' => 1), array('id' => $s_value['site_id']));
 			}
 
 		}

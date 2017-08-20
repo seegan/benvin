@@ -125,12 +125,11 @@ function populate_select2(this_data = '', v) {
           dataType: 'json',
           data: function(params) {
             return {
-              action: 'get_lot_data', // search term
+              action: ( jQuery('.lot_search_action').val() ) ? jQuery('.lot_search_action').val() : 'get_lot_data', // search term
               page: 1,
               search_key: params.term,
               customer_id: jQuery('.customer_id').val(),
               site_id : jQuery('.site_id').val(),
-              
             };
           },
           processResults: function(data) {

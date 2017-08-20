@@ -4964,9 +4964,6 @@ input[type=text].to_date:hover {
     letter-spacing: 1px
 }
 
-.customer-phone-txt {
-    line-height: 100px;
-}
 
 .address-line .select2-container--default .select2-selection--single, .customer-name .select2-container--default .select2-selection--single {
     border: 1px solid #aaa !important;

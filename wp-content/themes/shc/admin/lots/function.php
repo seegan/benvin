@@ -84,5 +84,24 @@ add_action( 'wp_ajax_nopriv_lot_filter', 'lot_filter' );
 
 
 
+function without_special_price_lot($value='')
+{
+	$lot_id = $_POST['search_key'];
+
+	$data['success'] = 0;
+	global $wpdb;
+	$lots_table = $wpdb->prefix.'shc_lots';
+	$query = "SELECT id, lot_no, product_name, product_type, tax1, unit_price FROM ${lots_table} l WHERE ( lot_no LIKE '${lot_id}%' OR product_name LIKE '${lot_id}%' )";
+
+	if( $data['items'] = $wpdb->get_results( $query, ARRAY_A ) ) {
+		$data['success'] = 1;
+	}
+
+	echo json_encode($data);
+	die();
+}
+add_action( 'wp_ajax_without_special_price_lot', 'without_special_price_lot' );
+add_action( 'wp_ajax_nopriv_without_special_price_lot', 'without_special_price_lot' );
+
 
 ?>
