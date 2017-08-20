@@ -164,10 +164,10 @@
 									?>
 										<tr>
 											<td colspan="2">
-												<div style="width:500px;" class="align-txt">
-													<div style="float:left;width:150px;">Vehicle Number : </div>
+												<div class="align-txt">
+													<div style="float:left;width:150px; line-height: 15px;">Vehicle Number : </div>
 													<div>
-													<input type="text" class="group_vehicle_number" name="vehicle_number" style="border: 0;border-bottom: 2px dotted;" value="<?php echo (isset($return_detail->vehicle_number)) ? $return_detail->vehicle_number : ''; ?>"></div>
+													<input type="text" class="group_vehicle_number" name="vehicle_number" style="border: 0;border-bottom: 2px dotted;padding: 0;" value="<?php echo (isset($return_detail->vehicle_number)) ? $return_detail->vehicle_number : ''; ?>"></div>
 												</div>
 											</td>
 											<td colspan="2"><div class="align-txt"><div class="return-charge-txt">Unloading</div></div></td>
@@ -175,10 +175,10 @@
 										</tr>
 										<tr>
 											<td colspan="2">
-												<div style="width:500px;" class="align-txt">
-													<div style="float:left;width:150px;">Driver Name : </div>
+												<div class="align-txt">
+													<div style="float:left;width:150px; line-height: 15px;">Driver Name : </div>
 													<div>
-														<input type="text" class="group_driver_name" name="driver_name" style="border: 0;border-bottom: 2px dotted;" value="<?php echo (isset($return_detail->driver_name)) ? $return_detail->driver_name : ''; ?>">
+														<input type="text" class="group_driver_name" name="driver_name" style="border: 0;border-bottom: 2px dotted;padding: 0;" value="<?php echo (isset($return_detail->driver_name)) ? $return_detail->driver_name : ''; ?>">
 													</div>
 												</div>
 											</td>
@@ -187,10 +187,10 @@
 										</tr>
 										<tr>
 											<td colspan="2">
-												<div style="width:500px;" class="align-txt">
-													<div style="float:left;width:150px;">Mobile Number : </div>
+												<div class="align-txt">
+													<div style="float:left;width:150px; line-height: 15px;">Mobile Number : </div>
 													<div>
-														<input type="text" class="group_driver_mobile" name="driver_mobile" style="border: 0;border-bottom: 2px dotted;" value="<?php echo (isset($return_detail->driver_mobile)) ? $return_detail->driver_mobile : ''; ?>">
+														<input type="text" class="group_driver_mobile" name="driver_mobile" style="border: 0;border-bottom: 2px dotted;padding: 0;" value="<?php echo (isset($return_detail->driver_mobile)) ? $return_detail->driver_mobile : ''; ?>">
 													</div>
 												</div>
 											</td>
@@ -210,12 +210,12 @@
 
 							<div style="float:right;">
 	                          	<?php 
-	                          		if($master_data) {
+	                          		/*if($master_data) {
 	                          			echo "<input type='hidden' name='master_id' value='".$master_data['master_data']->id."'>";
 	                          			echo "<input type='hidden' name='return_id' value='".$_GET['return_id']."'>";
 	                          			echo "<input type='hidden' name='action' class='action' value='update_return'>";
 										echo "<button type='submit' class='btn btn-success create_return'>Update Return</button>";
-	                          		}
+	                          		}*/
 	                          	?>
 	                       	</div>
 

@@ -4,7 +4,12 @@
 	$site_detail = false;
 
 	$delivery_data = false;
-	
+
+	$vehicle_number = false;
+	$driver_name = false;
+	$driver_mobile = false;
+
+
 	$customer_id = '';
 	$site_id = '';
 
@@ -28,12 +33,19 @@
 
 			if(isset($_GET['delivery_id'])) {
 				$delivery_data = getDeliveryData($_GET['delivery_id']);
-
 				$delivery_date = date('Y-m-d', strtotime($delivery_data['delivery_data']->delivery_date));
 				$delivery_time = date('H:i', strtotime($delivery_data['delivery_data']->delivery_date));
+
+
+
+				
+				$vehicle_number = isset($delivery_data['delivery_data']->vehicle_number) ? $delivery_data['delivery_data']->vehicle_number : false; 
+				$driver_name = isset($delivery_data['delivery_data']->driver_name) ? $delivery_data['delivery_data']->driver_name : false; 
+				$driver_mobile = isset($delivery_data['delivery_data']->driver_mobile) ? $delivery_data['delivery_data']->driver_mobile : false; 
 			}
 		}
 	}
+
 ?>
 <style type="text/css">
 	.address-line, .customer-name {
@@ -105,17 +117,19 @@
 							</div>
 						</div>
 						<div class="col-lg-6">
-							<div class="address-line">Date : <span class="deposit-date"><input type="text" name="date" id="datepicker" value="<?php echo $delivery_date; ?>" style="border-color: rgba(118, 118, 118, 0);height: 34px;margin: 0;"></span></div>
-							<div class="address-line">Time : <span class="deposit-time"><input type="time" name="time" value="<?php echo $delivery_time; ?>" style="border-color: rgba(118, 118, 118, 0);height: 34px;margin: 0;"></span></div>
 							<div class="address-line">Site : 
 								<select type="text" name="delivery_site_name" class="delivery_site_name" data-dvalue="<?php echo ($site_detail) ? $site_detail->id : ''; ?>"  data-sitename="<?php echo ($site_detail) ? $site_detail->site_name : ''; ?>">
 								</select>
 								<input type="hidden" class="site_id" value="<?php echo ($site_detail) ? $site_detail->id : 0; ?>">
 							</div>
+							<div class="address-line">Date : <span class="deposit-date"><input type="text" name="date" id="datepicker" value="<?php echo $delivery_date; ?>" style="border-color: rgba(118, 118, 118, 0);height: 34px;margin: 0;"></span></div>
+							<div class="address-line">Time : <span class="deposit-time"><input type="time" name="time" value="<?php echo $delivery_time; ?>" style="border-color: rgba(118, 118, 118, 0);height: 34px;margin: 0;"></span></div>
 							<div class="address-line">Phone : <span class="site-phone"><?php echo ($site_detail) ? $site_detail->phone_number : ''; ?></span></div>
 						</div>
 						<div class="col-lg-12">
-						
+							<?php
+								if($master_data) {
+							?>
 							<div class="deposit-repeater delivery_detail" style="margin-top:20px;">
 								<table class="table table-bordered" data-repeater-list="delivery_detail">
 									<thead>
@@ -132,8 +146,6 @@
 									</thead>
 									<tbody>
 									<?php
-
-
 										if($delivery_data && isset($delivery_data['delivery_detail']) && count($delivery_data['delivery_detail']) > 0) {
 											$i = 1;
 											foreach ($delivery_data['delivery_detail'] as $d_value) {
@@ -182,13 +194,14 @@
 									<?php
 										}
 									?>
-
+									</tbody>
+									<tfoot>
 										<tr>
 											<td colspan="3">
 												<div style="width:400px;" class="align-txt">
 													<div style="float:left;width:150px;">Vehicle Number : </div>
-													<div>
-														<input type="text" class="vehicle_number" style="border: 0;border-bottom: 2px dotted;">
+													<div style="float: left;">
+														<input type="text" name="vehicle_number" class="vehicle_number" style="border: 0;border-bottom: 2px dotted;" value="<?php echo ($vehicle_number) ? $vehicle_number : ''; ?>">
 													</div>
 												</div>
 											</td>
@@ -200,8 +213,8 @@
 											<td colspan="3">
 												<div style="width:400px;" class="align-txt">
 													<div style="float:left;width:150px;">Driver Name : </div>
-													<div>
-														<input type="text" class="driver_name" style="border: 0;border-bottom: 2px dotted;">
+													<div style="float: left;">
+														<input type="text" name="driver_name" class="driver_name" style="border: 0;border-bottom: 2px dotted;" value="<?php echo ($driver_name) ? $driver_name : ''; ?>">
 													</div>
 												</div>
 											</td>
@@ -213,19 +226,16 @@
 											<td colspan="3">
 												<div style="width:400px;" class="align-txt">
 													<div style="float:left;width:150px;">Mobile Number : </div>
-													<div><input type="text" class="driver_mobile" style="border: 0;border-bottom: 2px dotted;"></div>
+													<div style="float: left;">
+														<input type="text" name="driver_mobile" class="driver_mobile" style="border: 0;border-bottom: 2px dotted;" value="<?php echo ($driver_mobile) ? $driver_mobile : ''; ?>">
+													</div>
 												</div>
 											</td>
 											<td colspan="3">
 												
 											</td>
 										</tr>
-
-
-
-
-
-									</tbody>
+									</tfoot>
 								</table>
 
 								<ul class="icons-labeled">
@@ -235,20 +245,20 @@
 
 							<div style="float:right;">
 	                          	<?php 
-	                          		if($master_data) {
-	                          			echo "<input type='hidden' name='master_id' value='".$master_data['master_data']->id."'>";
-										echo "<button type='submit' class='btn btn-success create_delivery'>Update Delivery</button>";
+                          			echo "<input type='hidden' name='master_id' value='".$master_data['master_data']->id."'>";
+									echo "<button type='submit' class='btn btn-success create_delivery'>Update Delivery</button>";
 
-	                          			if(isset($delivery_data['delivery_data']) && $delivery_data['delivery_data']) {
-	                          				echo "<input type='hidden' name='delivery_id' value='".$delivery_data['delivery_data']->id."'>";
-	                          				echo "<input type='hidden' name='action' class='action' value='update_delivery'>";
-	                          			} else {
-	                          				echo "<input type='hidden' name='action' class='action' value='new_delivery'>";
-	                          			}
-	                          		}
-	                          	?>
+                          			if(isset($delivery_data['delivery_data']) && $delivery_data['delivery_data']) {
+                          				echo "<input type='hidden' name='delivery_id' value='".$delivery_data['delivery_data']->id."'>";
+                          				echo "<input type='hidden' name='action' class='action' value='update_delivery'>";
+                          			} else {
+                          				echo "<input type='hidden' name='action' class='action' value='new_delivery'>";
+                          			}	                          	
+                          		?>
 	                       	</div>
-
+	                       	<?php
+	                       		}
+	                       	?>
 						</div>
 					</div>
 				</div>

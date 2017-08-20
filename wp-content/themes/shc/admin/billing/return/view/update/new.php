@@ -176,9 +176,9 @@
 									?>
 										<tr>
 											<td colspan="2">
-												<div style="width:500px;" class="align-txt">
-													<div style="float:left;width:150px;">Vehicle Number : </div>
-													<div><input type="text" class="vehicle_number" style="border: 0;border-bottom: 2px dotted;"></div>
+												<div class="align-txt">
+													<div style="float:left;width:150px;line-height: 15px;">Vehicle Number : </div>
+													<div><input type="text" class="vehicle_number" style="border: 0;border-bottom: 2px dotted;padding: 0"></div>
 												</div>
 											</td>
 											<td colspan="2" style="width:300px;"><div class="align-txt"><div class="return-charge-txt">Unloading</div></div></td>
@@ -186,9 +186,9 @@
 										</tr>
 										<tr>
 											<td colspan="2">
-												<div style="width:500px;" class="align-txt">
-													<div style="float:left;width:150px;">Driver Name : </div>
-													<div><input type="text" class="driver_name" style="border: 0;border-bottom: 2px dotted;"></div>
+												<div class="align-txt">
+													<div style="float:left;width:150px;line-height: 15px;">Driver Name : </div>
+													<div><input type="text" class="driver_name" style="border: 0;border-bottom: 2px dotted;padding: 0"></div>
 												</div>
 											</td>
 											<td colspan="2" style="width:300px;"><div class="align-txt"><div class="return-charge-txt">Transportation</div></div></td>
@@ -196,16 +196,16 @@
 										</tr>
 										<tr>
 											<td colspan="2">
-												<div style="width:500px;" class="align-txt">
-													<div style="float:left;width:150px;">Mobile Number : </div>
-													<div><input type="text" class="driver_mobile" style="border: 0;border-bottom: 2px dotted;"></div>
+												<div class="align-txt">
+													<div style="float:left;width:150px;line-height: 15px;">Mobile Number : </div>
+													<div><input type="text" class="driver_mobile" style="border: 0;border-bottom: 2px dotted;padding: 0"></div>
 												</div>
 											</td>
 											<td colspan="2" style="width:300px;"><div class="align-txt"><div class="return-charge-txt">Damage (as Per detail overleaf)</div></div></td>
 											<td colspan="3"><div class="align-txt"><div class="return-charge-val">Rs. <input type="text"  class="return-charge-input damage"></div></div></td>
 										</tr>
 										<tr>
-											<td colspan="2"><div style="width:500px;" class="align-txt"></div></td>
+											<td colspan="2"><div class="align-txt"></div></td>
 											<td colspan="2" style="width:300px;"><div class="align-txt"><div class="return-charge-txt">Total</div></div></td>
 											<td colspan="3"><div class="align-txt"><div class="return-charge-val">Rs. <input type="text"  class="return-charge-input total"></div></div></td>
 										</tr>
@@ -314,9 +314,9 @@
 									?>
 										<tr>
 											<td colspan="3">
-												<div style="width:500px;" class="align-txt">
-													<div style="float:left;width:150px;">Vehicle Number : </div>
-													<div><input type="text" class="group_vehicle_number" name="vehicle_number" style="border: 0;border-bottom: 2px dotted;"></div>
+												<div class="align-txt">
+													<div style="float:left;width:150px;line-height: 15px;">Vehicle Number : </div>
+													<div><input type="text" class="group_vehicle_number" name="vehicle_number" style="border: 0;border-bottom: 2px dotted;padding: 0;"></div>
 												</div>
 											</td>
 											<td colspan="2" style="width:300px;">
@@ -328,9 +328,9 @@
 										</tr>
 										<tr>
 											<td colspan="3">
-												<div style="width:500px;" class="align-txt">
-													<div style="float:left;width:150px;">Driver Name : </div>
-													<div><input type="text" class="group_driver_name" name="driver_name" style="border: 0;border-bottom: 2px dotted;"></div>
+												<div class="align-txt">
+													<div style="float:left;width:150px;line-height: 15px;">Driver Name : </div>
+													<div><input type="text" class="group_driver_name" name="driver_name" style="border: 0;border-bottom: 2px dotted;padding: 0;"></div>
 												</div>
 											</td>
 											<td colspan="2" style="width:300px;"><div class="align-txt"><div class="return-charge-txt">Transportation</div></div></td>
@@ -338,9 +338,9 @@
 										</tr>
 										<tr>
 											<td colspan="3">
-												<div style="width:500px;" class="align-txt">
-													<div style="float:left;width:150px;">Mobile Number : </div>
-													<div><input type="text" class="group_driver_mobile" name="driver_mobile" style="border: 0;border-bottom: 2px dotted;"></div>
+												<div class="align-txt">
+													<div style="float:left;width:150px;line-height: 15px;">Mobile Number : </div>
+													<div><input type="text" class="group_driver_mobile" name="driver_mobile" style="border: 0;border-bottom: 2px dotted;padding: 0;"></div>
 												</div>
 											</td>
 											<td colspan="2" style="width:300px;"><div class="align-txt"><div class="return-charge-txt">Damage (as Per detail overleaf)</div></div></td>

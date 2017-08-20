@@ -31,10 +31,14 @@ function create_delivery() {
 	$last_billed_date = date( 'Y-m-d', strtotime( $delivery_date . ' -1 day' ) );
 	$master_id = $params['master_id'];
 
+	$vehicle_number = isset($params['vehicle_number']) ? $params['vehicle_number'] : '';
+	$driver_name = isset($params['driver_name']) ? $params['driver_name'] : '';
+	$driver_mobile = isset($params['driver_mobile']) ? $params['driver_mobile'] : '';
+
 
 	if(isset($params['action']) && $params['action'] == 'new_delivery') {
 
-		$wpdb->insert($delivery_table, array('master_id' => $master_id, 'delivery_date' => $delivery_date, 'last_billed_date' => $last_billed_date ) );
+		$wpdb->insert($delivery_table, array('master_id' => $master_id, 'delivery_date' => $delivery_date, 'last_billed_date' => $last_billed_date, 'vehicle_number' => $vehicle_number , 'driver_name' => $driver_name , 'driver_mobile' => $driver_mobile  ) );
 		$delivery_id = $wpdb->insert_id;
 
 		if($delivery_id) {
@@ -59,7 +63,7 @@ function create_delivery() {
 		$delivery_id = isset($params['delivery_id']) ? $params['delivery_id'] : 0;
 
 
-		$wpdb->update($delivery_table, array('delivery_date' => $delivery_date, 'last_billed_date' => $last_billed_date ), array('id' => $delivery_id) );
+		$wpdb->update($delivery_table, array('delivery_date' => $delivery_date, 'last_billed_date' => $last_billed_date, 'vehicle_number' => $vehicle_number , 'driver_name' => $driver_name , 'driver_mobile' => $driver_mobile ), array('id' => $delivery_id) );
 
 		$wpdb->update($delivery_detail_table, array('active' => 0), array('delivery_id' => $delivery_id));
 

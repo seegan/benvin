@@ -48,14 +48,23 @@ if(isset($_GET['id']) && $lot = get_lot($_GET['id']) ) {
 						</div>
 						<div class="divider-dashed"></div>
 						<div class="form-group">
-							<label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Vat % <span class="required">*</span>
+							<label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Buying Price<span class="required"></span>
 							</label>
 							<div class="col-md-6 col-sm-6 col-xs-12">
-								<input type="text" id="tax1" name="tax1" required="required" class="form-control col-md-7 col-xs-12" value="<?php echo ($lot) ? $lot->tax1 : ''; ?>">
+								<input type="text" id="buying_price" name="buying_price" required="required" class="form-control col-md-7 col-xs-12" value="<?php echo ($lot) ? $lot->buying_price : ''; ?>">
 							</div>
 						</div>
 						<div class="divider-dashed"></div>
 						<div class="form-group">
+							<label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Weight<span class="required"></span>
+							</label>
+							<div class="col-md-6 col-sm-6 col-xs-12">
+								<input type="text" id="weight" name="weight" required="required" class="form-control col-md-7 col-xs-12" value="<?php echo ($lot) ? $lot->weight : ''; ?>">
+							</div>
+						</div>
+						<div class="divider-dashed"></div>
+						<div class="form-group">
+							<input type="hidden" id="tax1" name="tax1" required="required" class="form-control col-md-7 col-xs-12" value="<?php echo ($lot) ? $lot->tax1 : 0; ?>">
 							<div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
 	                          	<button class="btn btn-primary" type="button">Cancel</button>
 							  	<button class="btn btn-primary" type="reset">Reset</button>
