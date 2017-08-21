@@ -48,7 +48,6 @@ function create_billing() {
 	$hiring_detail_table = $wpdb->prefix.'shc_hiring_detail';
 	parse_str($_POST['data'], $params);
 
-
 	//unset($params['action']);
 	$master_id = isset($params['master_id']) ? $params['master_id'] : 0;
 
@@ -59,10 +58,22 @@ function create_billing() {
 			'bill_to'  => isset($params['master_id']) ? $params['bill_to'] : '0000:00:00',
 			'return_ids' => isset($params['master_id']) ? $params['transport_return_id'] : '',
 			'transportation_charge' => isset($params['master_id']) ? $params['unloading_total'] : 0.00,
+
+
+			'sub_tot' => isset($params['sub_tot']) ? $params['sub_tot'] : 0.00,
+			'gst_for' => isset($params['gst_for']) ? $params['gst_for'] : 'cgst',
+			'igst_amt' => isset($params['gst_igst']) ? $params['gst_igst'] : 0.00,
+			'cgst_amt' => isset($params['gst_cgst']) ? $params['gst_cgst'] : 0.00,
+			'sgst_amt' => isset($params['gst_sgst']) ? $params['gst_sgst'] : 0.00,
+			'gst_include_tot' => isset($params['gst_include_total']) ? $params['gst_include_total'] : 0.00,
+			'round_off' => isset($params['round_off']) ? $params['round_off'] : 0.00,
 			'hiring_total' => isset($params['master_id']) ? $params['hiring_tot'] : 0.00,
+
 			'bill_date' => isset($params['master_id']) ? $params['billing_date'] : '0000:00:00',
 			'bill_time' => isset($params['master_id']) ? $params['billing_time'] : '00:00',
 		);
+
+
 
 	if($params['action'] == 'create_billing') {
 

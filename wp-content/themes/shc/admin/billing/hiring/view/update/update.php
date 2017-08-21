@@ -196,29 +196,57 @@
 											</td>
 											<td>
 												<div class="align-txt">
-													<span class=""><?php echo $bill_data['hiring_data']->hiring_total ?></span>
+													<span class=""><?php echo $bill_data['hiring_data']->sub_tot ?></span>
+												</div>
+											</td>
+										</tr>
+
+										<?php
+											if( isset($bill_data['hiring_data']->gst_for) && $bill_data['hiring_data']->gst_for == 'igst') {
+										?>
+										<tr>
+											<td colspan="7" style="text-align: right;">
+												<div class="align-txt">IGST - 18%: </div>
+											</td>
+											<td>
+												<div class="align-txt">
+													<span class=""><?php echo $bill_data['hiring_data']->igst_amt; ?></span>
+												</div>
+											</td>
+										</tr>
+										<?php
+											} else {
+										?>
+										<tr>
+											<td colspan="7" style="text-align: right;">
+												<div class="align-txt">CGST - 9% : </div>
+											</td>
+											<td>
+												<div class="align-txt">
+													<span class=""><?php echo $bill_data['hiring_data']->cgst_amt ?></span>
 												</div>
 											</td>
 										</tr>
 										<tr>
 											<td colspan="7" style="text-align: right;">
-												<div class="align-txt">GST : </div>
+												<div class="align-txt">SGST - 9% : </div>
 											</td>
 											<td>
 												<div class="align-txt">
-													<span class="hiring_tot_txt"></span>
-													<input type="hidden" class="hiring_tot_val" name="hiring_tot" value="">
+													<span class=""><?php echo $bill_data['hiring_data']->sgst_amt ?></span>
 												</div>
 											</td>
 										</tr>
+										<?php
+											}
+										?>
 										<tr>
 											<td colspan="7" style="text-align: right;">
 												<div class="align-txt">Round Off : </div>
 											</td>
 											<td>
 												<div class="align-txt">
-													<span class="hiring_tot_txt"></span>
-													<input type="hidden" class="hiring_tot_val" name="hiring_tot" value="">
+													<span class=""><?php echo $bill_data['hiring_data']->round_off ?></span>
 												</div>
 											</td>
 										</tr>
@@ -228,8 +256,7 @@
 											</td>
 											<td>
 												<div class="align-txt">
-													<span class="hiring_tot_txt"></span>
-													<input type="hidden" class="hiring_tot_val" name="hiring_tot" value="">
+													<span class=""><?php echo $bill_data['hiring_data']->hiring_total ?></span>
 												</div>
 											</td>
 										</tr>

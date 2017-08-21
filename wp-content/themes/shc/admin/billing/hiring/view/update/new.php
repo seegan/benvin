@@ -342,22 +342,67 @@
 											</td>
 											<td>
 												<div class="align-txt">
-													<span class="hiring_tot_txt"></span>
-													<input type="hidden" class="hiring_tot_val" name="hiring_tot" value="">
+													<span class="sub_tot_txt"></span>
+													<input type="hidden" class="sub_tot_val" name="sub_tot" value="0">
+												</div>
+											</td>
+											<td></td>
+										</tr>
+
+
+
+									<?php if(isset($site_detail->gst_for) && $site_detail->gst_for == 'igst') { ?>
+										<tr>
+											<td colspan="7" style="text-align: right;">
+												<div class="align-txt">IGST : </div>
+												<input type="hidden" class="gst_percentage" value="18">
+											</td>
+											<td>
+												<div class="align-txt">
+													<span class="gst_igst_txt"></span>
+													<input type="hidden" class="gst_igst" name="gst_igst" value="0">
+												</div>
+											</td>
+											<td></td>
+										</tr>
+									<?php } else {
+									?>
+										<tr>
+											<td colspan="7" style="text-align: right;">
+												<div class="align-txt">CGST : </div>
+												<input type="hidden" class="gst_percentage" value="9">
+											</td>
+											<td>
+												<div class="align-txt">
+													<span class="gst_cgst_txt"></span>
+													<input type="hidden" class="gst_cgst" name="gst_cgst" value="0">
 												</div>
 											</td>
 											<td></td>
 										</tr>
 										<tr>
 											<td colspan="7" style="text-align: right;">
-												<div class="align-txt">GST : </div>
-												<input type="hidden" name="gst_for" value="<?php echo isset($site_detail->gst_for) ? $site_detail->gst_for : ''; ?>">
-												<input type="hidden" name="gst_percentage" value="18">
+												<div class="align-txt">SGST : </div>
+												<input type="hidden" class="gst_percentage" value="0">
 											</td>
 											<td>
 												<div class="align-txt">
-													<span class=""></span>
-													<input type="hidden" class="gst_total" name="" value="">
+													<span class="gst_sgst_txt"></span>
+													<input type="hidden" class="gst_sgst" name="gst_sgst" value="0">
+												</div>
+											</td>
+											<td></td>
+										</tr>
+									<?php
+									} ?>
+										<tr>
+											<td colspan="7" style="text-align: right;">
+												<div class="align-txt">Total Including GST : </div>
+											</td>
+											<td>
+												<div class="align-txt">
+													<span class="gst_include_total_txt"></span>
+													<input type="hidden" class="gst_include_total" name="gst_include_total" value="">
 												</div>
 											</td>
 											<td></td>
@@ -368,8 +413,7 @@
 											</td>
 											<td>
 												<div class="align-txt">
-													<span class=""></span>
-													<input type="hidden" class="" name="" value="">
+													<input type="text" class="round_off" name="round_off" value="0" style="border-color: rgba(118, 118, 118, 0);height:34px;margin:0;">
 												</div>
 											</td>
 											<td></td>
@@ -380,8 +424,9 @@
 											</td>
 											<td>
 												<div class="align-txt">
-													<span class=""></span>
-													<input type="hidden" class="" name="" value="">
+													<span class="hiring_tot_txt"></span>
+													<input type="hidden" name="gst_for" class="gst_for"  value="<?php echo isset($site_detail->gst_for) ? $site_detail->gst_for : 'cgst'; ?>">
+													<input type="hidden" class="hiring_tot_val" name="hiring_tot" value="0">
 												</div>
 											</td>
 											<td></td>
