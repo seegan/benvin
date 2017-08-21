@@ -337,7 +337,9 @@
 											<td></td>
 										</tr>
 										<tr>
-											<td colspan="7" style="font-size: 20px;font-weight: bold;text-align: center;">TOTAL</td>
+											<td colspan="7" style="text-align: right;">
+												<div class="align-txt">Sub Total</div>
+											</td>
 											<td>
 												<div class="align-txt">
 													<span class="hiring_tot_txt"></span>
@@ -346,6 +348,45 @@
 											</td>
 											<td></td>
 										</tr>
+										<tr>
+											<td colspan="7" style="text-align: right;">
+												<div class="align-txt">GST : </div>
+												<input type="hidden" name="gst_for" value="<?php echo isset($site_detail->gst_for) ? $site_detail->gst_for : ''; ?>">
+												<input type="hidden" name="gst_percentage" value="18">
+											</td>
+											<td>
+												<div class="align-txt">
+													<span class=""></span>
+													<input type="hidden" class="gst_total" name="" value="">
+												</div>
+											</td>
+											<td></td>
+										</tr>
+										<tr>
+											<td colspan="7" style="text-align: right;">
+												<div class="align-txt">Round Off : </div>
+											</td>
+											<td>
+												<div class="align-txt">
+													<span class=""></span>
+													<input type="hidden" class="" name="" value="">
+												</div>
+											</td>
+											<td></td>
+										</tr>
+										<tr>
+											<td colspan="7" style="font-size: 20px;font-weight: bold;text-align: center;">
+												<div class="align-txt">Total</div>
+											</td>
+											<td>
+												<div class="align-txt">
+													<span class=""></span>
+													<input type="hidden" class="" name="" value="">
+												</div>
+											</td>
+											<td></td>
+										</tr>
+
 									<?php
 										} else {
 									?>

@@ -191,13 +191,51 @@
 											</td>
 										</tr>
 										<tr>
-											<td colspan="7" style="font-size: 20px;font-weight: bold;text-align: center;">TOTAL</td>
+											<td colspan="7" style="text-align: right;">
+												<div class="align-txt">Sub Total : </div>
+											</td>
 											<td>
 												<div class="align-txt">
 													<span class=""><?php echo $bill_data['hiring_data']->hiring_total ?></span>
 												</div>
 											</td>
 										</tr>
+										<tr>
+											<td colspan="7" style="text-align: right;">
+												<div class="align-txt">GST : </div>
+											</td>
+											<td>
+												<div class="align-txt">
+													<span class="hiring_tot_txt"></span>
+													<input type="hidden" class="hiring_tot_val" name="hiring_tot" value="">
+												</div>
+											</td>
+										</tr>
+										<tr>
+											<td colspan="7" style="text-align: right;">
+												<div class="align-txt">Round Off : </div>
+											</td>
+											<td>
+												<div class="align-txt">
+													<span class="hiring_tot_txt"></span>
+													<input type="hidden" class="hiring_tot_val" name="hiring_tot" value="">
+												</div>
+											</td>
+										</tr>
+										<tr>
+											<td colspan="7" style="font-size: 20px;font-weight: bold;text-align: center;">
+												<div class="align-txt">Total</div>
+											</td>
+											<td>
+												<div class="align-txt">
+													<span class="hiring_tot_txt"></span>
+													<input type="hidden" class="hiring_tot_val" name="hiring_tot" value="">
+												</div>
+											</td>
+										</tr>
+
+
+
 									<?php
 										} else {
 									?>
