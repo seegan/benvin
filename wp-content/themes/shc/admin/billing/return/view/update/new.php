@@ -165,7 +165,7 @@
 										} else {
 									?>
 										<tr data-repeater-item class="repeterin div-table-row" class="repeterin div-table-row">
-											<td colspan="6">
+											<td colspan="7">
 												<center>No Pending Items</center>
 											</td>
 										</tr>

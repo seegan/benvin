@@ -256,6 +256,10 @@ function populate_site_select_search(v = 'new', type = 'deposit') {
     if(type == 'obc') {
       window.location = admin_page.obc+'&id='+e.params.data.id;
     }
+    if(type == 'statement') {
+      window.location = admin_page.statement+'&id='+e.params.data.id;
+    }
+
   });
 
 

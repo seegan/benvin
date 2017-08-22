@@ -25,11 +25,9 @@
 </style>
 
 <?php
-	if( isset($_GET['id']) && isset($_GET['bill_id'])  && $bill_data = getHiringBillData($_GET['id'], $_GET['bill_id']) ) { 
-		include( get_template_directory().'/admin/billing/hiring/view/update/update.php' );
-	} else if( isset($_GET['id']) ) {  
-		include( get_template_directory().'/admin/billing/hiring/view/update/new.php' );
+	if( isset($_GET['id']) ) {  
+		include( get_template_directory().'/admin/statement/view/new.php' );
 	} else {
-		include( get_template_directory().'/admin/billing/hiring/view/update/search.php' );
+		include( get_template_directory().'/admin/statement/view/search.php' );
 	}
 ?>

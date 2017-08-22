@@ -77,7 +77,7 @@ global $src_capabilities;
 	add_submenu_page('master_report', 'Return List', 'Return List', $src_capabilities['billing']['permission']['deposit'], 'return_report', 'return_report' );
 	add_submenu_page('master_report', 'Hiring List', 'Hiring List', $src_capabilities['billing']['permission']['deposit'], 'hiring_report', 'hiring_report' );
 	add_submenu_page('master_report', 'OBC List', 'OBC List', $src_capabilities['billing']['permission']['deposit'], 'obc_report', 'obc_report' );
-
+	add_submenu_page('master_report', 'Statement', 'Statement', $src_capabilities['billing']['permission']['deposit'], 'new_statement', 'new_statement' );
 
 
 	add_menu_page(
@@ -104,6 +104,9 @@ global $src_capabilities;
 	add_submenu_page('user_roles', 'New Role', 'New Role', $src_capabilities['roles']['permission']['add_roles'], 'add_admin_role', 'add_admin_role' );
 	add_submenu_page('user_roles', 'Role List', 'Role List', $src_capabilities['roles']['permission']['role_list'], 'list_roles', 'list_roles' );
 }
+
+
+
 
 
 function list_lots() {
@@ -165,6 +168,10 @@ function new_hiring() {
 function new_obc() {
     require 'billing/obc/new-obc.php';
 }
+function new_statement() {
+    require 'statement/new-statement.php';
+}
+
 
 
 function master_report() {
