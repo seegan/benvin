@@ -6,6 +6,7 @@
 	$master_data = getMasterDetail($master_id);
 	$master_data = ($master_data) ? $master_data : false;
 
+	$statement_date = date('Y-m-d');
 
 	if($master_data['master_data']) {
 		$customer_id = $master_data['master_data']->customer_id;
@@ -14,12 +15,8 @@
 		$customer_detail = getCustomerData($customer_id);
 		$site_detail = getSiteData($site_id);
 
-		$bill_from = (isset($bill_data['hiring_data']->bill_from) && $bill_data['hiring_data']->bill_from != '') ? $bill_data['hiring_data']->bill_from : date('Y-m-01');
-		$bill_to = (isset($bill_data['hiring_data']->bill_to) && $bill_data['hiring_data']->bill_to != '') ? $bill_data['hiring_data']->bill_to : date('Y-m-d', strtotime('last day of this month'));
 		$hiring_items = getHiringItems($_GET['id'], $bill_from, $bill_to);
 
-		$billing_date = (isset($bill_data['hiring_data']->bill_date) && $bill_data['bill_date']->bill_date != '') ? $master_data['hiring_data']->bill_date : date('Y-m-d');
-		$billing_time = (isset($bill_data['hiring_data']->bill_time)) ? date('H:i', strtotime($bill_data['hiring_data']->bill_time)) : date('H:i');
 	}
 ?>
 

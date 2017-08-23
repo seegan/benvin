@@ -8,4 +8,9 @@ function load_statement_scripts() {
 }
 add_action( 'admin_enqueue_scripts', 'load_statement_scripts' );
 
+
+function getAccountStatement($master_id = 0, $date_to = '0000-00-00') {
+	$statement = new Statement();
+	return $statement->get_AccountStatement($master_id, $date_to);
+}
 ?>
