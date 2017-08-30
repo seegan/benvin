@@ -13,4 +13,9 @@ function getAccountStatement($master_id = 0, $date_to = '0000-00-00') {
 	$statement = new Statement();
 	return $statement->get_AccountStatement($master_id, $date_to);
 }
+
+function getLostStatement($master_id = 0, $date_to = '0000-00-00') {
+	$lost_data = new Statement();
+	return $lost_data->get_LostStatement($master_id, $date_to);
+}
 ?>

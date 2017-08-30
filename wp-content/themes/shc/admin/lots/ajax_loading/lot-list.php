@@ -43,7 +43,11 @@
                                     </td>
                                     <td class=""><?php echo $l_value->unit_price; ?></td>
                                     <td class=""><?php echo $l_value->tax1; ?></td>
-                                    <td class=""><a href="<?php echo menu_page_url( 'add_lot', 0 )."&id=${lot_id}"; ?>">Update</a></td>
+
+                                    <?php
+                                        $update_url = 'admin.php?page=add_lot&id='.$lot_id;
+                                    ?>
+                                    <td class=""><a href="<?php echo network_admin_url( $update_url ); ?>">Update</a></td>
                                 </tr>
                     <?php
                                 $i++;

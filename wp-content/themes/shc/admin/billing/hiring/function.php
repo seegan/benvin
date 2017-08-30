@@ -74,8 +74,12 @@ function create_billing() {
 		);
 
 
-
 	if($params['action'] == 'create_billing') {
+		
+		$bill_no_data = getCorrectBillNumber($params['bill_no'], $params['site_id'], 'shc_hiring');
+
+		$hiring_data['bill_from_comp'] = $bill_no_data['bill_from_comp'];
+		$hiring_data['bill_no'] = $bill_no_data['bill_no'];
 
 		$wpdb->insert($hiring_table, $hiring_data);
 		$hiring_bill_id = $wpdb->insert_id;

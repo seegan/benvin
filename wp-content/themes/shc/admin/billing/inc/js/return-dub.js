@@ -17,8 +17,6 @@ jQuery(document).ready(function () {
     });
 
 
-
-
 	jQuery('.unloading, .transportation, .damage').on('change keyup', function(){
 		calculateUnloadingCharge();
 	});
@@ -34,10 +32,30 @@ jQuery(document).ready(function () {
 	})
 
 
+	jQuery('.return_detail_group .return_qty, .return_detail_group .lost_per_unit').on('change keyup', function(){
+		var row_selector = jQuery(this).parent().parent().parent();
+
+		var lost_per_unit = row_selector.find('.lost_per_unit').val();
+		var return_tot = row_selector.find('.return_qty').val();
+
+		var row_lost_tot = return_tot * lost_per_unit;
+		row_lost_tot = Math.round10(row_lost_tot.toFixed(3), -2);
+
+		row_selector.find('.lost_row_total').val(row_lost_tot).change();
+		row_selector.find('.lost_row_total_txt').text(row_lost_tot);
+
+		calculateHiringTotal();
+
+	});
+
+
+
 	jQuery('.return_detail_group .return_qty').on('change keyup', function(){
+
 		var group_class = '.return_group_qty_'+jQuery(this).attr('data-lotid');
 		//
 		var return_tot = jQuery(this).val();
+
 
 		jQuery(group_class).each(function(){
 			var in_hand_total = jQuery(this).parent().parent().parent().find('.in_hand_group').val();
@@ -53,8 +71,9 @@ jQuery(document).ready(function () {
 					jQuery(this).val(0);
 				}
 			}
-
 		});
+
+
 	});
 
 
@@ -65,12 +84,59 @@ jQuery(document).ready(function () {
 	});
 
 
+	jQuery('.return_status').on('change', function () {
+		var return_status = jQuery(".return_status:checked").val();
 
+		if(return_status == 'lost') {
+			jQuery('.show_lost').css('display', 'table-cell');
+			jQuery('.show_row_lost').css('display', 'table-row');
+			jQuery('.show_return').css('display', 'none');
+			jQuery('.show_row_return').css('display', 'none');
+
+
+		} else {
+			jQuery('.show_return').css('display', 'table-cell');
+			jQuery('.show_row_return').css('display', 'table-row');
+			jQuery('.show_lost').css('display', 'none');
+			jQuery('.show_row_lost').css('display', 'none');
+		}
+	})
 
 
 
 
 });
+
+
+function calculateHiringTotal() {
+	var sub_tot = 0.00, ur_tot;
+	jQuery('.return_detail_group .return_qty').each(function(){
+	    var ur_tot = parseFloat(jQuery(this).val())
+	    ur_tot = (isNaN(ur_tot)) ? 0.00 : ur_tot;
+	    sub_tot = sub_tot + ur_tot;
+
+	    sub_tot = Math.round10(sub_tot.toFixed(3), -2);
+	});
+
+
+	var sub_tot1 = 0.00, ur_tot1;
+	jQuery('.return_detail_group .lost_row_total').each(function(){
+	    var ur_tot1 = parseFloat(jQuery(this).val())
+	    ur_tot1 = (isNaN(ur_tot1)) ? 0.00 : ur_tot1;
+	    sub_tot1 = sub_tot1 + ur_tot1;
+
+	    sub_tot1 = Math.round10(sub_tot1.toFixed(3), -2);
+	});
+
+	jQuery('.lost_qty_total_txt').text(sub_tot);
+	jQuery('.lost_qty_total').val(sub_tot);
+
+	jQuery('.lost_total_txt').text(sub_tot1);
+	jQuery('.lost_total').val(sub_tot1);
+	
+	console.log(sub_tot1);
+}
+
 
 function calculateUnloadingCharge() {
 	var unloading = jQuery('.unloading').val();
@@ -92,7 +158,6 @@ function calculateUnloadingCharge() {
 
 	jQuery('.total').val(total).change();
 	jQuery('.group_total').val(total).change();
-
 }
 
 

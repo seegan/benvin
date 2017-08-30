@@ -24,13 +24,19 @@ function create_return() {
 	$params = array();
 	parse_str($_POST['data'], $params);
 
-	$return_table 		= $wpdb->prefix.'shc_return';
+
+	$return_table 			= $wpdb->prefix.'shc_return';
 	$return_detail_table 	= $wpdb->prefix.'shc_return_detail';
-	$unloading_table 	= $wpdb->prefix.'shc_unloading';
-	$unloading_detail_table 	= $wpdb->prefix.'shc_unloading_detail';
+	$unloading_table 		= $wpdb->prefix.'shc_unloading';
+	$unloading_detail_table = $wpdb->prefix.'shc_unloading_detail';
+	$lost_table 			= $wpdb->prefix.'shc_lost';
+	$lost_detail_table 		= $wpdb->prefix.'shc_lost_detail';
+
+
 
 	$return_date = $params['date'].' '.$params['time'].':00';
 	$master_id = $params['master_id'];
+
 
 	$unloading = (isset($params['unloading']) && $params['unloading'] != '') ? $params['unloading'] : 0.00;
 	$transportation = (isset($params['transportation']) && $params['transportation'] != '') ? $params['transportation'] : 0.00;
@@ -43,7 +49,16 @@ function create_return() {
 
 	if(isset($params['action']) && $params['action'] == 'new_return') {
 
-		$wpdb->insert($return_table, array('master_id' => $master_id, 'return_date' => $return_date, 'is_return' => $is_return, 'vehicle_number' => $vehicle_number, 'driver_name' => $driver_name, 'driver_mobile' => $driver_mobile) );
+
+		$return_data = array('master_id' => $master_id, 'return_date' => $return_date, 'is_return' => $is_return, 'vehicle_number' => $vehicle_number, 'driver_name' => $driver_name, 'driver_mobile' => $driver_mobile);
+
+		if($is_return) {
+			$bill_no_data = getCorrectBillNumber($params['bill_no'], $params['site_id'], 'shc_return');
+			$return_data['bill_from_comp'] = $bill_no_data['bill_from_comp'];
+			$return_data['bill_no'] = $bill_no_data['bill_no'];
+		}
+
+		$wpdb->insert($return_table,  $return_data);
 		$return_id = $wpdb->insert_id;
 
 		$wpdb->insert($unloading_table, array('return_id' => $return_id, 'master_id' => $master_id, 'unloading_charge' => $total, 'return_date' => $return_date ) );
@@ -54,13 +69,26 @@ function create_return() {
 		$wpdb->insert($unloading_detail_table, array('return_id' => $return_id, 'unloading_id' => $loading_id, 'charge_for' => 'transportation', 'charge_amt' => $transportation ) );
 		$wpdb->insert($unloading_detail_table, array('return_id' => $return_id, 'unloading_id' => $loading_id, 'charge_for' => 'damage', 'charge_amt' => $damage ) );
 
-
 		if($return_id) {
 
 			foreach ($params['return_detail'] as $n_value) {
 
 				if($n_value['delivery_detail_id'] != 0 && $n_value['delivery_detail_id'] != '' && $n_value['qty'] != 0 && $n_value['qty'] != '') {
 					$wpdb->insert($return_detail_table, array('return_id' => $return_id, 'master_id' => $master_id, 'lot_id' => $n_value['lot_id'], 'delivery_detail_id' => $n_value['delivery_detail_id'] , 'qty' => $n_value['qty'], 'return_date' => $return_date ));
+				}
+			}
+
+			if(!$is_return) {
+				$lost_data = array('master_id' => $master_id, 'return_id' => $return_id, 'lost_qty' => $params['lost_qty_total'], 'lost_total' => $params['lost_cost']);
+				$wpdb->insert($lost_table, $lost_data);
+				$lost_id = $wpdb->insert_id;
+
+				foreach ($params['return_detail_group'] as $l_value) {
+
+					if($l_value['lost_qty'] != '' && $l_value['lost_qty'] > 0 ) {
+						$wpdb->insert($lost_detail_table, array('master_id' => $master_id, 'lost_id' => $lost_id, 'return_id' => $return_id, 'lot_id' => $l_value['lot_id'], 'lost_qty' => $l_value['lost_qty'] , 'lost_unit_price' => $l_value['lost_per_unit'], 'lost_total' => $l_value['lost_row_total'] ));
+					}
+
 				}
 			}
 

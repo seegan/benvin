@@ -6,7 +6,7 @@
 		width: 80px;
 	}
 	.return-charge-txt {
-		width: 300px;
+		width: 190px;
 		float: right;
 	}
 	.return-charge-input {

@@ -2,6 +2,41 @@
 
 
   
+jQuery(document).ready(function(){
+  jQuery( "#datepicker, .datepicker" ).datepicker( {dateFormat: 'yy-mm-dd'} );
+
+  jQuery('.bill.bill_no').on('change', function() {
+    jQuery('.loadin-billfrom').css('display', 'inline-block');
+    jQuery('.loadin-check').css('display', 'none');
+    jQuery('.loadin-cross').css('display', 'none');
+
+
+    jQuery.ajax({
+      type: "POST",
+      dataType : "json",
+      url: frontendajax.ajaxurl,
+      data: {
+          action : 'billno_check',
+          bill_no : jQuery('.bill.bill_no').val(),
+          bill_for : jQuery('.billno_action').val(),
+          site_id : jQuery('.site_id').val(),
+      },
+      success: function (data) {
+        jQuery('.loadin-billfrom').css('display', 'none');
+        if(data.success) {
+          jQuery('.loadin-check').css('display', 'inline-block');
+          jQuery('.loadin-cross').css('display', 'none');
+        } else {
+          jQuery('.loadin-check').css('display', 'none');
+          jQuery('.loadin-cross').css('display', 'inline-block');
+        }
+      }
+    });
+
+  })
+
+  
+});
 
   /**
    * Decimal adjustment of a number.
@@ -310,14 +345,6 @@ function isFloat(n){
     return Number(n) === n && n % 1 !== 0;
 }
 
-
-
-
-
-
-jQuery(document).ready(function(){
-  jQuery( "#datepicker, .datepicker" ).datepicker( {dateFormat: 'yy-mm-dd'} );
-});
 
 
 

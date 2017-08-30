@@ -2,13 +2,17 @@
 	$customer = false;
 	$site_detail = false;
 	$special_price = false;
+	$companies = getCompanies();
+	$bill_from = false;
 
 	if(isset($_GET['id']) && $customer = get_customer($_GET['id']) ) {
 		$user_id = $_GET['id'];
 		$site_detail = getSitedetail($user_id);
-
 		$special_price = getSpecialPrice($user_id);
+
+		$bill_from = $customer->bill_from;
 	}
+
 ?>
 <div class="container">
 
@@ -43,6 +47,24 @@
 							</label>
 							<div class="col-md-6 col-sm-6 col-xs-12">
 								<textarea id="address" name="address" required="required" class="form-control col-md-7 col-xs-12"><?php echo ($customer) ? $customer->address : ''; ?></textarea>
+							</div>
+						</div>
+						<div class="divider-dashed"></div>
+						<div class="form-group">
+							<label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Bill From <span class="required">*</span>
+							</label>
+							<div class="col-md-6 col-sm-6 col-xs-12">
+								<select name="bill_from_comp" style="width:100%;">
+									<?php 
+										if($companies) {
+											foreach ($companies as $c_value) {
+												$selected = ($bill_from == $c_value->id) ? 'selected' : '';
+												echo "<option ".$selected." value='".$c_value->id."'>".$c_value->company_name."</option>";
+											}
+										}
+									?>
+								</select>
+
 							</div>
 						</div>
 						<div class="divider-dashed"></div>

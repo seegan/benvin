@@ -21,7 +21,7 @@
 			$site_id = $master_data['master_data']->site_id;
 
 			$customer_detail = getCustomerData($customer_id);
-			$site_detail = getSiteData($site_id);
+			$site_detail = getSiteData($site_id, 'shc_hiring');
 
 			$bill_from = (isset($_GET['bill_from']) && $_GET['bill_from'] != '') ? $_GET['bill_from'] : date('Y-m-01');
 			$bill_to = (isset($_GET['bill_to']) && $_GET['bill_to'] != '') ? $_GET['bill_to'] : date('Y-m-d', strtotime('last day of this month'));
@@ -137,6 +137,18 @@
 							<?php
 							if($master_data) {
 								echo "<div class='address-line'>No. BA/SD : ".$master_data['master_data']->id."</div>";
+								echo"<input type='hidden' name='site_id' class='site_id' value='".$site_id."'>";
+
+
+								echo '<div class="address-line">Bill No : ';
+								echo '	<span class="deposit-time">';
+								echo $site_detail->company_id."/HB <input type='text' style='border-color: rgba(118, 118, 118, 0);height: 34px;margin: 0;' value='".$site_detail->next_bill_no."' name='bill_no' class='bill bill_no'>";
+								echo '<img src="'.get_template_directory_uri() . '/admin/inc/images/5.gif" style="width: 20px;display:none;" class="loadin-billfrom">';
+								echo '<img src="'.get_template_directory_uri() . '/admin/inc/images/check.png" style="width: 20px;display:none;" class="loadin-check">';
+								echo '<img src="'.get_template_directory_uri() . '/admin/inc/images/cross.png" style="width: 20px;display:none;" class="loadin-cross">';
+								echo '	</span>';
+								echo '<input type="hidden" class="billno_action" value="shc_hiring">';
+								echo '</div>';
 							}
 							?>
 							<div class="customer-name">Customer Name : M/s 

@@ -14,7 +14,13 @@ function get_customer($customer_id = 0) {
     return $wpdb->get_row($query);
 }
 
-
+function getCompanies()
+{
+	global $wpdb;
+	$companies_table = $wpdb->prefix.'shc_companies';
+    $query = "SELECT * FROM ${companies_table} WHERE active = 1";
+    return $wpdb->get_results($query);
+}
 
 function create_customer() {
 	$data['success'] 	= 0;
@@ -57,9 +63,14 @@ function update_customer() {
 	unset($params['action']);
 	unset($params['customer_id']);
 
+
+
 	if(get_customer($customer_id)) {
+
+
 		$customer_table = $wpdb->prefix. 'shc_customers';
 		$wpdb->update($customer_table, $params, array('id' => $customer_id));
+
 		$data['success'] = 1;
 		$data['msg'] = 'Customer Detail Updated!';
 	}
@@ -192,7 +203,7 @@ function getCustomerData($customer_id = 0) {
 	return $customer->get_CustomerData($customer_id);
 }
 
-function getSiteData($site_id = 0 ) {
+function getSiteData($site_id = 0, $bill_for = false ) {
 	$customer = new Customer();
-	return $customer->get_SiteData($site_id);
+	return $customer->get_SiteData($site_id, $bill_for);
 }

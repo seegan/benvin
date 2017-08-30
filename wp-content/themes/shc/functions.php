@@ -18,7 +18,7 @@ function my_footer_shh() {
 	remove_menu_page( 'jetpack' );                    //Jetpack* 
 	remove_menu_page( 'edit.php' );                   //Posts
 	remove_menu_page( 'upload.php' );                 //Media
-	remove_menu_page( 'edit.php?post_type=page' );    //Pages
+	//remove_menu_page( 'edit.php?post_type=page' );    //Pages
 	remove_menu_page( 'edit-comments.php' );          //Comments
 /*	remove_menu_page( 'themes.php' );                 //Appearance*/
 	remove_menu_page( 'plugins.php' );                //Plugins
@@ -198,6 +198,105 @@ function convert_number_to_words($num) {
 }
 
 
+
+
+function getCorrectBillNumber($bill_no = '', $site_id = '', $bill_for = false) {
+	global $wpdb;
+
+	if($bill_for) {
+		$bill_for_table = $wpdb->prefix.$bill_for;
+
+		$bill_exist_query = "SELECT dep.bill_no FROM ${bill_for_table} as dep WHERE dep.bill_no = ${bill_no} AND dep.bill_from_comp = ( SELECT c.bill_from_comp FROM wp_shc_customer_site as cs JOIN wp_shc_customers as c ON c.id = cs.customer_id WHERE cs.id = ${site_id} LIMIT 1 )";
+		
+		if($wpdb->get_row($bill_exist_query)) {
+			$query = "SELECT fc.*, comp.company_id, (CASE WHEN fc.bill_no is null THEN 1 ELSE fc.bill_no + 1 END) next_bill_no FROM (SELECT cs.*, c.bill_from_comp, (SELECT d.bill_no from ${bill_for_table} as d WHERE d.bill_from_comp = c.bill_from_comp ORDER BY bill_no DESC LIMIT 1 ) as bill_no FROM `wp_shc_customer_site` as cs JOIN wp_shc_customers as c ON c.id = cs.customer_id WHERE cs.id = ${site_id} ) as fc JOIN wp_shc_companies as comp ON comp.id = fc.bill_from_comp";
+			if( $bill_data = $wpdb->get_row($query) ) {
+
+				$data['bill_from_comp'] = $bill_data->bill_from_comp;
+				$data['bill_no'] = $bill_data->next_bill_no;
+
+				return $data;
+			}
+		} else {
+			$query = "SELECT c.bill_from_comp FROM wp_shc_customer_site cs JOIN wp_shc_customers as c ON c.id = cs.customer_id WHERE cs.id = ${site_id}";
+			$cus_data = $wpdb->get_row($query);
+
+			$data['bill_from_comp'] = $cus_data->bill_from_comp;
+			$data['bill_no'] = $bill_no;
+			return $data;
+		}
+		return false;
+	}
+
+}
+
+
+function billno_check() {
+	$bill_no = isset( $_POST['bill_no'] ) ? $_POST['bill_no'] : 0;
+	$bill_for = isset( $_POST['bill_for'] ) ? $_POST['bill_for'] : 0;
+	$site_id = isset( $_POST['site_id'] ) ? $_POST['site_id'] : 0;
+
+	$bill_data = getCorrectBillNumber($bill_no, $site_id, $bill_for);
+	if($bill_data['bill_no'] == $bill_no) {
+		$data['success'] = true;
+	} else {
+		$data['success'] = false;
+	}
+	echo json_encode($data);
+	die();
+}
+add_action( 'wp_ajax_billno_check', 'billno_check' );
+add_action( 'wp_ajax_nopriv_billno_check', 'billno_check' );
+
+
+
+
+
+
+
+
+if ( is_admin() ){
+    add_action('init', 'create_initial_pages');
+}
+function create_initial_pages() {
+
+    $pages = array( 
+        'Deposit' => array(
+            'Deposit Invoice'=>'template-deposit-invoice.php'),
+        'Delivery' => array(
+            'Delivery Invoie'=>'template-delivery-invoice.php'),
+        'Return' => array(
+            'Return Invoice'=>'template-return-invoice.php'),
+    );
+
+    foreach( $pages as $page_url_title => $page_meta ) {
+
+        $id = get_page_by_title($page_url_title);
+
+        foreach ($page_meta as $page_content=>$page_template){
+
+            $page = array(
+                'post_type'   => 'page',
+                'post_title'  => $page_url_title,
+                'post_name'   => $page_url_title,
+                'post_status' => 'publish',
+                'post_content' => $page_content,
+                'post_author' => 1,
+                'post_parent' => ''
+            );
+
+            if(!isset($id->ID)){
+                $new_page_id = wp_insert_post($page);
+                if(!empty($page_template)){
+                    update_post_meta($new_page_id, '_wp_page_template', $page_template);
+                }
+            }
+        }
+    }
+}
+
+
+
 /*SELECT l.*,sale_bal.sale_unit, stock_bal.stock_total FROM wp_shc_lots as l LEFT JOIN 
 ( SELECT sd.lot_id, sum(sd.sale_unit) sale_unit FROM wp_shc_sale_detail as sd JOIN wp_shc_sale as s ON s.id = sd.sale_id WHERE s.locked = 1 AND s.active = 1 AND sd.item_status = 'open' AND sd.active = 1 GROUP BY sd.lot_id ) as sale_bal
 ON l.id = sale_bal.lot_id LEFT JOIN 
@@ -205,4 +304,10 @@ ON l.id = sale_bal.lot_id LEFT JOIN
 (SELECT st.lot_number, SUM(st.stock_count) as stock_total FROM wp_shc_stock as st WHERE st.active = 1 GROUP BY st.lot_number) as stock_bal
 ON l.id = stock_bal.lot_number*/
 
+
+
+
+/*function getBillDetail($customer_id=0, $bill_type = '') {
+	
+}*/
 ?>

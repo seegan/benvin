@@ -38,7 +38,9 @@ function create_delivery() {
 
 	if(isset($params['action']) && $params['action'] == 'new_delivery') {
 
-		$wpdb->insert($delivery_table, array('master_id' => $master_id, 'delivery_date' => $delivery_date, 'last_billed_date' => $last_billed_date, 'vehicle_number' => $vehicle_number , 'driver_name' => $driver_name , 'driver_mobile' => $driver_mobile  ) );
+		$bill_no_data = getCorrectBillNumber($params['bill_no'], $params['site_id'], 'shc_delivery');
+
+		$wpdb->insert($delivery_table, array('master_id' => $master_id, 'bill_from_comp' => $bill_no_data['bill_from_comp'], 'bill_no' => $bill_no_data['bill_no'], 'delivery_date' => $delivery_date, 'last_billed_date' => $last_billed_date, 'vehicle_number' => $vehicle_number , 'driver_name' => $driver_name , 'driver_mobile' => $driver_mobile  ) );
 		$delivery_id = $wpdb->insert_id;
 
 		if($delivery_id) {

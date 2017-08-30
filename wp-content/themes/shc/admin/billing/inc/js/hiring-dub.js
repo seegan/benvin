@@ -14,7 +14,6 @@ jQuery(document).ready(function () {
 		jQuery(this).parent().parent().parent().parent().find('.row_hiring_amt').val(row_hiring)
 
 		calculateHiringTotal();
-
 	});
 
 	jQuery('.round_off').on('change',function(){

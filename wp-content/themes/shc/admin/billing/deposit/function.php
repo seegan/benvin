@@ -21,11 +21,19 @@ function getDepositDetail($deposit_id = '') {
 
 	$query = "SELECT * FROM ${deposit_table} WHERE active = 1 AND id = ${deposit_id}";
 
+
 	$data['deposit_data'] = $wpdb->get_row($query);
+
 
 	$detail_query = "SELECT f.*, l.lot_no, l.product_name, l.product_type FROM ( SELECT dd.* FROM ${deposit_table} as d JOIN ${deposit_detail} as dd ON d.id = dd.deposit_id WHERE d.active = 1 AND dd.active = 1 AND dd.deposit_id = ${deposit_id} ) as f JOIN ${lots_table} as l ON l.id = f.lot_id";
 	
 	$data['deposit_detail'] = $wpdb->get_results($detail_query);
+
+	$invoice_query = "SELECT mf.*, c.name, c.mobile, c.address, cs.site_name, cs.site_address, cs.phone_number, cs.gst_number, cs.gst_for, comp.company_id, comp.company_name  FROM ( SELECT d.bill_from_comp, d.bill_no, d.master_id,d.amt_times, d.total_thirty_days, d.total_ninety_days, d.deposit_date, d.created_at, d.modified_at, d.active, m.customer_id, m.site_id, dc.cheque_no, dc.cheque_date, dc.cheque_amount FROM wp_shc_deposit as d JOIN wp_shc_master as m ON d.master_id = m.id JOIN wp_shc_deposit_cheque as dc ON dc.deposit_id = d.id WHERE d.id = ${deposit_id} ) as mf JOIN wp_shc_customers as c ON mf.customer_id = c.id JOIN wp_shc_customer_site as cs ON mf.site_id = cs.id JOIN wp_shc_companies as comp ON mf.bill_from_comp = comp.id";
+
+	$data['invoice_data'] = $wpdb->get_row($invoice_query);
+
+
 	return $data;
 }
 
@@ -115,6 +123,7 @@ function create_deposit() {
 
 	$deposit_date = $params['date'].' '.$params['time'].':00';
 
+	//$bill_detail = getBillDetail( $params['customer_id'], 'deposit');
 
 	$loading = (isset($params['loading']) && $params['loading'] != '') ? $params['loading'] : 0.00;
 	$transportation = (isset($params['transportation']) && $params['transportation'] != '') ? $params['transportation'] : 0.00;
@@ -132,6 +141,11 @@ function create_deposit() {
 
 	if(isset($params['action']) && $params['action'] != 'update_deposit') {
 
+		$bill_no_data = getCorrectBillNumber($params['bill_no'], $params['site_id'], 'shc_deposit');
+
+		$detail_main['bill_from_comp'] = $bill_no_data['bill_from_comp'];
+		$detail_main['bill_no'] = $bill_no_data['bill_no'];
+		
 		$wpdb->insert($deposit_table, $detail_main);
 		$deposit_id = $wpdb->insert_id;
 

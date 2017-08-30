@@ -20,7 +20,7 @@
 			$site_id = $master_data['master_data']->site_id;
 
 			$customer_detail = getCustomerData($customer_id);
-			$site_detail = getSiteData($site_id);
+			$site_detail = getSiteData($site_id, $bill_for = 'shc_return');
 
 			$pending_items = getPendingItems($_GET['id'], $delivery_date);
 		}
@@ -81,6 +81,18 @@
 							<?php
 							if($master_data) {
 								echo "<div class='address-line'>No. BA/MRI : ".$master_data['master_data']->id."</div>";
+
+
+								echo '<div class="address-line">Bill No : ';
+								echo '	<span class="deposit-time">';
+								echo $site_detail->company_id."/MRR <input type='text' style='border-color: rgba(118, 118, 118, 0);height: 34px;margin: 0;' value='".$site_detail->next_bill_no."' name='bill_no' class='bill bill_no'>";
+								echo '<img src="'.get_template_directory_uri() . '/admin/inc/images/5.gif" style="width: 20px;display:none;" class="loadin-billfrom">';
+								echo '<img src="'.get_template_directory_uri() . '/admin/inc/images/check.png" style="width: 20px;display:none;" class="loadin-check">';
+								echo '<img src="'.get_template_directory_uri() . '/admin/inc/images/cross.png" style="width: 20px;display:none;" class="loadin-cross">';
+								echo '	</span>';
+								echo '<input type="hidden" class="billno_action" value="shc_return">';
+								echo '</div>';
+
 							}
 							?>
 							<div class="customer-name">Customer Name : M/s <?php echo ($customer_detail->name) ? $customer_detail->name : ''; ?>
@@ -89,8 +101,8 @@
 							<div class="address-line">Address : <span class="address-txt"><?php echo ($customer_detail->address) ? $customer_detail->address : ''; ?></span>
 							</div>
 							<div class="return_lost">
-								<input type="radio" name="return_status" value="return" style="margin: -2px 0 0;" checked><span> Return </span> &nbsp;&nbsp;
-								<input type="radio" name="return_status" value="lost" style="margin: -2px 0 0;"> <span> Lost </span>
+								<input type="radio" name="return_status" class="return_status" value="return" style="margin: -2px 0 0;" checked><span> Return </span> &nbsp;&nbsp;
+								<input type="radio" name="return_status" class="return_status" value="lost" style="margin: -2px 0 0;"> <span> Lost </span>
 							</div>
 						</div>
 						<div class="col-lg-6">
@@ -99,6 +111,7 @@
 							<div class="address-line">Site : 
 								<select type="text" name="delivery_site_name" class="delivery_site_name" data-dvalue="<?php echo ($site_detail) ? $site_detail->id : ''; ?>"  data-sitename="<?php echo ($site_detail) ? $site_detail->site_name : ''; ?>">
 								</select>
+								<input type="hidden" name="site_id" class="site_id" value="<?php echo $site_id; ?>">
 							</div>
 							<div class="address-line">Phone : <span class="site-phone"><?php echo ($site_detail) ? $site_detail->phone_number : ''; ?></span></div>
 						</div>
@@ -108,7 +121,7 @@
 
 						<div class="col-lg-12">
 							<div class="deposit-repeater return_detail_group" style="margin-top:20px;">
-								<table class="table table-bordered">
+								<table class="table table-bordered" data-repeater-list="return_detail_group">
 									<thead>
 										<tr>
 											<th rowspan="2" style="width:50px;" class="center-th"><div>S.No</div></th>
@@ -116,11 +129,25 @@
 											<th colspan="3" class="center-th" style="width:80px;">
 												<div>Qty</div>
 											</th>
+											<th colspan="2" class="center-th show_lost" style="display: none;">
+												<div>
+													Lost Cost
+												</div>
+											</th>
 										</tr>
 										<tr>
 											<td style="width:20px;">Taken</td>
 											<td style="width:20px;">In Hand</td>
-											<td style="width:20px;">Return</td>
+											<td style="width:20px;">
+												<span class="show_return">Return</span>
+												<span class="show_lost" style="display: none;">Lost</span>
+											</td>
+											<td style="display: none;" class="show_lost">
+												<span>Per Unit</span>
+											</td>	
+											<td style="display: none;" class="show_lost">
+												<span>Total</span>
+											</td>										
 										</tr>
 									</thead>
 									<tbody class="return-group">
@@ -131,7 +158,7 @@
 											$i = 1;
 											foreach ($pending_items['grouping_detail'] as $g_value) {
 									?>
-										<tr class="div-table-row" class="repeterin div-table-row">
+										<tr class="div-table-row" class="repeterin div-table-row" data-repeater-item>
 											<td>
 												<div class="rowno align-txt"><?php echo $i; ?></div>
 											</td>
@@ -139,7 +166,7 @@
 												<div class="align-txt">
 													<span><?php echo $g_value->product_name ?></span>
 													<span><?php echo $g_value->product_type ?></span>
-													<input type="hidden" value="<?php echo $g_value->lot_id ?>">
+													<input type="hidden" name="lot_id" value="<?php echo $g_value->lot_id ?>">
 												</div>
 											</td>
 											<td>
@@ -155,8 +182,17 @@
 											</td>
 											<td>
 												<div class="align-txt">
-													<input type="text" style="border-color: rgba(118, 118, 118, 0);height:34px;margin:0;" class="return_qty" value="0" data-lotid="<?php echo $g_value->lot_id ?>">
+													<input type="text" style="border-color: rgba(118, 118, 118, 0);height:34px;margin:0;" class="return_qty" value="0" data-lotid="<?php echo $g_value->lot_id ?>" name="lost_qty">
 												</div>
+											</td>
+											<td class="show_lost" style="display: none;width:75px;">
+												<div class="align-txt">
+													<input type="text" name="lost_per_unit" class="lost_per_unit" value="<?php echo $g_value->buying_price; ?>" style="border-color: rgba(118, 118, 118, 0);height:34px;margin:0;width:75px;">
+												</div>
+											</td>
+											<td class="show_lost" style="display: none;">
+												<div class="align-txt lost_row_total_txt">0</div>
+												<input type="hidden" name="lost_row_total" value="0" class="lost_row_total">
 											</td>
 										</tr>
 									<?php
@@ -174,40 +210,65 @@
 
 										//echo (getUnloadingData('unloading'));
 									?>
-										<tr>
+										<tr class="show_row_return">
 											<td colspan="2">
 												<div class="align-txt">
 													<div style="float:left;width:150px;line-height: 15px;">Vehicle Number : </div>
 													<div><input type="text" class="vehicle_number" style="border: 0;border-bottom: 2px dotted;padding: 0"></div>
 												</div>
 											</td>
-											<td colspan="2" style="width:300px;"><div class="align-txt"><div class="return-charge-txt">Unloading</div></div></td>
+											<td colspan="2" style=""><div class="align-txt"><div class="return-charge-txt">Unloading</div></div></td>
 											<td colspan="3"><div class="align-txt"><div class="return-charge-val">Rs. <input type="text"  class="return-charge-input unloading"></div></div></td>
 										</tr>
-										<tr>
+										<tr class="show_row_return">
 											<td colspan="2">
 												<div class="align-txt">
 													<div style="float:left;width:150px;line-height: 15px;">Driver Name : </div>
 													<div><input type="text" class="driver_name" style="border: 0;border-bottom: 2px dotted;padding: 0"></div>
 												</div>
 											</td>
-											<td colspan="2" style="width:300px;"><div class="align-txt"><div class="return-charge-txt">Transportation</div></div></td>
+											<td colspan="2" style=""><div class="align-txt"><div class="return-charge-txt">Transportation</div></div></td>
 											<td colspan="3"><div class="align-txt"><div class="return-charge-val">Rs. <input type="text"  class="return-charge-input transportation"></div></div></td>
 										</tr>
-										<tr>
+										<tr class="show_row_return">
 											<td colspan="2">
 												<div class="align-txt">
 													<div style="float:left;width:150px;line-height: 15px;">Mobile Number : </div>
 													<div><input type="text" class="driver_mobile" style="border: 0;border-bottom: 2px dotted;padding: 0"></div>
 												</div>
 											</td>
-											<td colspan="2" style="width:300px;"><div class="align-txt"><div class="return-charge-txt">Damage (as Per detail overleaf)</div></div></td>
+											<td colspan="2" style=""><div class="align-txt"><div class="return-charge-txt">Damage (as Per detail overleaf)</div></div></td>
 											<td colspan="3"><div class="align-txt"><div class="return-charge-val">Rs. <input type="text"  class="return-charge-input damage"></div></div></td>
 										</tr>
-										<tr>
+										<tr class="show_row_return">
 											<td colspan="2"><div class="align-txt"></div></td>
-											<td colspan="2" style="width:300px;"><div class="align-txt"><div class="return-charge-txt">Total</div></div></td>
+											<td colspan="2" style="">
+												<div class="align-txt"><div class="return-charge-txt">Total</div></div>
+											</td>
 											<td colspan="3"><div class="align-txt"><div class="return-charge-val">Rs. <input type="text"  class="return-charge-input total"></div></div></td>
+										</tr>
+										<tr class="show_row_lost" style="display: none;">
+											<td colspan="6" style="">
+												<div class="align-txt">
+													<div class="return-charge-txt">Total</div>
+												</div>
+											</td>
+											<td>
+												<div class="align-txt">
+													<div class="return-charge-val">
+														<span class="lost_qty_total_txt">0</span>
+														<input type="hidden" name="lost_qty_total" class="lost_qty_total" value="0">
+													</div>
+												</div>
+											</td>
+											<td colspan="2">
+												<div class="align-txt">
+													<div class="return-charge-val">Rs.
+														<span class="lost_total_txt">0</span> 
+														<input type="hidden" name="lost_cost" class="lost_total" value="0">
+													</div>
+												</div>
+											</td>
 										</tr>
 									</tbody>
 								</table>

@@ -5,6 +5,9 @@
 	$master_data = ($master_data) ? $master_data : false;
 	$statement_date = (isset($_GET['date_to'])) ? $_GET['date_to'] : date('Y-m-d');
 
+	$lost_data['lost_detail'] = false;
+	$lost_data['lost_total'] = false;
+
 	if($master_data['master_data']) {
 		$customer_id = $master_data['master_data']->customer_id;
 		$site_id = $master_data['master_data']->site_id;
@@ -13,10 +16,9 @@
 		$site_detail = getSiteData($site_id);
 
 		$statement = getAccountStatement($master_id, $statement_date);
+
+		$lost_data = getLostStatement($master_id, $statement_date);
 	}
-
-
-
 
 ?>
 
@@ -95,7 +97,7 @@
 
 
 							<div class="deposit-repeater hiring_detail" style="margin-top:20px;">
-								<table class="table table-bordered" data-repeater-list="hiring_detail">
+								<table class="table table-bordered">
 									<thead>
 										<tr>
 											<th rowspan="2" style="width:140px;" class="center-th"><div>Date</div></th>
@@ -112,7 +114,7 @@
 										?>
 													<tr>
 														<td>
-															<?php echo $s_value->r_date; ?>
+															<?php echo $s_value->bill_date; ?>
 														</td>
 														<td>
 															<?php echo $s_value->description; ?>
@@ -135,22 +137,58 @@
 								</table>
 							</div>
 
-							<div style="float:right;">
-	                          	<?php 
-	                          		if($master_data) {
-	                          			echo "<input type='hidden' name='master_id' class='master_id_input' value='".$master_data['master_data']->id."'>";
-									
-	                          			if(isset($existin_bill) && $existin_bill->id) {
-	                          				echo "<input type='hidden' name='bill_id' value='".$existin_bill->id."'>";
-	                          				echo "<input type='hidden' name='action' class='action' value='update_billing'>";
-	                          				echo "<button type='submit' class='btn btn-success create_billing'>Update Bill</button>";
-	                          			} else {
-	                          				echo "<input type='hidden' name='action' class='action' value='create_billing'>";
-	                          				echo "<button type='submit' class='btn btn-success create_billing'>Generate Bill</button>";
-	                          			}
-	                          		}
-	                          	?>
-	                       	</div>
+
+
+							<div class="deposit-repeater hiring_detail" style="margin-top:20px;">
+								<h2>Missing Cost</h2>
+								<table class="table table-bordered">
+									<thead>
+										<tr>
+											<th rowspan="2" style="width:80px;" class="center-th"><div>SL#</div></th>
+											<th rowspan="2" class="center-th"><div>Description</div></th>
+											<th rowspan="2" class="center-th"><div>Qty</div></th>
+											<th rowspan="2" style="width:140px;" class="center-th"><div>Rate</div></th>
+											<th rowspan="2" style="width:140px;" class="center-th"><div>Amount</div></th>
+										</tr>
+									</thead>
+									<tbody>
+										<?php
+
+											if( $lost_data['lost_detail'] && $lost_data['lost_total'] ) {
+												$i = 1;
+												foreach ($lost_data['lost_detail'] as $ld_value) {
+										?>
+													<tr>
+														<td>
+															<?php echo $i; ?>
+														</td>
+														<td>
+															<?php echo $ld_value->product_name.' '.$ld_value->product_type; ?>
+														</td>
+														<td>
+															<?php echo $ld_value->lost_qty; ?>
+														</td>
+														<td>
+															<?php echo $ld_value->lost_unit_price; ?>
+														</td>
+														<td>
+															<?php echo $ld_value->lost_total; ?>
+														</td>
+													</tr>
+										<?php
+													$i++;
+												}
+										?>
+													<tr>
+														<td colspan="4">Total</td>
+														<td><?php echo $lost_data['lost_total']->debit; ?></td>
+													</tr>
+										<?php
+											}
+										?>
+									</tbody>
+								</table>
+							</div>
 
 						</div>
 					</div>

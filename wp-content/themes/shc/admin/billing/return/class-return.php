@@ -87,7 +87,7 @@ END )
 
 
 
-$return_group = "SELECT f.lot_id, SUM(f.qty) as qty, f.rate_per_unit, SUM(f.return_qty) as return_qty, SUM(f.return_pending) as return_pending, l.product_name, l.product_type FROM 
+$return_group = "SELECT f.lot_id, SUM(f.qty) as qty, f.rate_per_unit, SUM(f.return_qty) as return_qty, SUM(f.return_pending) as return_pending, l.product_name, l.product_type, l.buying_price FROM 
 
 
 ( SELECT del.*,
