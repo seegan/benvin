@@ -30,7 +30,9 @@ if(isset($_GET['deposit_id'])) {
 	$dt = new DateTime($security_data->deposit_date);
 	$date = $dt->format('d-m-Y');
 	$time = $dt->format('h:i A');
+
 }
+
 ?>
 
 
@@ -382,7 +384,7 @@ if(isset($_GET['deposit_id'])) {
 											<div class="text-center">Rate/30 Days</div>
 										</th>
 										<th class="center-th" style="padding: 0;" colspan="2">
-											<div class="text-center">Amount@3 Times</div>
+											<div class="text-center">Amount@<?php echo $invoice_data->amt_times; ?> Times</div>
 										</th>
 									</tr>
 									<tr>
@@ -395,6 +397,9 @@ if(isset($_GET['deposit_id'])) {
 								<?php 
 
 								foreach ($pieces[$i] as $key => $value) {
+									$data_thirty = splitCurrency($value->rate_thirty);
+									$data_ninety = splitCurrency($value->rate_ninety);
+
 								?>
 									<tr>
 										<td><?php echo $page_start ?></td>
@@ -405,13 +410,23 @@ if(isset($_GET['deposit_id'])) {
 										<td>
 											<div class="text-center"><?php echo $value->qty; ?></div>
 										</td>
-										<td>0</td>
-										<td>00</td>
-										<td>0</td>
-										<td>00</td>
+										<td>
+											<div class="text-center" style="text-align: right;"><?php echo $data_thirty['rs']; ?></div>
+										</td>
+										<td>
+											<div class="text-center"><?php echo $data_thirty['ps']; ?></div>
+										</td>
+										<td>
+											<div class="text-center" style="text-align: right;"><?php echo $data_ninety['rs']; ?></div>
+										</td>
+										<td>
+											<div class="text-center"><?php echo $data_ninety['ps']; ?></div>
+										</td>
 									</tr>
 								<?php
 									if($tota_row == $page_start) {
+										$total_thirty_days = splitCurrency($invoice_data->total_thirty_days);
+										$total_ninety_days = splitCurrency($invoice_data->total_ninety_days);
 								?>
 										<tr>
 											<td></td>
@@ -419,17 +434,24 @@ if(isset($_GET['deposit_id'])) {
 											<td></td>
 											<td></td>
 											<td></td>
-										</tr>
-										<tr>
-											<td></td>
-											<td></td>
-											<td></td>
 											<td></td>
 											<td></td>
 										</tr>
 										<tr>
-											<td colspan="4">Total</td>
 											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+										</tr>
+										<tr>
+											<td colspan="3"><div class="text-center">Total</div></td>
+											<td><div class="text-center" style="text-align: right;"><?php echo $total_thirty_days['rs'] ?></div></td>
+											<td><div class="text-center"><?php echo $total_thirty_days['ps'] ?></div></td>
+											<td style="text-align: right;"><div class="text-center" style="text-align: right;"><?php echo $total_ninety_days['rs'] ?></div></td>
+											<td><div class="text-center"><?php echo $total_ninety_days['ps'] ?></div></td>
 										</tr>
 								<?php
 									}
@@ -450,38 +472,66 @@ if(isset($_GET['deposit_id'])) {
 
 <div class="footer">
 		<div class="inner-container">
-			<div class="left-float" style="width:200px;">E. & OE.</div>
-			<div style="width: 594px">Working Hours : 9.00 AM to 5.00 PM SUNDAY HOLIDAY</div>
-			<div class="clear"></div>
-		</div>
-
-		<div class="inner-container" style="margin-top: 5px;">
-			<div class="vehicle-detail left-float">
-				<div class="bottom-detail-in">
-					<div class="detail-in">
-						Vehicle No.
-						<div class="vehicle-box">
-							.
+			<div  class="left-float" style="width: 434px">
+				<div style="width: 100%;">
+					<div class="left-float">Rupees</div>
+					<div class="left-float" style="min-width: 360px;border-bottom: 1px dotted;height: 20px;margin-left: 5px;"></div>
+					<div class="clear"></div>
+				</div>
+				<div class="">
+					<div style="width: 310px;float: left;padding-right: 10px;font-size: 10px;margin-top: 20px;">The Security Deposit will be returned on immediately on safe receipt of the hired equipments * Rental peroid - minimum 30 days * No part payment of the Security Deposit will be returned on receipt of the part quantity of the hired equipments. </div>
+					<div style="float: left;width: 124px;padding: 0 10px;text-align: right;">
+						<div style="margin-top: 5px; ">
+							Received by <br>Cash / Cheque
 						</div>
+
 					</div>
-					<div class="detail-in">
-						Driver Name: 
-					</div>
-					<div class="detail-in">
-						Mobile No: 
-					</div>
+					<div class="clear"></div>
 				</div>
 			</div>
-			<div class="hirer-detail left-float">
-				<div class="bottom-detail-in">tret</div>
-			</div>
-			<div class="signature-detail left-float">
-				<div class="bottom-detail-in">tret</div>
+			<div class="left-float" style="width:200px;">
+				<table class="table table-bordered" style="margin-bottom: 0px;">
+					<tr>
+						<td style="width: 110px;">Cheque No <span style="float: right;">:</span> </td>
+						<td> </td>
+					</tr>
+					<tr>
+						<td>Date <span style="float: right;">:</span> </td>
+						<td></td>
+					</tr>
+					<tr>
+						<td>amount Rs <span style="float: right;">:</span> </td>
+						<td></td>
+					</tr>
+				</table>
 			</div>
 			<div class="clear"></div>
 		</div>
 
-		<div class="inner-container foot" style="width: 810px;line-height: 50px;font-size: 14px;color: #fff !important;">
+
+
+
+		<div class="inner-container" style="margin-top: 5px;">
+
+
+			<div class="left-float" style="width: 310px;float: left;padding-right: 10px;">
+				<div>Hirer Signature</div>
+				<div style="border-bottom: 1px dotted;height: 20px;margin-left: 5px;"></div>
+				<div style="width: 310px;float: left;padding-right: 10px;font-size: 10px;margin-top: 2px;">Received the above construction equipments in good condition</div>
+			</div>
+			<div class="left-float" style="width: 170px;float: left;padding: 0 10px;">
+				WORKING HOURS<br>
+				9.00 AM to 5.00 PM<br>
+				SUNDAY HOLIDAY
+			</div>
+			<div class="left-float" style="width: 154px;">
+				<div style="margin-top: -10px;">For JBC Associates</div>
+				<div style="margin-top: 30px;">Manager / Accountant</div>
+			</div>
+			<div class="clear"></div>
+		</div>
+
+		<div class="inner-container foot" style="width: 810px;line-height: 25px;font-size: 14px;color: #fff !important;">
 			<div class="left-float" style="width:325px;font-size: 14px;color: #fff !important;text-align: center;">Email : infojbcaccesss@gmail.com</div>
 			<div class="left-float" style="width:325px;font-size: 14px;color: #fff !important;text-align: center;">Website : www.jcbascdfdsgdfg.in</div>
 			<div class="clear"></div>
