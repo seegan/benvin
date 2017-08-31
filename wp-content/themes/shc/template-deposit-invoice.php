@@ -388,9 +388,9 @@ if(isset($_GET['deposit_id'])) {
 										</th>
 									</tr>
 									<tr>
-										<th style="padding: 0;width: 100px;"><div class="text-center">Rs</div></th>
+										<th style="padding: 0;width: 70px;"><div class="text-center">Rs</div></th>
 										<th style="padding: 0;width: 35px;"><div class="text-center">Ps</div></th>
-										<th style="padding: 0;width: 100px;"><div class="text-center">Rs</div></th>
+										<th style="padding: 0;width: 70px;"><div class="text-center">Rs</div></th>
 										<th style="padding: 0;width: 35px;"><div class="text-center">Ps</div></th>
 									</tr>
 								</thead>

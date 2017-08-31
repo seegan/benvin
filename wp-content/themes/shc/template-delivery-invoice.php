@@ -47,8 +47,6 @@ if(isset($_GET['deposit_id'])) {
 		}
 		@media print {
 
-
-
 /*total width 794*/
 
 			.inner-container {
