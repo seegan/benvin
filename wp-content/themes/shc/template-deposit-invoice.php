@@ -27,16 +27,11 @@ if(isset($_GET['deposit_id'])) {
 	$invoice_data = $security_data['invoice_data'];
 	$deposit_detail = $security_data['deposit_detail'];
 
-	$dt = new DateTime($security_data->deposit_date);
+	$dt = new DateTime($security_data['deposit_data']->deposit_date);
 	$date = $dt->format('d-m-Y');
 	$time = $dt->format('h:i A');
-
 }
-
 ?>
-
-
-
 	<style type="text/css">
 
 		@page {
@@ -390,7 +385,7 @@ if(isset($_GET['deposit_id'])) {
 									<tr>
 										<th style="padding: 0;width: 70px;"><div class="text-center">Rs</div></th>
 										<th style="padding: 0;width: 35px;"><div class="text-center">Ps</div></th>
-										<th style="padding: 0;width: 70px;"><div class="text-center">Rs</div></th>
+										<th style="padding: 0;width: 80px;"><div class="text-center">Rs</div></th>
 										<th style="padding: 0;width: 35px;"><div class="text-center">Ps</div></th>
 									</tr>
 								</thead>
@@ -473,7 +468,9 @@ if(isset($_GET['deposit_id'])) {
 			<div  class="left-float" style="width: 434px">
 				<div style="width: 100%;">
 					<div class="left-float">Rupees</div>
-					<div class="left-float" style="min-width: 360px;border-bottom: 1px dotted;height: 20px;margin-left: 5px;"></div>
+					<div class="left-float" style="min-width: 360px;border-bottom: 1px dotted;height: 20px;margin-left: 5px;">
+						<?php echo ucfirst(convert_number_to_words_full($invoice_data->total_ninety_days)); ?>
+					</div>
 					<div class="clear"></div>
 				</div>
 				<div class="">
@@ -491,15 +488,15 @@ if(isset($_GET['deposit_id'])) {
 				<table class="table table-bordered" style="margin-bottom: 0px;">
 					<tr>
 						<td style="width: 110px;">Cheque No <span style="float: right;">:</span> </td>
-						<td> </td>
+						<td><?php  echo ($invoice_data->cheque_no !== '0.00') ? $invoice_data->cheque_no : ''; ?></td>
 					</tr>
 					<tr>
 						<td>Date <span style="float: right;">:</span> </td>
-						<td></td>
+						<td><?php echo ($invoice_data->cheque_date !== '0000-00-00') ? $invoice_data->cheque_date : ''; ?></td>
 					</tr>
 					<tr>
 						<td>amount Rs <span style="float: right;">:</span> </td>
-						<td></td>
+						<td><?php echo ($invoice_data->cheque_amount !== '0') ? $invoice_data->cheque_amount : ''; ?></td>
 					</tr>
 				</table>
 			</div>

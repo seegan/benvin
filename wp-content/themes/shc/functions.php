@@ -296,6 +296,19 @@ function create_initial_pages() {
 }
 
 
+function create_admin_history($data) {
+	global $wpdb;
+	$table = $wpdb->prefix.'shc_admin_history';
+	$wpdb->insert($table, $data);
+
+	
+	//customer_create
+	//customer_update
+	//site_create
+	//site_update
+	//special_price_create
+}
+
 
 /*SELECT l.*,sale_bal.sale_unit, stock_bal.stock_total FROM wp_shc_lots as l LEFT JOIN 
 ( SELECT sd.lot_id, sum(sd.sale_unit) sale_unit FROM wp_shc_sale_detail as sd JOIN wp_shc_sale as s ON s.id = sd.sale_id WHERE s.locked = 1 AND s.active = 1 AND sd.item_status = 'open' AND sd.active = 1 GROUP BY sd.lot_id ) as sale_bal
