@@ -395,11 +395,9 @@ if(isset($_GET['deposit_id'])) {
 									</tr>
 								</thead>
 								<?php 
-
 								foreach ($pieces[$i] as $key => $value) {
 									$data_thirty = splitCurrency($value->rate_thirty);
 									$data_ninety = splitCurrency($value->rate_ninety);
-
 								?>
 									<tr>
 										<td><?php echo $page_start ?></td>
