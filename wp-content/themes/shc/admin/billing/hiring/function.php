@@ -41,6 +41,7 @@ function create_billing() {
 	$data['msg'] 	= 'Something Went Wrong! Please Try Again!';
 	$data['redirect'] 	= 0;
 	$data['success'] = 0;
+	$loggdin_user = get_current_user_id();	
 
 	global $wpdb;
 	$params = array();
@@ -80,9 +81,11 @@ function create_billing() {
 
 		$hiring_data['bill_from_comp'] = $bill_no_data['bill_from_comp'];
 		$hiring_data['bill_no'] = $bill_no_data['bill_no'];
+		$hiring_data['updated_by'] = $loggdin_user;
 
 		$wpdb->insert($hiring_table, $hiring_data);
 		$hiring_bill_id = $wpdb->insert_id;
+		create_admin_history(array('updated_by' => $loggdin_user, 'update_in' => $hiring_bill_id, 'detail' => 'hiring_create' ));
 
 		if($hiring_bill_id && $params['hiring_detail']) {
 			foreach ($params['hiring_detail'] as $h_value) {
@@ -118,7 +121,6 @@ function create_billing() {
 				$redirect_url = 'admin.php?page=new_hiring&id='.$master_id.'&bill_id='.$hiring_bill_id;
 
 				$data['redirect'] = network_admin_url( $redirect_url );
-
 			}
 		}
 
@@ -129,6 +131,8 @@ function create_billing() {
 		$hiring_bill_id = $params['bill_id'];
 
 		$wpdb->update($hiring_table, $hiring_data, array('id' => $hiring_bill_id));
+		create_admin_history(array('updated_by' => $loggdin_user, 'update_in' => $hiring_bill_id, 'detail' => 'hiring_update' ));
+
 		$wpdb->update($hiring_detail_table, array('active' => 0), array('hiring_bill_id' => $hiring_bill_id) );
 
 

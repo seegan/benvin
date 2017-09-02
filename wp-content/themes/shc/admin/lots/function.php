@@ -22,33 +22,37 @@ function create_lot(){
 	$data['success'] 	= 0;
 	$data['msg'] 	= 'Something Went Wrong Please Try Again!';
 	$data['redirect'] 	= 0;
+	$loggdin_user = get_current_user_id();
 
 	global $wpdb;
 	$params = array();
 	parse_str($_POST['data'], $params);
 	unset($params['action']);
 	$lot_table = $wpdb->prefix. 'shc_lots';
+	$params['updated_by'] = $loggdin_user;
+
 	$wpdb->insert($lot_table, $params);
+	$lot_id = $wpdb->insert_id;
+	create_admin_history(array('updated_by' => $loggdin_user, 'update_in' => $lot_id, 'detail' => 'lot_create' ));
 
 	if($wpdb->insert_id) {
 		$data['success'] = 1;
 		$data['msg'] 	= 'Lot Created!';
 		$data['redirect'] = network_admin_url( 'admin.php?page=list_lots' );
 	}
-
 	echo json_encode($data);
 	die();
 }
 add_action( 'wp_ajax_create_lot', 'create_lot' );
 add_action( 'wp_ajax_nopriv_create_lot', 'create_lot' );
 
-
-
 function update_lot(){
 
 	$data['success'] 	= 0;
 	$data['msg'] 	= 'Product Not Exist Please Try Again!';
 	$data['redirect'] 	= 0;
+	$loggdin_user = get_current_user_id();
+
 	global $wpdb;
 	$params = array();
 	parse_str($_POST['data'], $params);
@@ -60,6 +64,7 @@ function update_lot(){
 	$lot_table = $wpdb->prefix. 'shc_lots';
 	if($lot_id != '' && get_lot($lot_id)) {
 		$wpdb->update($lot_table, $params, array('id' => $lot_id));
+		create_admin_history(array('updated_by' => $loggdin_user, 'update_in' => $lot_id, 'detail' => 'lot_update' ));
 		$data['success'] = 1;
 		$data['msg'] 	= 'Lot Updated!';
 	}

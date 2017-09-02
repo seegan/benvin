@@ -16,26 +16,31 @@ function create_master() {
 	$data['msg'] 	= 'Something Went Wrong! Please Try Again!';
 	$data['redirect'] 	= 0;
 	$data['success'] = 0;
+	$loggdin_user = get_current_user_id();
+
 	$params = array();
 	parse_str($_POST['data'], $params);
 
 	$master_table = $wpdb->prefix.'shc_master';
-
 
 	$master_date = $params['date'].' '.$params['time'].':00';
 
 	$detail_main = array(
 			'customer_id' => $params['customer_name'],
 			'site_id' => $params['site_name'],
-			'master_date' 	=> $master_date
+			'master_date' 	=> $master_date,
 		);
 	
 	if(isset($params['action']) && $params['action'] != 'update_master') {
+		$detail_main['updated_by'] = $loggdin_user;
 		$wpdb->insert($master_table, $detail_main);
 		$master_id = $wpdb->insert_id;
+		create_admin_history(array('updated_by' => $loggdin_user, 'update_in' => $master_id, 'detail' => 'master_create' ));		
+
 	} else {
-		$masterid = $params['master_id'];
+		$master_id = $params['master_id'];
 		$wpdb->update($master_table, $detail_main, array('id' => $master_id));
+		create_admin_history(array('updated_by' => $loggdin_user, 'update_in' => $master_id, 'detail' => 'master_update' ));			
 	}
 
 	$data['success'] = 1;

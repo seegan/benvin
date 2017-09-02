@@ -112,6 +112,7 @@ function create_deposit() {
 	$data['msg'] 	= 'Something Went Wrong! Please Try Again!';
 	$data['redirect'] 	= 0;
 	$data['success'] = 0;
+	$loggdin_user = get_current_user_id();	
 	$params = array();
 	parse_str($_POST['data'], $params);
 
@@ -145,9 +146,11 @@ function create_deposit() {
 
 		$detail_main['bill_from_comp'] = $bill_no_data['bill_from_comp'];
 		$detail_main['bill_no'] = $bill_no_data['bill_no'];
+		$detail_main['updated_by'] = $loggdin_user;
 		
 		$wpdb->insert($deposit_table, $detail_main);
 		$deposit_id = $wpdb->insert_id;
+		create_admin_history(array('updated_by' => $loggdin_user, 'update_in' => $deposit_id, 'detail' => 'deposit_create' ));
 
 
 		$wpdb->insert($loading_table, array('deposit_id' => $deposit_id, 'master_id' => $params['master_id'], 'loading_charge' => $loading_total, 'deposit_date' => $deposit_date ) );
@@ -160,6 +163,8 @@ function create_deposit() {
 
 		$deposit_id = isset($params['deposit_id']) ? $params['deposit_id'] : 0;
 		$wpdb->update($deposit_table, $detail_main, array('id' => $deposit_id));
+
+		create_admin_history(array('updated_by' => $loggdin_user, 'update_in' => $deposit_id, 'detail' => 'deposit_update' ));
 
 		$loadin_update_select = "SELECT * FROM ${loading_table} WHERE deposit_id = ${deposit_id} AND master_id = ".$params['master_id'];
 		

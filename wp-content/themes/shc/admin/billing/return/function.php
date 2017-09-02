@@ -21,10 +21,10 @@ function create_return() {
 	$data['msg'] 	= 'Something Went Wrong! Please Try Again!';
 	$data['redirect'] 	= 0;
 	$data['success'] = 0;
+	$loggdin_user = get_current_user_id();
+
 	$params = array();
 	parse_str($_POST['data'], $params);
-
-
 	$return_table 			= $wpdb->prefix.'shc_return';
 	$return_detail_table 	= $wpdb->prefix.'shc_return_detail';
 	$unloading_table 		= $wpdb->prefix.'shc_unloading';
@@ -32,11 +32,8 @@ function create_return() {
 	$lost_table 			= $wpdb->prefix.'shc_lost';
 	$lost_detail_table 		= $wpdb->prefix.'shc_lost_detail';
 
-
-
 	$return_date = $params['date'].' '.$params['time'].':00';
 	$master_id = $params['master_id'];
-
 
 	$unloading = (isset($params['unloading']) && $params['unloading'] != '') ? $params['unloading'] : 0.00;
 	$transportation = (isset($params['transportation']) && $params['transportation'] != '') ? $params['transportation'] : 0.00;
@@ -49,8 +46,9 @@ function create_return() {
 
 	if(isset($params['action']) && $params['action'] == 'new_return') {
 
-
 		$return_data = array('master_id' => $master_id, 'return_date' => $return_date, 'is_return' => $is_return, 'vehicle_number' => $vehicle_number, 'driver_name' => $driver_name, 'driver_mobile' => $driver_mobile);
+
+		$return_date['updated_by'] = $loggdin_user;
 
 		if($is_return) {
 			$bill_no_data = getCorrectBillNumber($params['bill_no'], $params['site_id'], 'shc_return');
@@ -60,6 +58,7 @@ function create_return() {
 
 		$wpdb->insert($return_table,  $return_data);
 		$return_id = $wpdb->insert_id;
+		create_admin_history(array('updated_by' => $loggdin_user, 'update_in' => $return_id, 'detail' => 'return_create' ));
 
 		$wpdb->insert($unloading_table, array('return_id' => $return_id, 'master_id' => $master_id, 'unloading_charge' => $total, 'return_date' => $return_date ) );
 		$loading_id = $wpdb->insert_id;
@@ -78,10 +77,12 @@ function create_return() {
 				}
 			}
 
+
 			if(!$is_return) {
-				$lost_data = array('master_id' => $master_id, 'return_id' => $return_id, 'lost_qty' => $params['lost_qty_total'], 'lost_total' => $params['lost_cost']);
+				$lost_data = array('master_id' => $master_id, 'return_id' => $return_id, 'lost_qty' => $params['lost_qty_total'], 'lost_total' => $params['lost_cost'], 'updated_by' => $loggdin_user);
 				$wpdb->insert($lost_table, $lost_data);
 				$lost_id = $wpdb->insert_id;
+				create_admin_history(array('updated_by' => $loggdin_user, 'update_in' => $lost_id, 'detail' => 'lost_create' ));
 
 				foreach ($params['return_detail_group'] as $l_value) {
 
@@ -105,6 +106,8 @@ function create_return() {
 		$return_id = isset($params['return_id']) ? $params['return_id'] : 0;
 
 		$wpdb->update($return_table, array('return_date' => $return_date, 'is_return' => $is_return, 'vehicle_number' => $vehicle_number, 'driver_name' => $driver_name, 'driver_mobile' => $driver_mobile), array('id' => $return_id) );
+		create_admin_history(array('updated_by' => $loggdin_user, 'update_in' => $return_id, 'detail' => 'return_update' ));
+		
 		$wpdb->update($return_detail_table, array('active' => 0), array('return_id' => $return_id));
 
 

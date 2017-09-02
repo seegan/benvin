@@ -20,6 +20,8 @@ function create_obc() {
 	$data['msg'] 	= 'Something Went Wrong! Please Try Again!';
 	$data['redirect'] 	= 0;
 	$data['success'] = 0;
+	$loggdin_user = get_current_user_id();
+
 	$params = array();
 	parse_str($_POST['data'], $params);
 
@@ -41,8 +43,9 @@ function create_obc() {
 
 	if(isset($params['action']) && $params['action'] == 'create_obc') {
 
-		$wpdb->insert($obc_table, array('master_id' => $master_id, 'cheque_no' => $cheque_no, 'cheque_date' => $cheque_date, 'cheque_amount' => $cheque_amt, 'notes' => $notes, 'obc_date' => $obc_date_time ) );
+		$wpdb->insert($obc_table, array('master_id' => $master_id, 'cheque_no' => $cheque_no, 'cheque_date' => $cheque_date, 'cheque_amount' => $cheque_amt, 'notes' => $notes, 'obc_date' => $obc_date_time, 'updated_by' => $loggdin_user ) );
 		$obc_id = $wpdb->insert_id;
+		create_admin_history(array('updated_by' => $loggdin_user, 'update_in' => $obc_id, 'detail' => 'obc_create' ));
 
 		$data['success'] = 1;
 		$data['msg'] 	= 'OBC Updated!';
@@ -54,11 +57,11 @@ function create_obc() {
 	if(isset($params['action']) && $params['action'] == 'update_obc') {
 
 		$wpdb->update($obc_table, array( 'cheque_no' => $cheque_no, 'cheque_date' => $cheque_date, 'cheque_amount' => $cheque_amt, 'notes' => $notes, 'obc_date' => $obc_date_time ), array('master_id' => $master_id, 'id' => $obc_id) );
+		create_admin_history(array('updated_by' => $loggdin_user, 'update_in' => $obc_id, 'detail' => 'obc_update' ));
 
 		$data['success'] = 1;
 		$data['msg'] 	= 'OBC Updated!';
 		$redirect_url = 'admin.php?page=new_obc&id='.$master_id.'&obc_id='.$obc_id;
-
 		$data['redirect'] = network_admin_url( $redirect_url );
 	}
 
