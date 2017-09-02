@@ -3,14 +3,15 @@
 	$site_detail = false;
 	$special_price = false;
 	$companies = getCompanies();
-	$bill_from = false;
+	$bill_from_comp = false;
 
 	if(isset($_GET['id']) && $customer = get_customer($_GET['id']) ) {
 		$user_id = $_GET['id'];
 		$site_detail = getSitedetail($user_id);
 		$special_price = getSpecialPrice($user_id);
 
-		$bill_from = $customer->bill_from;
+		$bill_from_comp = $customer->bill_from_comp;
+
 	}
 
 ?>
@@ -58,7 +59,8 @@
 									<?php 
 										if($companies) {
 											foreach ($companies as $c_value) {
-												$selected = ($bill_from == $c_value->id) ? 'selected' : '';
+
+												$selected = ($bill_from_comp == $c_value->id) ? 'selected' : '';
 												echo "<option ".$selected." value='".$c_value->id."'>".$c_value->company_name."</option>";
 											}
 										}

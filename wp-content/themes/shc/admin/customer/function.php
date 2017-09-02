@@ -26,6 +26,7 @@ function create_customer() {
 	$data['success'] 	= 0;
 	$data['msg'] 	= 'Something Went Wrong! Please Try Again!';
 	$data['redirect'] 	= 0;
+	$loggdin_user = get_current_user_id();
 
 	global $wpdb;
 	$params = array();
@@ -33,10 +34,13 @@ function create_customer() {
 	unset($params['action']);
 
 	$customer_table = $wpdb->prefix. 'shc_customers';
+	$params['updated_by'] = $loggdin_user;
 	$wpdb->insert($customer_table, $params);
 
 	if($wpdb->insert_id) {
 		$customer_id = $wpdb->insert_id;
+		create_admin_history(array('updated_by' => $loggdin_user, 'update_in' => $customer_id, 'detail' => 'customer_create' ));
+
 		$data['success'] = 1;
 		$data['msg'] 	= 'Customer Added!';
 		$redirect_url = "admin.php?page=new_customer&id=${customer_id}";
@@ -54,6 +58,7 @@ function update_customer() {
 	$data['success'] 	= 0;
 	$data['msg'] = 'Invalid Customer Please Check Again!';
 	$data['redirect'] 	= 0;
+	$loggdin_user = get_current_user_id();
 
 	global $wpdb;
 	$params = array();
@@ -64,12 +69,12 @@ function update_customer() {
 	unset($params['customer_id']);
 
 
-
 	if(get_customer($customer_id)) {
 
 
 		$customer_table = $wpdb->prefix. 'shc_customers';
 		$wpdb->update($customer_table, $params, array('id' => $customer_id));
+		create_admin_history(array('updated_by' => $loggdin_user, 'update_in' => $customer_id, 'detail' => 'customer_update' ));
 
 		$data['success'] = 1;
 		$data['msg'] = 'Customer Detail Updated!';
@@ -88,6 +93,7 @@ function create_site() {
 	$data['success'] 	= 0;
 	$data['msg'] = 'Invalid Try Again!';
 	$data['redirect'] 	= 0;
+	$loggdin_user = get_current_user_id();
 
 	global $wpdb;
 	$site_table = $wpdb->prefix.'shc_customer_site';
@@ -104,9 +110,13 @@ function create_site() {
 		foreach ($params['site_address'] as $s_value) {
 
 			if($s_value['site_id'] == 0) {
-				$wpdb->insert($site_table, array('customer_id' => $customer_id, 'site_name' => $s_value['site_name'], 'site_address' => $s_value['site_address'], 'phone_number' => $s_value['site_phone'], 'extra_contact' => $s_value['extra_contact'], 'gst_number' => $s_value['gst_number'] , 'gst_for' => $s_value['gst_for'] ));
+				$wpdb->insert($site_table, array('customer_id' => $customer_id, 'site_name' => $s_value['site_name'], 'site_address' => $s_value['site_address'], 'phone_number' => $s_value['site_phone'], 'extra_contact' => $s_value['extra_contact'], 'gst_number' => $s_value['gst_number'] , 'gst_for' => $s_value['gst_for'], 'updated_by' => $loggdin_user ));
+				$site_id = $wpdb->insert_id;
+				create_admin_history(array('updated_by' => $loggdin_user, 'update_in' => $site_id, 'detail' => 'site_create' ));
+
 			} else {
 				$wpdb->update($site_table, array( 'site_address' => $s_value['site_address'], 'site_name' => $s_value['site_name'], 'phone_number' => $s_value['site_phone'],'extra_contact' => $s_value['extra_contact'], 'gst_number' => $s_value['gst_number'] , 'gst_for' => $s_value['gst_for'], 'active' => 1), array('id' => $s_value['site_id']));
+				create_admin_history(array('updated_by' => $loggdin_user, 'update_in' => $s_value['site_id'], 'detail' => 'site_update' ));
 			}
 
 		}
@@ -120,9 +130,10 @@ function create_site() {
 			$site_id = ($p_value['site_id'] && $p_value['site_id']) ? $p_value['site_id'] : 0;
 
 			if($p_value['special_price_id'] == 0) {
-				$wpdb->insert($special_price, array('customer_id' => $customer_id, 'site_id' => $site_id, 'lot_id' => $p_value['lot_id_orig'], 'price' => $p_value['unit_price']));
+				$wpdb->insert($special_price, array('customer_id' => $customer_id, 'site_id' => $site_id, 'lot_id' => $p_value['lot_id_orig'], 'price' => $p_value['unit_price'], 'updated_by' => $loggdin_user));
+				$special_price_id = $wpdb->insert_id;
+				create_admin_history(array('updated_by' => $loggdin_user, 'update_in' => $special_price_id, 'detail' => 'special_price_create' ));
 			} else {
-
 				$wpdb->update($special_price, array('customer_id' => $customer_id, 'site_id' => $site_id, 'lot_id' => $p_value['lot_id_orig'], 'price' => $p_value['unit_price'], 'active' => 1), array('id' => $p_value['special_price_id']));
 			}
 
