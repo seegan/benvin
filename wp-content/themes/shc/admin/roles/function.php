@@ -13,8 +13,8 @@ function src_global_var() {
 		'lots' => array(
 			'name' => 'Products',
 			'data' => array(
-				'add_lot' => 'Add Stock',
-				'lot_list' => 'Lot List', 
+				'add_lot' => 'Add Product',
+				'lot_list' => 'Product List', 
 			),
 			'permission' => array(
 				'add_lot' => (is_super_admin()) ? 'manage_options' : 'add_lot',
@@ -26,6 +26,7 @@ function src_global_var() {
 			'data' => array(
 				'add_stock' => 'Add Stock',
 				'stock_list' => 'Stock List', 
+				'stock_data' => 'Stock Data', 
 			),
 			'permission' => array(
 				'add_stock' => (is_super_admin()) ? 'manage_options' : 'add_stock',
@@ -46,12 +47,39 @@ function src_global_var() {
 		'billing' => array(
 			'name' => 'Billing',
 			'data' => array(
-				'deposit' => 'Deposit',
-				'new_deposit' => 'New Deposit',
+				'new_master' => 'Create Master',
+				'new_deposit' => 'Create Deposit',
+				'new_delivery' => 'Create Delivery',
+				'new_return' => 'Create Return',
+				'new_bill' => 'Create Hiring Bill',
+				'new_obc' => 'Create OBC',
 			),
 			'permission' => array(
-				'deposit' => (is_super_admin()) ? 'manage_options' : 'deposit',
+				'new_master' => (is_super_admin()) ? 'manage_options' : 'new_master',
 				'new_deposit' => (is_super_admin()) ? 'manage_options' : 'new_deposit',
+				'new_delivery' => (is_super_admin()) ? 'manage_options' : 'new_delivery',
+				'new_return' => (is_super_admin()) ? 'manage_options' : 'new_return',
+				'new_bill' => (is_super_admin()) ? 'manage_options' : 'new_bill',
+				'new_obc' => (is_super_admin()) ? 'manage_options' : 'new_obc',
+			),			
+		),
+		'report' => array(
+			'name' => 'Report',
+			'data' => array(
+				'master_report' => 'Master Report',
+				'deposit_report' => 'Deposit Report',
+				'delivery_report' => 'Delivery Report',
+				'return_report' => 'Return Report',
+				'bill_report' => 'Hiring bill Report',
+				'obc_report' => 'OBC Report',
+			),
+			'permission' => array(
+				'master_report' => (is_super_admin()) ? 'manage_options' : 'master_report',
+				'deposit_report' => (is_super_admin()) ? 'manage_options' : 'deposit_report',
+				'delivery_report' => (is_super_admin()) ? 'manage_options' : 'delivery_report',
+				'return_report' => (is_super_admin()) ? 'manage_options' : 'return_report',
+				'bill_report' => (is_super_admin()) ? 'manage_options' : 'bill_report',
+				'obc_report' => (is_super_admin()) ? 'manage_options' : 'obc_report',
 			),			
 		),
 		'admin_user' => array(
@@ -76,7 +104,23 @@ function src_global_var() {
 				'role_list' => (is_super_admin()) ? 'manage_options' : 'role_list', 
 			),			
 
-		)
+		),
+		'Employee' => array(
+			'name' => 'Employee',
+			'data' => array(
+				'add_employee' => 'Add Employee', 
+				'list_employee' => 'Employee List', 
+				'employee_attendance' => 'Employee Attendance', 
+				'employee_salary' => 'Employee Salary', 
+			),
+			'permission' => array(
+				'add_employee' => (is_super_admin()) ? 'manage_options' : 'add_employee',
+				'list_employee' => (is_super_admin()) ? 'manage_options' : 'list_employee', 
+				'employee_attendance' => (is_super_admin()) ? 'manage_options' : 'employee_attendance', 
+				'employee_salary' => (is_super_admin()) ? 'manage_options' : 'employee_salary', 
+			),			
+
+		),
 	);
 
 }
