@@ -46,38 +46,52 @@ global $src_capabilities;
 
 
 	add_menu_page(
+	    __( 'Employee', 'shc'),
+	    'Employee',
+	    $src_capabilities['employee']['permission']['list_employee'],
+	    'list_employee',
+	    'list_employee',
+	    'dashicons-list-view',
+	    6
+	);
+	add_submenu_page('list_employee', 'Employee List', 'Employee List', $src_capabilities['employee']['permission']['list_employee'], 'list_employee', 'list_employee' );
+	add_submenu_page('list_employee', 'New Employee', 'New Employee', $src_capabilities['employee']['permission']['add_employee'], 'new_employee', 'new_employee' );	
+
+
+
+	add_menu_page(
 	    __( 'Billing', 'shc'),
 	    'Billing',
-	    $src_capabilities['billing']['permission']['deposit'],
+	    $src_capabilities['billing']['permission']['new_master'],
 	    'master',
 	    'master',
 	    'dashicons-id',
 	    7
 	);
-	add_submenu_page('master', 'New Master', 'New Master', $src_capabilities['billing']['permission']['deposit'], 'master', 'master' );
-	add_submenu_page('master', 'New Deposit', 'Deposit', $src_capabilities['billing']['permission']['deposit'], 'deposit', 'new_deposit' );
-	add_submenu_page('master', 'New Delivery', 'Delivery', $src_capabilities['billing']['permission']['deposit'], 'new_delivery', 'new_delivery' );
-	add_submenu_page('master', 'New Return', 'Return', $src_capabilities['billing']['permission']['deposit'], 'new_return', 'new_return' );
-	add_submenu_page('master', 'New Hiring', 'Hiring Bill', $src_capabilities['billing']['permission']['deposit'], 'new_hiring', 'new_hiring' );
-	add_submenu_page('master', 'New OBC', 'OBC', $src_capabilities['billing']['permission']['deposit'], 'new_obc', 'new_obc' );
+	add_submenu_page('master', 'New Master', 'New Master', $src_capabilities['billing']['permission']['new_master'], 'master', 'master' );
+	add_submenu_page('master', 'New Deposit', 'Deposit', $src_capabilities['billing']['permission']['new_deposit'], 'deposit', 'new_deposit' );
+	add_submenu_page('master', 'New Delivery', 'Delivery', $src_capabilities['billing']['permission']['new_delivery'], 'new_delivery', 'new_delivery' );
+	add_submenu_page('master', 'New Return', 'Return', $src_capabilities['billing']['permission']['new_return'], 'new_return', 'new_return' );
+	add_submenu_page('master', 'New Hiring', 'Hiring Bill', $src_capabilities['billing']['permission']['new_bill'], 'new_hiring', 'new_hiring' );
+	add_submenu_page('master', 'New OBC', 'OBC', $src_capabilities['billing']['permission']['new_obc'], 'new_obc', 'new_obc' );
 
 
 	add_menu_page(
 	    __( 'Report', 'shc'),
 	    'Report',
-	    $src_capabilities['billing']['permission']['deposit'],
+	    $src_capabilities['report']['permission']['master_report'],
 	    'master_report',
 	    'master_report',
 	    'dashicons-id',
 	    7
 	);
-	add_submenu_page('master_report', 'Master List', 'Master List', $src_capabilities['billing']['permission']['deposit'], 'master_report', 'master_report' );
-	add_submenu_page('master_report', 'Deposit List', 'Deposit List', $src_capabilities['billing']['permission']['deposit'], 'deposit_report', 'deposit_report' );
-	add_submenu_page('master_report', 'Delivery List', 'Delivery List', $src_capabilities['billing']['permission']['deposit'], 'delivery_report', 'delivery_report' );
-	add_submenu_page('master_report', 'Return List', 'Return List', $src_capabilities['billing']['permission']['deposit'], 'return_report', 'return_report' );
-	add_submenu_page('master_report', 'Hiring List', 'Hiring List', $src_capabilities['billing']['permission']['deposit'], 'hiring_report', 'hiring_report' );
-	add_submenu_page('master_report', 'OBC List', 'OBC List', $src_capabilities['billing']['permission']['deposit'], 'obc_report', 'obc_report' );
-	add_submenu_page('master_report', 'Statement', 'Statement', $src_capabilities['billing']['permission']['deposit'], 'new_statement', 'new_statement' );
+	add_submenu_page('master_report', 'Master List', 'Master List', $src_capabilities['report']['permission']['master_report'], 'master_report', 'master_report' );
+	add_submenu_page('master_report', 'Deposit List', 'Deposit List', $src_capabilities['report']['permission']['deposit_report'], 'deposit_report', 'deposit_report' );
+	add_submenu_page('master_report', 'Delivery List', 'Delivery List', $src_capabilities['report']['permission']['delivery_report'], 'delivery_report', 'delivery_report' );
+	add_submenu_page('master_report', 'Return List', 'Return List', $src_capabilities['report']['permission']['return_report'], 'return_report', 'return_report' );
+	add_submenu_page('master_report', 'Hiring List', 'Hiring List', $src_capabilities['report']['permission']['bill_report'], 'hiring_report', 'hiring_report' );
+	add_submenu_page('master_report', 'OBC List', 'OBC List', $src_capabilities['report']['permission']['obc_report'], 'obc_report', 'obc_report' );
+	add_submenu_page('master_report', 'Statement', 'Statement', $src_capabilities['report']['permission']['statement'], 'new_statement', 'new_statement' );
 
 
 	add_menu_page(
@@ -130,8 +144,12 @@ function new_customer() {
 	require 'customer/add-customer.php';
 }
 
-
-
+function list_employee() {
+	require 'employee/listing/employee-list.php';
+}
+function new_employee() {
+	require 'employee/add-employee.php';
+}
 
 function add_admin() {
     require 'users/add-admin.php';

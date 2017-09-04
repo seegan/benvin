@@ -57,7 +57,6 @@ function load_custom_wp_admin_style() {
 
 	wp_enqueue_style('kv_js_time_style' , get_template_directory_uri(). '/admin/inc/css/jquery-ui-timepicker-addon.css');
 	wp_enqueue_style('jquery-style', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/smoothness/jquery-ui.css');
-
 	
 	wp_enqueue_script( 'bootstrap-min', get_template_directory_uri() . '/admin/inc/js/bootstrap.min.js', array('jquery'), false, false );
 	wp_enqueue_script( 'bpopup-min', get_template_directory_uri() . '/admin/inc/js/jquery.bpopup.min.js', array('jquery'), false, false );
@@ -84,6 +83,8 @@ require get_template_directory() . '/admin/users/function.php';
 require get_template_directory() . '/admin/customer/function.php';
 require get_template_directory() . '/admin/lots/function.php';
 require get_template_directory() . '/admin/stocks/function.php';
+require get_template_directory() . '/admin/employee/function.php';
+
 
 require get_template_directory() . '/admin/billing/master/function.php';
 require get_template_directory() . '/admin/billing/deposit/function.php';

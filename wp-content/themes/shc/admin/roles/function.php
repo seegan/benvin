@@ -72,6 +72,7 @@ function src_global_var() {
 				'return_report' => 'Return Report',
 				'bill_report' => 'Hiring bill Report',
 				'obc_report' => 'OBC Report',
+				'statement' => 'Account Statement',
 			),
 			'permission' => array(
 				'master_report' => (is_super_admin()) ? 'manage_options' : 'master_report',
@@ -80,6 +81,7 @@ function src_global_var() {
 				'return_report' => (is_super_admin()) ? 'manage_options' : 'return_report',
 				'bill_report' => (is_super_admin()) ? 'manage_options' : 'bill_report',
 				'obc_report' => (is_super_admin()) ? 'manage_options' : 'obc_report',
+				'statement' => (is_super_admin()) ? 'manage_options' : 'statement',
 			),			
 		),
 		'admin_user' => array(
@@ -105,7 +107,7 @@ function src_global_var() {
 			),			
 
 		),
-		'Employee' => array(
+		'employee' => array(
 			'name' => 'Employee',
 			'data' => array(
 				'add_employee' => 'Add Employee', 
