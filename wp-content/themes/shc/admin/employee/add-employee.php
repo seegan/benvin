@@ -1,7 +1,7 @@
 <?php
-$lot = false;
-if(isset($_GET['id']) && $lot = get_lot($_GET['id']) ) {
-	$lot_id = $_GET['id'];
+$employee = false;
+if(isset($_GET['id']) && $employee = get_employee($_GET['id']) ) {
+	$employee_id = $_GET['id'];
 }
 ?>
 <div class="container">
@@ -14,67 +14,58 @@ if(isset($_GET['id']) && $lot = get_lot($_GET['id']) ) {
 					<div class="clearfix"></div>
 				</div>
 				<div class="x_content">
-					<form class="form-horizontal form-label-left" id="create_lot">
+					<form class="form-horizontal form-label-left" id="create_employee">
 						<div class="form-group">
-							<label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Lot Number <span class="required">*</span>
+							<label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Employee Name <span class="required">*</span>
 							</label>
 							<div class="col-md-6 col-sm-6 col-xs-12">
-								<input type="text" id="lot_no" name="lot_no" required="required" class="form-control col-md-7 col-xs-12" value="<?php echo ($lot) ? $lot->lot_no : ''; ?>">
+								<input type="text" id="emp_name" name="emp_name" required="required" class="form-control col-md-7 col-xs-12" value="<?php echo ($employee) ? $employee->emp_name : ''; ?>">
 							</div>
 						</div>
 						<div class="divider-dashed"></div>
 						<div class="form-group">
-							<label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Product Name <span class="required">*</span>
+							<label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Employee Mobile <span class="required">*</span>
 							</label>
 							<div class="col-md-6 col-sm-6 col-xs-12">
-								<input type="text" id="product_name" name="product_name" required="required" class="form-control col-md-7 col-xs-12" value="<?php echo ($lot) ? $lot->product_name : ''; ?>">
+								<input type="text" id="emp_mobile" name="emp_mobile" required="required" class="form-control col-md-7 col-xs-12" value="<?php echo ($employee) ? $employee->emp_mobile : ''; ?>">
 							</div>
 						</div>
 						<div class="divider-dashed"></div>
 						<div class="form-group">
-							<label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Product Type <span class="required">*</span>
+							<label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Employee Address <span class="required">*</span>
 							</label>
 							<div class="col-md-6 col-sm-6 col-xs-12">
-								<input type="text" id="product_type" name="product_type" required="required" class="form-control col-md-7 col-xs-12" value="<?php echo ($lot) ? $lot->product_type : ''; ?>">
+								<textarea id="emp_address" name="emp_address" class="form-control col-md-7 col-xs-12"><?php echo ($employee) ? $employee->emp_address : ''; ?></textarea>
 							</div>
 						</div>
 						<div class="divider-dashed"></div>
 						<div class="form-group">
-							<label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Rate Per Day <span class="required">*</span>
+							<label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Salary (Per Day)<span class="required">*</span>
 							</label>
 							<div class="col-md-6 col-sm-6 col-xs-12">
-								<input type="text" id="unit_price" name="unit_price" required="required" class="form-control col-md-7 col-xs-12" value="<?php echo ($lot) ? $lot->unit_price : ''; ?>">
+								<input type="text" id="emp_salary" name="emp_salary" required="required" class="form-control col-md-7 col-xs-12" value="<?php echo ($employee) ? $employee->emp_salary : ''; ?>">
 							</div>
 						</div>
 						<div class="divider-dashed"></div>
 						<div class="form-group">
-							<label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Buying Price<span class="required"></span>
+							<label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Join Date<span class="required"></span>
 							</label>
 							<div class="col-md-6 col-sm-6 col-xs-12">
-								<input type="text" id="buying_price" name="buying_price" required="required" class="form-control col-md-7 col-xs-12" value="<?php echo ($lot) ? $lot->buying_price : ''; ?>">
+								<input type="text" id="emp_joining" name="emp_joining" required="required" class="form-control col-md-7 col-xs-12 datepicker" value="<?php echo ($employee) ? $employee->emp_joining : ''; ?>">
 							</div>
 						</div>
 						<div class="divider-dashed"></div>
 						<div class="form-group">
-							<label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Weight<span class="required"></span>
-							</label>
-							<div class="col-md-6 col-sm-6 col-xs-12">
-								<input type="text" id="weight" name="weight" required="required" class="form-control col-md-7 col-xs-12" value="<?php echo ($lot) ? $lot->weight : ''; ?>">
-							</div>
-						</div>
-						<div class="divider-dashed"></div>
-						<div class="form-group">
-							<input type="hidden" id="tax1" name="tax1" required="required" class="form-control col-md-7 col-xs-12" value="<?php echo ($lot) ? $lot->tax1 : 0; ?>">
 							<div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
 	                          	<button class="btn btn-primary" type="button">Cancel</button>
 							  	<button class="btn btn-primary" type="reset">Reset</button>
 	                          	<button type="submit" class="btn btn-success">Submit</button>
 								<?php 
-									if(  $lot ) {
-										echo '<input type="hidden" name="lot_id" value="'.$lot_id.'">';
-										echo '<input type="hidden" name="action" class="lot_action" value="update_lot">';
+									if(  $employee ) {
+										echo '<input type="hidden" name="employee_id" value="'.$employee_id.'">';
+										echo '<input type="hidden" name="action" class="employee_action" value="update_employee">';
 									} else {
-										echo '<input type="hidden" name="action" class="lot_action" value="create_lot">';
+										echo '<input type="hidden" name="action" class="employee_action" value="create_employee">';
 									}
 								?>
 
