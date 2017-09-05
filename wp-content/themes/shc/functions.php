@@ -311,6 +311,23 @@ function create_admin_history($data) {
 }
 
 
+
+function billNumberText($bill_from_comp = 0, $bill_no = 0, $bill_for = 0) {
+
+	$company_data = getCompaniesById($bill_from_comp);
+
+	$data['company_name'] 	= 	$company_data->company_name;
+	$data['company_id'] 	= 	$company_data->company_id;
+	$data['bill_no'] = 0;
+	if($bill_no && $bill_for) {
+		$data['bill_no'] = $data['company_id'].'/'.$bill_for.' : '.$bill_no;
+	}
+	return $data;
+}
+
+
+
+
 /*SELECT l.*,sale_bal.sale_unit, stock_bal.stock_total FROM wp_shc_lots as l LEFT JOIN 
 ( SELECT sd.lot_id, sum(sd.sale_unit) sale_unit FROM wp_shc_sale_detail as sd JOIN wp_shc_sale as s ON s.id = sd.sale_id WHERE s.locked = 1 AND s.active = 1 AND sd.item_status = 'open' AND sd.active = 1 GROUP BY sd.lot_id ) as sale_bal
 ON l.id = sale_bal.lot_id LEFT JOIN 

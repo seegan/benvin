@@ -75,7 +75,7 @@
 						<div class="col-lg-6">
 							<?php
 							if($master_data) {
-								echo "<div class='address-line'>No. BA/SD : ".$master_data['master_data']->id."</div>";
+								echo "<div class='address-line'>MRI : ".$master_data['master_data']->id."</div>";
 							}
 							?>
 							<div class="customer-name">Customer Name : M/s 
@@ -198,20 +198,3 @@
 	</div>
 
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

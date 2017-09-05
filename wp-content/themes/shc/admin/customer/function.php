@@ -22,6 +22,14 @@ function getCompanies()
     return $wpdb->get_results($query);
 }
 
+function getCompaniesById($comp_id = 0)
+{
+	global $wpdb;
+	$companies_table = $wpdb->prefix.'shc_companies';
+    $query = "SELECT company_id, company_name FROM ${companies_table} WHERE id = ${comp_id}";
+    return $wpdb->get_row($query);
+}
+
 function create_customer() {
 	$data['success'] 	= 0;
 	$data['msg'] 	= 'Something Went Wrong! Please Try Again!';

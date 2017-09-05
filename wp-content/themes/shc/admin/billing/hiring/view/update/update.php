@@ -70,7 +70,11 @@
 						<div class="col-lg-6">
 							<?php
 							if($master_data) {
-								echo "<div class='address-line'>No. BA/SD : ".$master_data['master_data']->id."</div>";
+								echo "<div class='address-line'>MRI : ".$master_data['master_data']->id."</div>";
+								if($bill_data) {
+									$bill_number = billNumberText($bill_data['hiring_data']->bill_from_comp, $bill_data['hiring_data']->bill_no, 'MRR');
+									echo "<div class='address-line'>No. ".$bill_number['bill_no']."</div>";
+								}
 							}
 							?>
 							<div class="customer-name">Customer Name : M/s 

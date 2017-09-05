@@ -183,9 +183,9 @@ add_action( 'wp_ajax_create_billing', 'create_billing' );
 add_action( 'wp_ajax_nopriv_create_billing', 'create_billing' );
 
 
-function getHiringBillData($master_id = 0, $return_id = 0) {
+function getHiringBillData($master_id = 0, $bill_id = 0) {
 	$hiring_bill = new Hiring();
-	return $hiring_bill->get_BillHiringData($master_id, $return_id);
+	return $hiring_bill->get_BillHiringData($master_id, $bill_id);
 }
 
 

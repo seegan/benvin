@@ -156,7 +156,7 @@
 											<th colspan="2">
 												<div>Amount @ <input type="text" name="amt_times" class="amt_times" value="3" style="width: 25px;height: 20px;"> Times</div>
 											</th>
-											<th colspan="2">
+											<th rowspan="2">
 												<div>Action</div>
 											</th>
 										</tr>
@@ -165,8 +165,6 @@
 											<th style="width:40px;">Ps.</th>
 											<th style="width:120px;">Rs.</th>
 											<th style="width:40px;">Ps.</th>
-											<th style="width:40px;">Pay</th>
-											<th style="width:40px;">Delete</th>
 										</tr>
 									</thead>
 									<tbody>
@@ -200,11 +198,6 @@
 											</td>
 											<td>
 												<div class="align-txt n_ps_txt">00</div>
-											</td>
-											<td>
-												<div class="align-txt">
-													<input type="checkbox" style="margin-top: -5px;">
-												</div>
 											</td>
 											<td>
 												<a href="#" data-repeater-delete="" style="font-size: 16px;font-weight: bold; color: #ff0000;line-height: 30px;">x</a>

@@ -35,7 +35,6 @@
 				$cheque_data = getDepositChequeData($_GET['deposit_id']);
 				$cheque_data = ($cheque_data) ? $cheque_data : false;
 			}
-
 		}
 
 	}
@@ -100,11 +99,12 @@
 						<div class="col-lg-6">
 							<?php
 								if($master_data) {
-									echo "<div class='address-line'>No. BA/MRI : ".$master_data['master_data']->id."</div>";
+									echo "<div class='address-line'>MRI : ".$master_data['master_data']->id."</div>";
 									echo "<input type='hidden' name='master_id' value='".$master_data['master_data']->id."'>";
 
 									if($security_data) { 
-										echo "<div class='address-line'>No. BA/SD : ".$security_data['deposit_data']->id."</div>";
+										$bill_number = billNumberText($security_data['deposit_data']->bill_from_comp, $security_data['deposit_data']->bill_no, 'SD');
+										echo "<div class='address-line'>No.".$bill_number['bill_no']."</div>";
 									}
 								} else {
 									echo "<div>";
