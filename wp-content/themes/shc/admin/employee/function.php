@@ -88,4 +88,54 @@ function employee_filter() {
 add_action( 'wp_ajax_employee_filter', 'employee_filter' );
 add_action( 'wp_ajax_nopriv_employee_filter', 'employee_filter' );
 
+
+function attendance_filter() {
+	$employee = new Employee();
+	include( get_template_directory().'/admin/employee/ajax_loading/attendance-list.php' );
+	die();
+}
+add_action( 'wp_ajax_attendance_filter', 'attendance_filter' );
+add_action( 'wp_ajax_nopriv_attendance_filter', 'attendance_filter' );
+
+function attendance_detail_filter() {
+	$employee = new Employee();
+	include( get_template_directory().'/admin/employee/ajax_loading/attendance-detail-list.php' );
+	die();
+}
+add_action( 'wp_ajax_attendance_detail_filter', 'attendance_detail_filter' );
+add_action( 'wp_ajax_nopriv_attendance_detail_filter', 'attendance_detail_filter' );
+
+
+function mark_attendance() {
+	$data['success'] = 0;
+
+	global $wpdb;
+	$attendance_table = $wpdb->prefix.'shc_employee_attendance';
+
+
+	$date = $_POST['attendance_date'];
+	$emp_id = $_POST['emp_id'];
+	$attendance = $_POST['attendance'];
+
+	$wpdb->update($attendance_table, array(
+	    'active' => 0,
+	), array( 'emp_id' => $emp_id, 'attendance_date' => $date ) );
+
+	if($attendance != '-') {
+		$wpdb->insert($attendance_table, array(
+		    'emp_id' => esc_attr($emp_id),
+		    'emp_attendance' => esc_attr($attendance),
+		    'attendance_date' => esc_attr($date),
+		    'active' => 1,
+		));
+	}
+
+	$data['success'] = 1;
+	$data['attendance'] = $attendance;
+
+	echo json_encode($data);
+	die();
+}
+add_action( 'wp_ajax_mark_attendance', 'mark_attendance' );
+add_action( 'wp_ajax_nopriv_mark_attendance', 'mark_attendance' );
 ?>

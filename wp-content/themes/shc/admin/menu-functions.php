@@ -56,6 +56,7 @@ global $src_capabilities;
 	);
 	add_submenu_page('list_employee', 'Employee List', 'Employee List', $src_capabilities['employee']['permission']['list_employee'], 'list_employee', 'list_employee' );
 	add_submenu_page('list_employee', 'New Employee', 'New Employee', $src_capabilities['employee']['permission']['add_employee'], 'new_employee', 'new_employee' );	
+	add_submenu_page('list_employee', 'Attendance List', 'Attendance List', $src_capabilities['employee']['permission']['employee_attendance'], 'list_attendance', 'list_attendance' );	
 
 
 
@@ -149,6 +150,9 @@ function list_employee() {
 }
 function new_employee() {
 	require 'employee/add-employee.php';
+}
+function list_attendance() {
+	require 'employee/listing/attendance-list.php';
 }
 
 function add_admin() {
