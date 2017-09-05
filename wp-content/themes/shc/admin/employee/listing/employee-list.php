@@ -1,5 +1,5 @@
 <?php
-    $customer = new Customer();
+    $employee = new Employee();
 ?>
 <div class="col-md-12 col-sm-12 col-xs-12">
     <div class="x_panel">
@@ -25,32 +25,32 @@
               <div class="row">
                 <div class="col-md-1">
                   <select name="ppage" class="ppage">
-                    <option value="5" <?php echo ($customer->ppage == 5) ? 'selected' : '' ?>>5</option>
-                    <option value="10" <?php echo ($customer->ppage == 10) ? 'selected' : '' ?>>10</option>
-                    <option value="20" <?php echo ($customer->ppage == 20) ? 'selected' : '' ?>>20</option>
-                    <option value="50" <?php echo ($customer->ppage == 50) ? 'selected' : '' ?>>50</option>
+                    <option value="5" <?php echo ($employee->ppage == 5) ? 'selected' : '' ?>>5</option>
+                    <option value="10" <?php echo ($employee->ppage == 10) ? 'selected' : '' ?>>10</option>
+                    <option value="20" <?php echo ($employee->ppage == 20) ? 'selected' : '' ?>>20</option>
+                    <option value="50" <?php echo ($employee->ppage == 50) ? 'selected' : '' ?>>50</option>
                   </select>
                 </div>
                 <div class="col-md-2">
-                  <input type="text" name="name" class="name" value="<?php echo $customer->name; ?>" placeholder="Customer Name">
+                  <input type="text" name="name" class="name" value="<?php echo $employee->name; ?>" placeholder="employee Name">
                 </div>
                 <div class="col-md-2">
-                  <input type="text" name="mobile" class="mobile" value="<?php echo $customer->mobile; ?>" placeholder="Mobile">
+                  <input type="text" name="mobile" class="mobile" value="<?php echo $employee->mobile; ?>" placeholder="Mobile">
                 </div>
                 <div class="col-md-2 form-group">
-                  <input type="text" name="customer_from" class="customer_from form-control" value="<?php echo $customer->customer_from; ?>" placeholder="Customer From">
+                  <input type="text" name="employee_from" class="employee_from form-control datepicker" value="<?php echo $employee->employee_from; ?>" placeholder="employee From">
                 </div>
                 <div class="col-md-2 form-group">
-                  <input type="text" name="customer_to" class="customer_to form-control" value="<?php echo $customer->customer_to; ?>" placeholder="Customer To">
+                  <input type="text" name="employee_to" class="employee_to form-control datepicker" value="<?php echo $employee->employee_to; ?>" placeholder="employee To">
                 </div>
               </div>
-              <input type="hidden" name="filter_action" class="filter_action" value="customer_filter">
+              <input type="hidden" name="filter_action" class="filter_action" value="employee_filter">
               
             </div>
         </div>
-        <div class="customer_filter">
+        <div class="employee_filter">
         <?php
-            include( get_template_directory().'/admin/customer/ajax_loading/customer-list.php' );
+            include( get_template_directory().'/admin/employee/ajax_loading/employee-list.php' );
         ?>
         </div>
     </div>

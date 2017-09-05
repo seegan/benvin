@@ -79,4 +79,13 @@ function get_employee($employee_id = 0) {
     return $wpdb->get_row($query);
 }
 
+
+function employee_filter() {
+	$employee = new Employee();
+	include( get_template_directory().'/admin/employee/ajax_loading/employee-list.php' );
+	die();
+}
+add_action( 'wp_ajax_employee_filter', 'employee_filter' );
+add_action( 'wp_ajax_nopriv_employee_filter', 'employee_filter' );
+
 ?>
