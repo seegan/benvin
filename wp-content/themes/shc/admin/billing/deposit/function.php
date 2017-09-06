@@ -142,7 +142,7 @@ function create_deposit() {
 
 	if(isset($params['action']) && $params['action'] != 'update_deposit') {
 
-		$bill_no_data = getCorrectBillNumber($params['bill_no'], $params['site_id'], 'shc_deposit');
+		$bill_no_data = getCorrectBillNumber($params['bill_no'], $params['site_id'], 'shc_deposit', $params['date']);
 
 		$detail_main['bill_from_comp'] = $bill_no_data['bill_from_comp'];
 		$detail_main['bill_no'] = $bill_no_data['bill_no'];

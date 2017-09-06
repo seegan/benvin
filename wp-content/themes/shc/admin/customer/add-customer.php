@@ -145,7 +145,10 @@
 														</div>
 														<div style="line-height: 45px;">
 															GST For : <input type="radio" name="gst_for" value="cgst" style="margin-top: -2px;" <?php echo ($s_value->gst_for == 'cgst') ? 'checked' : '';?>> CGST
-														<input type="radio" name="gst_for" value="igst" style="margin-top: -2px;" <?php echo ($s_value->gst_for == 'igst') ? 'checked' : '';?>> IGST
+															<input type="radio" name="gst_for" value="igst" style="margin-top: -2px;" <?php echo ($s_value->gst_for == 'igst') ? 'checked' : '';?>> IGST
+														</div>
+														<div style="line-height: 45px;">
+															VAT : <input type="text" name="vat_number" placeholder="VAT Number" value="<?php echo $s_value->vat_number;?>">
 														</div>
 													</td>
 													<td>
@@ -186,7 +189,10 @@
 														</div>
 														<div style="line-height: 45px;">
 															GST For : <input type="radio" name="gst_for" value="cgst" style="margin-top: -2px;" checked> CGST
-														<input type="radio" name="gst_for" value="igst" style="margin-top: -2px;"> IGST
+															<input type="radio" name="gst_for" value="igst" style="margin-top: -2px;"> IGST
+														</div>
+														<div style="line-height: 45px;">
+															VAT : <input type="text" name="vat_number" placeholder="VAT Number" value="">
 														</div>
 													</td>
 													<td>

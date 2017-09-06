@@ -48,10 +48,10 @@ function create_return() {
 
 		$return_data = array('master_id' => $master_id, 'return_date' => $return_date, 'is_return' => $is_return, 'vehicle_number' => $vehicle_number, 'driver_name' => $driver_name, 'driver_mobile' => $driver_mobile);
 
-		$return_date['updated_by'] = $loggdin_user;
+		$return_data['updated_by'] = $loggdin_user;
 
 		if($is_return) {
-			$bill_no_data = getCorrectBillNumber($params['bill_no'], $params['site_id'], 'shc_return');
+			$bill_no_data = getCorrectBillNumber($params['bill_no'], $params['site_id'], 'shc_return', $params['date']);
 			$return_data['bill_from_comp'] = $bill_no_data['bill_from_comp'];
 			$return_data['bill_no'] = $bill_no_data['bill_no'];
 		}

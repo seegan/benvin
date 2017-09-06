@@ -8,7 +8,7 @@
 	$customer_id = '';
 	$site_id = '';
 
-	$delivery_date = (isset($_GET['return_date'])) ? $_GET['return_date'] : date('Y-m-d');
+	$return_date = (isset($_GET['return_date'])) ? $_GET['return_date'] : date('Y-m-d');
 	$delivery_time = date('H:i');
 
 	if(isset($_GET['id'])) {
@@ -20,9 +20,9 @@
 			$site_id = $master_data['master_data']->site_id;
 
 			$customer_detail = getCustomerData($customer_id);
-			$site_detail = getSiteData($site_id, $bill_for = 'shc_return');
+			$site_detail = getSiteData($site_id, $bill_for = 'shc_return', $return_date);
 
-			$pending_items = getPendingItems($_GET['id'], $delivery_date);
+			$pending_items = getPendingItems($_GET['id'], $return_date);
 		}
 	}
 
@@ -106,7 +106,7 @@
 							</div>
 						</div>
 						<div class="col-lg-6">
-							<div class="address-line">Date : <span class="deposit-date"><input type="text" name="date" id="datepicker" value="<?php echo $delivery_date; ?>" class="return_date" style="border-color: rgba(118, 118, 118, 0);height: 34px;margin: 0;"></span></div>
+							<div class="address-line">Date : <span class="deposit-date"><input type="text" name="date" id="datepicker" value="<?php echo $return_date; ?>" class="return_date financial_date" style="border-color: rgba(118, 118, 118, 0);height: 34px;margin: 0;"></span></div>
 							<div class="address-line">Time : <span class="deposit-time"><input type="time" name="time" value="<?php echo $delivery_time; ?>" style="border-color: rgba(118, 118, 118, 0);height: 34px;margin: 0;"></span></div>
 							<div class="address-line">Site : 
 								<select type="text" name="delivery_site_name" class="delivery_site_name" data-dvalue="<?php echo ($site_detail) ? $site_detail->id : ''; ?>"  data-sitename="<?php echo ($site_detail) ? $site_detail->site_name : ''; ?>">

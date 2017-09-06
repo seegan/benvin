@@ -21,7 +21,7 @@
 			$site_id = $master_data['master_data']->site_id;
 
 			$customer_detail = getCustomerData($customer_id);
-			$site_detail = getSiteData($site_id, 'shc_hiring');
+			$site_detail = getSiteData($site_id, 'shc_hiring', $billing_date);
 
 			$bill_from = (isset($_GET['bill_from']) && $_GET['bill_from'] != '') ? $_GET['bill_from'] : date('Y-m-01');
 			$bill_to = (isset($_GET['bill_to']) && $_GET['bill_to'] != '') ? $_GET['bill_to'] : date('Y-m-d', strtotime('last day of this month'));
@@ -173,7 +173,7 @@
 							</div>
 						</div>
 						<div class="col-lg-6">
-							<div class="address-line">Date : <span class="billing-date"><input type="text" name="billing_date" value="<?php echo $billing_date; ?>" style="border-color: rgba(118, 118, 118, 0);height: 34px;margin: 0;" class="datepicker"></span></div>
+							<div class="address-line">Date : <span class="billing-date"><input type="text" name="billing_date" value="<?php echo $billing_date; ?>" style="border-color: rgba(118, 118, 118, 0);height: 34px;margin: 0;" class="datepicker financial_date"></span></div>
 							<div class="address-line">Time : <input type="time" name="billing_time" value="<?php echo $billing_time; ?>" style="border-color: rgba(118, 118, 118, 0);height: 34px;margin: 0;" class="billing-time"></div>
 							<div class="address-line">Site : 
 								<select type="text" name="delivery_site_name" class="delivery_site_name" data-dvalue="<?php echo ($site_detail) ? $site_detail->id : ''; ?>"  data-sitename="<?php echo ($site_detail) ? $site_detail->site_name : ''; ?>">

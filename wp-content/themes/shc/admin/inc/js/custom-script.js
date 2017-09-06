@@ -5,7 +5,7 @@
 jQuery(document).ready(function(){
   jQuery( "#datepicker, .datepicker" ).datepicker( {dateFormat: 'yy-mm-dd'} );
 
-  jQuery('.bill.bill_no').on('change', function() {
+  jQuery('.bill.bill_no, .financial_date').on('change', function() {
     jQuery('.loadin-billfrom').css('display', 'inline-block');
     jQuery('.loadin-check').css('display', 'none');
     jQuery('.loadin-cross').css('display', 'none');
@@ -20,6 +20,7 @@ jQuery(document).ready(function(){
           bill_no : jQuery('.bill.bill_no').val(),
           bill_for : jQuery('.billno_action').val(),
           site_id : jQuery('.site_id').val(),
+          financial_date : jQuery('.financial_date').val(),
       },
       success: function (data) {
         jQuery('.loadin-billfrom').css('display', 'none');

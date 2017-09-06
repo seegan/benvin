@@ -21,9 +21,8 @@
 			$customer_id = $master_data['master_data']->customer_id;
 			$site_id = $master_data['master_data']->site_id;
 			$customer_detail = getCustomerData($customer_id);
-			$site_detail = getSiteData($site_id, $bill_for = 'shc_deposit');
 
-			if(isset($_GET['deposit_id'])) {
+/*			if(isset($_GET['deposit_id'])) {
 				$security_data = ($security_data) ? $security_data : false;
 				if($security_data) {
 					$deposit_date = date('Y-m-d', strtotime($security_data['deposit_data']->deposit_date));
@@ -32,7 +31,10 @@
 
 				$cheque_data = getDepositChequeData($_GET['deposit_id']);
 				$cheque_data = ($cheque_data) ? $cheque_data : false;
-			}
+			}*/
+
+
+			$site_detail = getSiteData($site_id, $bill_for = 'shc_deposit', $deposit_date);
 
 		}
 
@@ -124,7 +126,7 @@
 							</div>
 						</div>
 						<div class="col-lg-6">
-							<div class="address-line">Date : <span class="deposit-date"><input type="text" name="date" id="datepicker" value="<?php echo $deposit_date; ?>" style="border-color: rgba(118, 118, 118, 0);height: 34px;margin: 0;"></span></div>
+							<div class="address-line">Date : <span class="deposit-date"><input type="text" name="date" id="datepicker" class="financial_date" value="<?php echo $deposit_date; ?>" style="border-color: rgba(118, 118, 118, 0);height: 34px;margin: 0;"></span></div>
 							
 							<div class="address-line">Time : <span class="deposit-time"><input type="time" name="time" value="<?php echo $deposit_time; ?>" style="border-color: rgba(118, 118, 118, 0);height: 34px;margin: 0;"></span></div>
 							<div class="address-line">Site : 

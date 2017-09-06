@@ -201,16 +201,18 @@ function convert_number_to_words($num) {
 
 
 
-function getCorrectBillNumber($bill_no = '', $site_id = '', $bill_for = false) {
+function getCorrectBillNumber($bill_no = '', $site_id = '', $bill_for = false, $financial_date = '') {
 	global $wpdb;
 
 	if($bill_for) {
 		$bill_for_table = $wpdb->prefix.$bill_for;
 
-		$bill_exist_query = "SELECT dep.bill_no FROM ${bill_for_table} as dep WHERE dep.bill_no = ${bill_no} AND dep.bill_from_comp = ( SELECT c.bill_from_comp FROM wp_shc_customer_site as cs JOIN wp_shc_customers as c ON c.id = cs.customer_id WHERE cs.id = ${site_id} LIMIT 1 )";
+		$financial_year = getFinancialYear( $financial_date );
+
+		$bill_exist_query = "SELECT dep.bill_no FROM ${bill_for_table} as dep WHERE dep.bill_no = ${bill_no} AND dep.financial_year = ${financial_year} AND dep.bill_from_comp = ( SELECT c.bill_from_comp FROM wp_shc_customer_site as cs JOIN wp_shc_customers as c ON c.id = cs.customer_id WHERE cs.id = ${site_id} LIMIT 1 )";
 		
 		if($wpdb->get_row($bill_exist_query)) {
-			$query = "SELECT fc.*, comp.company_id, (CASE WHEN fc.bill_no is null THEN 1 ELSE fc.bill_no + 1 END) next_bill_no FROM (SELECT cs.*, c.bill_from_comp, (SELECT d.bill_no from ${bill_for_table} as d WHERE d.bill_from_comp = c.bill_from_comp ORDER BY bill_no DESC LIMIT 1 ) as bill_no FROM `wp_shc_customer_site` as cs JOIN wp_shc_customers as c ON c.id = cs.customer_id WHERE cs.id = ${site_id} ) as fc JOIN wp_shc_companies as comp ON comp.id = fc.bill_from_comp";
+			$query = "SELECT fc.*, comp.company_id, (CASE WHEN fc.bill_no is null THEN 1 ELSE fc.bill_no + 1 END) next_bill_no FROM (SELECT cs.*, c.bill_from_comp, (SELECT d.bill_no from ${bill_for_table} as d WHERE d.bill_from_comp = c.bill_from_comp AND d.financial_year = ${financial_year} ORDER BY bill_no DESC LIMIT 1 ) as bill_no FROM `wp_shc_customer_site` as cs JOIN wp_shc_customers as c ON c.id = cs.customer_id WHERE cs.id = ${site_id} ) as fc JOIN wp_shc_companies as comp ON comp.id = fc.bill_from_comp";
 			if( $bill_data = $wpdb->get_row($query) ) {
 
 				$data['bill_from_comp'] = $bill_data->bill_from_comp;
@@ -236,8 +238,9 @@ function billno_check() {
 	$bill_no = isset( $_POST['bill_no'] ) ? $_POST['bill_no'] : 0;
 	$bill_for = isset( $_POST['bill_for'] ) ? $_POST['bill_for'] : 0;
 	$site_id = isset( $_POST['site_id'] ) ? $_POST['site_id'] : 0;
+	$financial_date = isset( $_POST['financial_date'] ) ? $_POST['financial_date'] : date('Y-m-d');
 
-	$bill_data = getCorrectBillNumber($bill_no, $site_id, $bill_for);
+	$bill_data = getCorrectBillNumber($bill_no, $site_id, $bill_for, $financial_date);
 	if($bill_data['bill_no'] == $bill_no) {
 		$data['success'] = true;
 	} else {
@@ -323,6 +326,19 @@ function billNumberText($bill_from_comp = 0, $bill_no = 0, $bill_for = 0) {
 		$data['bill_no'] = $data['company_id'].'/'.$bill_for.' : '.$bill_no;
 	}
 	return $data;
+}
+
+
+function getFinancialYear( $current_date = '' ) {
+	$month = date('m', strtotime($current_date));
+	$year = date('Y', strtotime($current_date));
+
+    if( $month >= 4 ) {
+    	$financial_year = $year;
+    } else {
+		$financial_year = ( $year - 1 );
+    }
+    return $financial_year;
 }
 
 

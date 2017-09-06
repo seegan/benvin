@@ -18,9 +18,10 @@
 		$bill_to = (isset($bill_data['hiring_data']->bill_to) && $bill_data['hiring_data']->bill_to != '') ? $bill_data['hiring_data']->bill_to : date('Y-m-d', strtotime('last day of this month'));
 		$hiring_items = getHiringItems($_GET['id'], $bill_from, $bill_to);
 
-		$billing_date = (isset($bill_data['hiring_data']->bill_date) && $bill_data['bill_date']->bill_date != '') ? $master_data['hiring_data']->bill_date : date('Y-m-d');
+		$billing_date = (isset($bill_data['hiring_data']->bill_date) && $bill_data['hiring_data']->bill_date != '') ? $bill_data['hiring_data']->bill_date : date('Y-m-d');
 		$billing_time = (isset($bill_data['hiring_data']->bill_time)) ? date('H:i', strtotime($bill_data['hiring_data']->bill_time)) : date('H:i');
 	}
+
 ?>
 
 <div class="container">
