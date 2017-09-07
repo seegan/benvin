@@ -107,7 +107,7 @@
 														<div>Site Name</div>
 													</th>
 													<th>
-														<div>Contact Details</div>
+														<div>Extra Details</div>
 													</th>
 													<th style="width: 300px;">
 														<div>GST Detail</div>
@@ -137,7 +137,13 @@
 														<textarea name="site_address" style="width:100%;height:100px;" placeholder="Site Address"><?php echo $s_value->site_address;?></textarea>
 													</td>
 													<td>
-														<textarea name="extra_contact" style="width:100%;min-height:180px;" placeholder="Some Name : 987654321,"><?php echo $s_value->extra_contact;?></textarea>
+														<div>
+															Discount : <input type="text" name="discount" value="<?php echo $s_value->discount; ?>">
+														</div>
+														<div style="margin-top:20px;">
+															<textarea name="extra_contact" style="width:100%;min-height:120px;" placeholder="Some Name : 987654321,"><?php echo $s_value->extra_contact;?></textarea>
+														</div>
+														
 													</td>
 													<td>
 														<div>
@@ -180,7 +186,12 @@
 													</td>
 													<td>
 														<div class="align-txt customer-phone-txt">
-															<textarea name="extra_contact" style="width:100%;min-height:180px;" placeholder="Some Name : 987654321,"></textarea>
+															<div>
+																Discount : <input type="text" name="discount" value="0.00">
+															</div>
+															<div style="margin-top:20px;">
+																<textarea name="extra_contact" style="width:100%;min-height:180px;" placeholder="Some Name : 987654321,"></textarea>
+															</div>
 														</div>
 													</td>
 													<td>

@@ -39,8 +39,6 @@
 		}
 
 	}
-
-
 ?>
 <style type="text/css">
 	.address-line, .customer-name {
@@ -123,6 +121,11 @@
 								<input type="hidden" class="customer_id" name="customer_id" value="<?php echo $customer_id; ?>">
 							</div>
 							<div class="address-line">Address : <span class="address-txt"><?php echo ($customer_detail->address) ? $customer_detail->address : ''; ?></span>
+							</div>
+							<div class="address-line">
+								Discount : <input type="radio" name="discount_avail" value="yes" style="margin-top: -2px;"> Yes &nbsp;&nbsp; <input type="radio" name="discount_avail" value="no" style="margin-top: -2px;" checked> No
+								<input type="hidden" name="discount_yes" class="discount_yes" value="<?php echo $site_detail->discount; ?>">
+								<input type="hidden" name="discount_no" class="discount_no" value="0.00">
 							</div>
 						</div>
 						<div class="col-lg-6">
@@ -223,6 +226,37 @@
 											</td>
 											<td>
 												<div class="align-txt n_ps_tot_txt">00</div>
+											</td>
+											<td colspan="2"></td>
+										</tr>
+										<tr>
+											<td colspan="6" style="text-align:center">
+												<div>
+													<b>Discount % </b>
+													<input type="text" name="discount_percentage" class="discount_percentage" value="0.00" style="width:45px;" readonly="readonly">
+												</div>
+											</td>
+											<td class="deposit_tot_td">
+												<div class="align-txt rs_discount_txt">0</div>
+												<input type="hidden" class="discount_amt" value="0.00" name="discount_amt">
+											</td>
+											<td>
+												<div class="align-txt p_discount_txt">00</div>
+											</td>
+											<td colspan="2"></td>
+										</tr>
+										<tr>
+											<td colspan="6" style="text-align:center">
+												<div>
+													<b>Total </b>
+												</div>
+											</td>
+											<td class="deposit_tot_td">
+												<div class="align-txt rs_tot_txt">0</div>
+												<input type="hidden" class="total" value="0.00" name="total">
+											</td>
+											<td>
+												<div class="align-txt ps_tot_txt">00</div>
 											</td>
 											<td colspan="2"></td>
 										</tr>

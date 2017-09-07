@@ -179,6 +179,23 @@ jQuery('.amt_times').live('change keyup', function(){
   })
 })
 
+jQuery('input[name=discount_avail]').live('change', function(){
+
+  var discount_avail = jQuery('input[name=discount_avail]:checked').val();
+  if(discount_avail == 'yes') {
+    jQuery('.discount_percentage').val(jQuery('.discount_yes').val()).change();
+    jQuery('.discount_percentage').attr('readonly', false);
+  } else {
+    jQuery('.discount_percentage').val(jQuery('.discount_no').val()).change();
+    jQuery('.discount_percentage').attr('readonly', true);
+  }
+
+})
+
+
+jQuery('.discount_percentage').live('change keyup', function(){
+  processDepositFull();
+})
 
 
 function formatState (state) {
@@ -283,6 +300,30 @@ function processDepositFull() {
 
 
   jQuery('.rupee-words').text( inWordsFull(n_str) );
+
+
+  var discount_percentage = jQuery('.discount_percentage').val();
+  var discount_amt = (ninety_days_total*discount_percentage) / 100;
+  var discount_amt = Math.round10(discount_amt.toFixed(3), -2);
+  jQuery('.discount_amt').val(discount_amt);
+
+  var d_str = (discount_amt).toFixed(2);
+  var d_substr = d_str.toString().split('.');
+  var discount_rs = d_substr[0];
+  var discount_ps = d_substr[1];
+  jQuery('.rs_discount_txt').text(discount_rs);
+  jQuery('.p_discount_txt').text(discount_ps);
+
+
+  var final_total = parseFloat(ninety_days_total) + parseFloat(discount_amt);
+  jQuery('.total').val(final_total)
+
+  var ft_str = (final_total).toFixed(2);
+  var ft_substr = ft_str.toString().split('.');
+  var final_total_rs = ft_substr[0];
+  var final_total_ps = ft_substr[1];
+  jQuery('.rs_tot_txt').text(final_total_rs);
+  jQuery('.ps_tot_txt').text(final_total_ps);
 
 }
 

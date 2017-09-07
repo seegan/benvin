@@ -138,6 +138,10 @@ function create_deposit() {
 		'total_ninety_days' => $params['for_ninety_days'],
 		'deposit_date' 	=> $deposit_date,
 		'amt_times' => $params['amt_times'],
+		'discount_avail' => $params['discount_avail'],
+		'discount_percentage' => $params['discount_percentage'],
+		'discount_amt' => $params['discount_amt'],
+		'total' => $params['total'],
 	);
 
 	if(isset($params['action']) && $params['action'] != 'update_deposit') {

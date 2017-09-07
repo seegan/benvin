@@ -179,7 +179,16 @@
 								<select type="text" name="delivery_site_name" class="delivery_site_name" data-dvalue="<?php echo ($site_detail) ? $site_detail->id : ''; ?>"  data-sitename="<?php echo ($site_detail) ? $site_detail->site_name : ''; ?>">
 								</select>
 							</div>
-							<div class="address-line">Phone : <span class="site-phone"><?php echo ($site_detail) ? $site_detail->phone_number : ''; ?></span></div>
+							<div class="address-line">Phone : <span class="site-phone"><?php echo ($site_detail) ? $site_detail->phone_number : ''; ?></span>
+							</div>
+							<div class="address-line">
+								Discount : <input type="radio" name="discount_avail" value="yes" style="margin-top: -2px;"> Yes &nbsp;&nbsp; <input type="radio" name="discount_avail" value="no" style="margin-top: -2px;" checked> No
+								<input type="hidden" name="discount_yes" class="discount_yes" value="<?php echo $site_detail->discount; ?>">
+								<input type="hidden" name="discount_no" class="discount_no" value="0.00">
+							</div>
+							<div class="address-line">
+								Tax For : <input type="radio" name="tax_from" value="no_tax" style="margin-top: -2px;"> No Tax &nbsp;&nbsp; <input type="radio" name="tax_from" value="vat" style="margin-top: -2px;"> VAT &nbsp;&nbsp; <input type="radio" name="tax_from" value="gst" style="margin-top: -2px;" checked> GST
+							</div>
 						</div>
 						<div class="col-lg-12">
 

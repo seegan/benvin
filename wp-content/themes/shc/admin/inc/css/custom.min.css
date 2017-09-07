@@ -4955,7 +4955,7 @@ input[type=text].to_date:hover {
     position: relative;
 }
 
-.t_rs_txt, .n_rs_txt, .t_rs_tot_txt, .n_rs_tot_txt {
+.t_rs_txt, .n_rs_txt, .t_rs_tot_txt, .n_rs_tot_txt, .rs_tot_txt, .rs_discount_txt {
     text-align: right;
     letter-spacing: 1px
 }

@@ -39,7 +39,6 @@
 
 	}
 
-
 ?>
 <style type="text/css">
 	.address-line, .customer-name {
@@ -119,6 +118,12 @@
 							</div>
 							<div class="address-line">Address : <span class="address-txt"><?php echo ($customer_detail->address) ? $customer_detail->address : ''; ?></span>
 							</div>
+							<div class="address-line">
+								Discount : <input type="radio" name="discount_avail" value="yes" style="margin-top: -2px;" <?php  echo (isset($security_data['deposit_data']) && $security_data['deposit_data']->discount_avail == 'yes')  ? 'checked' : ''; ?> > Yes &nbsp;&nbsp; <input type="radio" name="discount_avail" value="no" style="margin-top: -2px;" <?php  echo (isset($security_data['deposit_data']) && $security_data['deposit_data']->discount_avail != 'yes')  ? 'checked' : ''; ?> > No
+								<input type="hidden" name="discount_yes" class="discount_yes" value="<?php  echo (isset($security_data['deposit_data']) && $security_data['deposit_data']->discount_percentage != '0.00')  ? $security_data['deposit_data']->discount_percentage : '0.00'; ?>">
+								<input type="hidden" name="discount_no" class="discount_no" value="0.00">
+							</div>
+
 						</div>
 						<div class="col-lg-6">
 							<div class="address-line">Date : <span class="deposit-date"><input type="text" name="date" id="datepicker" class="financial_date" value="<?php echo $deposit_date; ?>" style="border-color: rgba(118, 118, 118, 0);height: 34px;margin: 0;"></span></div>
@@ -264,18 +269,24 @@
 									?>
 
 									</tbody>
+											<?php
+												$thirty_total = ($security_data && $security_data['deposit_data']->total_thirty_days) ? $security_data['deposit_data']->total_thirty_days : 0.00;
+												$thirty_total_data = splitCurrency($thirty_total);
+
+												$ninety_total = ($security_data && $security_data['deposit_data']->total_ninety_days) ? $security_data['deposit_data']->total_ninety_days : 0.00;
+												$ninety_total_data = splitCurrency($ninety_total);
+
+												$discount_amt = (isset( $security_data['deposit_data'] ) && $security_data['deposit_data']->discount_amt) ? $security_data['deposit_data']->discount_amt : 0.00;
+												$discount_total_data = splitCurrency($discount_amt);
+
+												$total_amt = (isset( $security_data['deposit_data'] ) && $security_data['deposit_data']->total) ? $security_data['deposit_data']->total : 0.00;
+												$total_data = splitCurrency($total_amt);
+
+											?>
 									<tfooter>
 										<tr>
 											<td colspan="4" style="text-align:center"><b>Actual Total </b></td>
 											<td class="minimum_pay_td">
-
-											<?php
-											$thirty_total = ($security_data && $security_data['deposit_data']->total_thirty_days) ? $security_data['deposit_data']->total_thirty_days : 0.00;
-											$thirty_total_data = splitCurrency($thirty_total);
-
-											$ninety_total = ($security_data && $security_data['deposit_data']->total_ninety_days) ? $security_data['deposit_data']->total_ninety_days : 0.00;
-											$ninety_total_data = splitCurrency($ninety_total);
-											?>
 												<div class="align-txt t_rs_tot_txt"><?php echo $thirty_total_data['rs']  ?></div>
 												<input type="hidden" class="total_thirty_days" value="<?php  echo $thirty_total; ?>" name="for_thirty_days">
 											</td>
@@ -291,6 +302,39 @@
 											</td>
 											<td colspan="2"></td>
 										</tr>
+										<tr>
+											<td colspan="6" style="text-align:center">
+												<div>
+													<b>Discount % </b>
+													<input type="text" name="discount_percentage" class="discount_percentage" value="<?php  echo (isset($security_data['deposit_data']) && $security_data['deposit_data']->discount_percentage != '0.00')  ? $security_data['deposit_data']->discount_percentage : '0.00'; ?>" style="width:45px;" <?php  echo (isset($security_data['deposit_data']) && $security_data['deposit_data']->discount_avail != 'yes')  ? 'readonly=readonly' : ''; ?> >
+												</div>
+											</td>
+											<td class="deposit_tot_td">
+												<div class="align-txt rs_discount_txt"><?php echo $discount_total_data['rs']  ?></div>
+												<input type="hidden" class="discount_amt" value="<?php  echo (isset($security_data['deposit_data']) && $security_data['deposit_data']->discount_amt != '0.00')  ? $security_data['deposit_data']->discount_amt : '0.00'; ?>" name="discount_amt">
+											</td>
+											<td>
+												<div class="align-txt p_discount_txt"><?php echo $discount_total_data['ps']  ?></div>
+											</td>
+											<td colspan="2"></td>
+										</tr>
+										<tr>
+											<td colspan="6" style="text-align:center">
+												<div>
+													<b>Total </b>
+												</div>
+											</td>
+											<td class="deposit_tot_td">
+												<div class="align-txt rs_tot_txt"><?php echo $total_data['rs']  ?></div>
+												<input type="hidden" class="total" value="<?php  echo (isset($security_data['deposit_data']) && $security_data['deposit_data']->total != '0.00')  ? $security_data['deposit_data']->total : '0.00'; ?>" name="total">
+											</td>
+											<td>
+												<div class="align-txt ps_tot_txt"><?php echo $total_data['ps']  ?></div>
+											</td>
+											<td colspan="2"></td>
+										</tr>
+
+
 									<tfooter>
 								</table>
 
