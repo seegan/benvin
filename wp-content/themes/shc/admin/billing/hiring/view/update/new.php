@@ -182,12 +182,12 @@
 							<div class="address-line">Phone : <span class="site-phone"><?php echo ($site_detail) ? $site_detail->phone_number : ''; ?></span>
 							</div>
 							<div class="address-line">
-								Discount : <input type="radio" name="discount_avail" value="yes" style="margin-top: -2px;"> Yes &nbsp;&nbsp; <input type="radio" name="discount_avail" value="no" style="margin-top: -2px;" checked> No
+								Discount : <input type="radio" name="hiring_discount_avail" class="hiring_discount_avail" value="yes" style="margin-top: -2px;"> Yes &nbsp;&nbsp; <input type="radio" name="hiring_discount_avail" class="hiring_discount_avail" value="no" style="margin-top: -2px;" checked> No
 								<input type="hidden" name="discount_yes" class="discount_yes" value="<?php echo $site_detail->discount; ?>">
 								<input type="hidden" name="discount_no" class="discount_no" value="0.00">
 							</div>
 							<div class="address-line">
-								Tax For : <input type="radio" name="tax_from" value="no_tax" style="margin-top: -2px;"> No Tax &nbsp;&nbsp; <input type="radio" name="tax_from" value="vat" style="margin-top: -2px;"> VAT &nbsp;&nbsp; <input type="radio" name="tax_from" value="gst" style="margin-top: -2px;" checked> GST
+								Tax For : <input type="radio" class="tax_from" name="tax_from" value="no_tax" style="margin-top: -2px;"> No Tax &nbsp;&nbsp; <input type="radio" class="tax_from" name="tax_from" value="vat" style="margin-top: -2px;"> VAT &nbsp;&nbsp; <input type="radio" class="tax_from" name="tax_from" value="gst" style="margin-top: -2px;" checked> GST
 							</div>
 						</div>
 						<div class="col-lg-12">
@@ -302,7 +302,7 @@
 												</div>
 											</td>
 											<td>
-												<div class="align-txt">
+												<div class="align-txt right-align-txt">
 													<span class="bill_amount_txt"><?php echo $h_value->bill_amount; ?></span>
 													<input type="hidden" class="row_hiring_amt" name="hiring_detail[][amount]" value="<?php echo $h_value->bill_amount; ?>">
 													<input type="hidden" name="hiring_detail[][hiring_amt]" class="hiring_amt" value="<?php echo $h_value->bill_amount; ?>">
@@ -350,9 +350,7 @@
 											<input type="hidden" name="transport_return_id" value="<?php echo $hiring_items['return_ids'] ?>">
 											</td>
 											<td>
-												<?php
-													echo $hiring_items['loading_charges'];
-												?>
+												<div class="right-align-txt"><?php echo $hiring_items['loading_charges']; ?></div>
 												<input type="hidden" class="row_hiring_amt" name="unloading_total" value="<?php echo $hiring_items['loading_charges']; ?>">
 											</td>
 											<td></td>
@@ -362,9 +360,38 @@
 												<div class="align-txt">Sub Total</div>
 											</td>
 											<td>
-												<div class="align-txt">
+												<div class="align-txt right-align-txt">
 													<span class="sub_tot_txt"></span>
-													<input type="hidden" class="sub_tot_val" name="sub_tot" value="0">
+													<input type="hidden" class="sub_tot_val" name="sub_tot" value="0.00">
+												</div>
+											</td>
+											<td></td>
+										</tr>
+										<tr class="discount_tr">
+											<td colspan="7" style="text-align: right;">
+												<div class="align-txt">
+													<b>Discount % </b>
+													<input type="text" name="discount_percentage" class="discount_percentage" value="0.00" style="width:45px;height: 30px;" readonly="readonly">
+												</div>
+											</td>
+											<td>
+												<div class="align-txt right-align-txt">
+													<span class="discount_txt"></span>
+													<input type="hidden" class="discount_amt" name="discount_amt" value="0.00">
+												</div>
+											</td>
+											<td></td>
+										</tr>
+										<tr class="discount_tr">
+											<td colspan="7" style="text-align: right;">
+												<div class="align-txt">
+													Total After Discount : 
+												</div>
+											</td>
+											<td>
+												<div class="align-txt right-align-txt">
+													<span class="after_discount_txt"></span>
+													<input type="hidden" class="after_discount_amt" name="after_discount_amt" value="0.00">
 												</div>
 											</td>
 											<td></td>
@@ -373,68 +400,83 @@
 
 
 									<?php if(isset($site_detail->gst_for) && $site_detail->gst_for == 'igst') { ?>
-										<tr>
+										<tr class="gst_tr tax_tr">
 											<td colspan="7" style="text-align: right;">
-												<div class="align-txt">IGST : </div>
-												<input type="hidden" class="gst_percentage" value="18">
+												<div class="align-txt">IGST - 9%: </div>
+												<input type="hidden" class="gst_percentage" value="18.00">
 											</td>
 											<td>
-												<div class="align-txt">
+												<div class="align-txt right-align-txt">
 													<span class="gst_igst_txt"></span>
-													<input type="hidden" class="gst_igst" name="gst_igst" value="0">
+													<input type="hidden" class="gst_igst" name="gst_igst" value="0.00">
 												</div>
 											</td>
 											<td></td>
 										</tr>
 									<?php } else {
 									?>
-										<tr>
+										<tr class="gst_tr tax_tr">
 											<td colspan="7" style="text-align: right;">
-												<div class="align-txt">CGST : </div>
-												<input type="hidden" class="gst_percentage" value="9">
+												<div class="align-txt">CGST - 9% : </div>
+												<input type="hidden" class="gst_percentage" value="9.00">
 											</td>
 											<td>
-												<div class="align-txt">
+												<div class="align-txt right-align-txt">
 													<span class="gst_cgst_txt"></span>
-													<input type="hidden" class="gst_cgst" name="gst_cgst" value="0">
+													<input type="hidden" class="gst_cgst" name="gst_cgst" value="0.00">
 												</div>
 											</td>
 											<td></td>
 										</tr>
-										<tr>
+										<tr class="gst_tr tax_tr">
 											<td colspan="7" style="text-align: right;">
-												<div class="align-txt">SGST : </div>
-												<input type="hidden" class="gst_percentage" value="0">
+												<div class="align-txt">SGST - 9% : </div>
+												<input type="hidden" class="gst_percentage" value="0.00">
 											</td>
 											<td>
-												<div class="align-txt">
+												<div class="align-txt right-align-txt">
 													<span class="gst_sgst_txt"></span>
-													<input type="hidden" class="gst_sgst" name="gst_sgst" value="0">
+													<input type="hidden" class="gst_sgst" name="gst_sgst" value="0.00">
 												</div>
 											</td>
 											<td></td>
 										</tr>
 									<?php
 									} ?>
-										<tr>
+										<tr class="vat_tr tax_tr">
 											<td colspan="7" style="text-align: right;">
-												<div class="align-txt">Total Including GST : </div>
+												<div class="align-txt">VAT - 5% : </div>
+												<input type="hidden" class="vat_percentage" value="5.00">
 											</td>
 											<td>
-												<div class="align-txt">
-													<span class="gst_include_total_txt"></span>
-													<input type="hidden" class="gst_include_total" name="gst_include_total" value="">
+												<div class="align-txt right-align-txt">
+													<span class="vat_amt_txt"></span>
+													<input type="hidden" class="vat_amt" name="vat_amt" value="0.00">
 												</div>
 											</td>
 											<td></td>
 										</tr>
+										<tr class="tax_tr">
+											<td colspan="7" style="text-align: right;">
+												<div class="align-txt">Total Including Tax : </div>
+											</td>
+											<td>
+												<div class="align-txt gst_div right-align-txt">
+													<span class="total_include_tax_txt">0.00</span>
+													<input type="hidden" class="total_include_tax_amt" name="total_include_tax_amt" value="0.00">
+													<!-- gst_include_total -->
+												</div>
+											</td>
+											<td></td>
+										</tr>
+
 										<tr>
 											<td colspan="7" style="text-align: right;">
 												<div class="align-txt">Round Off : </div>
 											</td>
 											<td>
-												<div class="align-txt">
-													<input type="text" class="round_off" name="round_off" value="0" style="border-color: rgba(118, 118, 118, 0);height:34px;margin:0;">
+												<div class="align-txt right-align-txt">
+													<input type="text" class="round_off right-align-txt" name="round_off" value="0.00" style="border-color: rgba(118, 118, 118, 0);height:34px;margin:0;">
 												</div>
 											</td>
 											<td></td>
@@ -444,10 +486,10 @@
 												<div class="align-txt">Total</div>
 											</td>
 											<td>
-												<div class="align-txt">
-													<span class="hiring_tot_txt"></span>
+												<div class="align-txt right-align-txt">
+													<span class="hiring_tot_txt "></span>
 													<input type="hidden" name="gst_for" class="gst_for"  value="<?php echo isset($site_detail->gst_for) ? $site_detail->gst_for : 'cgst'; ?>">
-													<input type="hidden" class="hiring_tot_val" name="hiring_tot" value="0">
+													<input type="hidden" class="hiring_tot_val" name="hiring_tot" value="0.00">
 												</div>
 											</td>
 											<td></td>

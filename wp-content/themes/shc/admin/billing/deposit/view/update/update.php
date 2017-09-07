@@ -306,7 +306,7 @@
 											<td colspan="6" style="text-align:center">
 												<div>
 													<b>Discount % </b>
-													<input type="text" name="discount_percentage" class="discount_percentage" value="<?php  echo (isset($security_data['deposit_data']) && $security_data['deposit_data']->discount_percentage != '0.00')  ? $security_data['deposit_data']->discount_percentage : '0.00'; ?>" style="width:45px;" <?php  echo (isset($security_data['deposit_data']) && $security_data['deposit_data']->discount_avail != 'yes')  ? 'readonly=readonly' : ''; ?> >
+													<input type="text" name="discount_percentage" class="discount_percentage_deposit" value="<?php  echo (isset($security_data['deposit_data']) && $security_data['deposit_data']->discount_percentage != '0.00')  ? $security_data['deposit_data']->discount_percentage : '0.00'; ?>" style="width:45px;" <?php  echo (isset($security_data['deposit_data']) && $security_data['deposit_data']->discount_avail != 'yes')  ? 'readonly=readonly' : ''; ?> >
 												</div>
 											</td>
 											<td class="deposit_tot_td">

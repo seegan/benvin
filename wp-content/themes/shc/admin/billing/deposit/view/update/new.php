@@ -233,7 +233,7 @@
 											<td colspan="6" style="text-align:center">
 												<div>
 													<b>Discount % </b>
-													<input type="text" name="discount_percentage" class="discount_percentage" value="0.00" style="width:45px;" readonly="readonly">
+													<input type="text" name="discount_percentage" class="discount_percentage_deposit" value="0.00" style="width:45px;" readonly="readonly">
 												</div>
 											</td>
 											<td class="deposit_tot_td">

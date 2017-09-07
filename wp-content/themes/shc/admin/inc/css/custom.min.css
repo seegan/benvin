@@ -4954,7 +4954,9 @@ input[type=text].to_date:hover {
     line-height: 34px;
     position: relative;
 }
-
+.right-align-txt {
+    text-align: right;
+}
 .t_rs_txt, .n_rs_txt, .t_rs_tot_txt, .n_rs_tot_txt, .rs_tot_txt, .rs_discount_txt {
     text-align: right;
     letter-spacing: 1px
@@ -5047,4 +5049,8 @@ input[type=text].to_date:hover {
 
 .rupee-txt {
     text-transform:capitalize;
+}
+
+.discount_tr, .vat_tr  {
+    display: none;
 }

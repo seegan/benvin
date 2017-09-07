@@ -53,26 +53,36 @@ function create_billing() {
 	$master_id = isset($params['master_id']) ? $params['master_id'] : 0;
 
 
+
 	$hiring_data = array(
-			'master_id' => isset($params['master_id']) ? $params['master_id'] : 0,
-			'bill_from' => isset($params['master_id']) ? $params['bill_from'] : '0000:00:00',
-			'bill_to'  => isset($params['master_id']) ? $params['bill_to'] : '0000:00:00',
-			'return_ids' => isset($params['master_id']) ? $params['transport_return_id'] : '',
-			'transportation_charge' => isset($params['master_id']) ? $params['unloading_total'] : 0.00,
+		'master_id' => isset($params['master_id']) ? $params['master_id'] : 0,
+		'bill_from' => isset($params['master_id']) ? $params['bill_from'] : '0000:00:00',
+		'bill_to'  => isset($params['master_id']) ? $params['bill_to'] : '0000:00:00',
+		'return_ids' => isset($params['master_id']) ? $params['transport_return_id'] : '',
+		'transportation_charge' => isset($params['master_id']) ? $params['unloading_total'] : 0.00,
+		'sub_tot' => isset($params['sub_tot']) ? $params['sub_tot'] : 0.00,
 
 
-			'sub_tot' => isset($params['sub_tot']) ? $params['sub_tot'] : 0.00,
-			'gst_for' => isset($params['gst_for']) ? $params['gst_for'] : 'cgst',
-			'igst_amt' => isset($params['gst_igst']) ? $params['gst_igst'] : 0.00,
-			'cgst_amt' => isset($params['gst_cgst']) ? $params['gst_cgst'] : 0.00,
-			'sgst_amt' => isset($params['gst_sgst']) ? $params['gst_sgst'] : 0.00,
-			'gst_include_tot' => isset($params['gst_include_total']) ? $params['gst_include_total'] : 0.00,
-			'round_off' => isset($params['round_off']) ? $params['round_off'] : 0.00,
-			'hiring_total' => isset($params['master_id']) ? $params['hiring_tot'] : 0.00,
+		'discount_avail' => isset($params['hiring_discount_avail']) ? $params['hiring_discount_avail'] : 'no',
+		'discount_percentage' => isset($params['discount_percentage']) ? $params['discount_percentage'] : 0.00,
+		'discount_amount' => isset($params['discount_amt']) ? $params['discount_amt'] : 0.00,
+		'total_after_discount' =>  isset($params['after_discount_amt']) ? $params['after_discount_amt'] : $params['sub_tot'],
 
-			'bill_date' => isset($params['master_id']) ? $params['billing_date'] : '0000:00:00',
-			'bill_time' => isset($params['master_id']) ? $params['billing_time'] : '00:00',
-		);
+		'tax_from' 	=> isset($params['tax_from']) ? $params['tax_from'] : 'no_tax',
+		'gst_for' 	=> isset($params['gst_for']) ? $params['gst_for'] : '',
+		'igst_amt' 	=> isset($params['gst_igst']) ? $params['gst_igst'] : 0.00,
+		'cgst_amt' 	=> isset($params['gst_cgst']) ? $params['gst_cgst'] : 0.00,
+		'sgst_amt' 	=> isset($params['gst_sgst']) ? $params['gst_sgst'] : 0.00,
+		'vat_amt' 	=> isset($params['vat_amt']) ? $params['vat_amt'] : 0.00,
+		'tax_include_tot' =>  isset($params['total_include_tax_amt']) ? $params['total_include_tax_amt'] : $hiring_data['total_after_discount'],
+
+		'round_off' => isset($params['round_off']) ? $params['round_off'] : 0.00,
+		'hiring_total' => isset($params['master_id']) ? $params['hiring_tot'] : 0.00,
+
+		'bill_date' => isset($params['master_id']) ? $params['billing_date'] : '0000:00:00',
+		'bill_time' => isset($params['master_id']) ? $params['billing_time'] : '00:00',
+	);
+
 
 
 	if($params['action'] == 'create_billing') {

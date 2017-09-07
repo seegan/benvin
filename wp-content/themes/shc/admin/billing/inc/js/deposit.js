@@ -183,17 +183,17 @@ jQuery('input[name=discount_avail]').live('change', function(){
 
   var discount_avail = jQuery('input[name=discount_avail]:checked').val();
   if(discount_avail == 'yes') {
-    jQuery('.discount_percentage').val(jQuery('.discount_yes').val()).change();
-    jQuery('.discount_percentage').attr('readonly', false);
+    jQuery('.discount_percentage_deposit').val(jQuery('.discount_yes').val()).change();
+    jQuery('.discount_percentage_deposit').attr('readonly', false);
   } else {
-    jQuery('.discount_percentage').val(jQuery('.discount_no').val()).change();
-    jQuery('.discount_percentage').attr('readonly', true);
+    jQuery('.discount_percentage_deposit').val(jQuery('.discount_no').val()).change();
+    jQuery('.discount_percentage_deposit').attr('readonly', true);
   }
 
 })
 
 
-jQuery('.discount_percentage').live('change keyup', function(){
+jQuery('.discount_percentage_deposit').live('change keyup', function(){
   processDepositFull();
 })
 
