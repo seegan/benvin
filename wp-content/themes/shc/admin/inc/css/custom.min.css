@@ -4951,7 +4951,7 @@ input[type=text].to_date:hover {
     border:0 !important;
 }
 .align-txt {
-    line-height: 34px;
+    line-height: 10px;
     position: relative;
 }
 .right-align-txt {
