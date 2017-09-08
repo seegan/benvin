@@ -302,7 +302,7 @@ function processDepositFull() {
   jQuery('.rupee-words').text( inWordsFull(n_str) );
 
 
-  var discount_percentage = jQuery('.discount_percentage').val();
+  var discount_percentage = jQuery('.discount_percentage_deposit').val();
   var discount_amt = (ninety_days_total*discount_percentage) / 100;
   var discount_amt = Math.round10(discount_amt.toFixed(3), -2);
   jQuery('.discount_amt').val(discount_amt);
@@ -315,7 +315,7 @@ function processDepositFull() {
   jQuery('.p_discount_txt').text(discount_ps);
 
 
-  var final_total = parseFloat(ninety_days_total) + parseFloat(discount_amt);
+  var final_total = ( parseFloat(ninety_days_total) - parseFloat(discount_amt) );
   jQuery('.total').val(final_total)
 
   var ft_str = (final_total).toFixed(2);
