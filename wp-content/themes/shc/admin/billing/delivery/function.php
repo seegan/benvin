@@ -29,6 +29,7 @@ function create_delivery() {
 	$processing_items_table 	= $wpdb->prefix.'shc_processing_items';
 
 	$delivery_date = $params['date'].' '.$params['time'].':00';
+	$financial_year = getFinancialYear( $params['date'] );
 
 	$last_billed_date = date( 'Y-m-d', strtotime( $delivery_date . ' -1 day' ) );
 	$master_id = $params['master_id'];
@@ -42,7 +43,7 @@ function create_delivery() {
 
 		$bill_no_data = getCorrectBillNumber($params['bill_no'], $params['site_id'], 'shc_delivery', $params['date']);
 
-		$wpdb->insert($delivery_table, array('master_id' => $master_id, 'bill_from_comp' => $bill_no_data['bill_from_comp'], 'bill_no' => $bill_no_data['bill_no'], 'delivery_date' => $delivery_date, 'last_billed_date' => $last_billed_date, 'vehicle_number' => $vehicle_number , 'driver_name' => $driver_name , 'driver_mobile' => $driver_mobile, 'updated_by' => $loggdin_user ) );
+		$wpdb->insert($delivery_table, array('master_id' => $master_id, 'financial_year' => $financial_year, 'bill_from_comp' => $bill_no_data['bill_from_comp'], 'bill_no' => $bill_no_data['bill_no'], 'delivery_date' => $delivery_date, 'last_billed_date' => $last_billed_date, 'vehicle_number' => $vehicle_number , 'driver_name' => $driver_name , 'driver_mobile' => $driver_mobile, 'updated_by' => $loggdin_user ) );
 		$delivery_id = $wpdb->insert_id;
 		create_admin_history(array('updated_by' => $loggdin_user, 'update_in' => $delivery_id, 'detail' => 'delivery_create' ));
 
@@ -67,7 +68,7 @@ function create_delivery() {
 	if(isset($params['action']) && $params['action'] == 'update_delivery') {
 		$delivery_id = isset($params['delivery_id']) ? $params['delivery_id'] : 0;
 
-		$wpdb->update($delivery_table, array('delivery_date' => $delivery_date, 'last_billed_date' => $last_billed_date, 'vehicle_number' => $vehicle_number , 'driver_name' => $driver_name , 'driver_mobile' => $driver_mobile ), array('id' => $delivery_id) );
+		$wpdb->update($delivery_table, array('financial_year' => $financial_year, 'delivery_date' => $delivery_date, 'last_billed_date' => $last_billed_date, 'vehicle_number' => $vehicle_number , 'driver_name' => $driver_name , 'driver_mobile' => $driver_mobile ), array('id' => $delivery_id) );
 
 		$wpdb->update($delivery_detail_table, array('active' => 0), array('delivery_id' => $delivery_id));
 		create_admin_history(array('updated_by' => $loggdin_user, 'update_in' => $delivery_id, 'detail' => 'delivery_update' ));

@@ -55,6 +55,7 @@ function create_billing() {
 
 
 	$hiring_data = array(
+		'financial_year' => getFinancialYear( $params['billing_date'] ),
 		'master_id' => isset($params['master_id']) ? $params['master_id'] : 0,
 		'bill_from' => isset($params['master_id']) ? $params['bill_from'] : '0000:00:00',
 		'bill_to'  => isset($params['master_id']) ? $params['bill_to'] : '0000:00:00',

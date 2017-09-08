@@ -123,6 +123,7 @@ function create_deposit() {
 	$loading_detail_table = $wpdb->prefix.'shc_loading_detail'; 
 
 	$deposit_date = $params['date'].' '.$params['time'].':00';
+	$financial_year = getFinancialYear( $params['date'] );
 
 	//$bill_detail = getBillDetail( $params['customer_id'], 'deposit');
 
@@ -131,6 +132,7 @@ function create_deposit() {
 	$loading_total = (isset($params['loading_total']) && $params['loading_total'] != '') ? $params['loading_total'] : 0.00;
 
 	$detail_main = array(
+		'financial_year' => $financial_year,
 		'master_id' => $params['master_id'],
 		'customer_id' => $params['customer_id'],
 		'site_id' => $params['site_id'],
