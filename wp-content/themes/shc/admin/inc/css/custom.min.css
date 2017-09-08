@@ -5046,11 +5046,9 @@ input[type=text].to_date:hover {
 .filter-section input[type="text"] {
     width: 100%;
 }
-
 .rupee-txt {
     text-transform:capitalize;
 }
-
 .discount_tr, .vat_tr  {
     display: none;
 }
