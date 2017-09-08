@@ -216,7 +216,17 @@
 									</tbody>
 									<tfooter>
 										<tr>
-											<td colspan="6" style="text-align:center"><b> Total </b></td>
+											<td colspan="6" style="text-align:right">
+											<div class="align-txt">
+												<span style="font-size: 20px;font-weight: bold;text-align: center;" class="discount_avail_no">
+														Total Hire Charges : 
+													</span>
+												</div>
+												<span class="discount_avail_yes">
+													Total : 
+												</span>
+												
+											</td>
 
 											<td class="deposit_tot_td">
 												<div class="align-txt n_rs_tot_txt">0</div>
@@ -250,7 +260,9 @@
 										<tr class="discount_tr">
 											<td colspan="6" style="text-align: right;">
 												<div class="align-txt">
-													Total Hire Charges : 
+													<span style="font-size: 20px;font-weight: bold;text-align: center;">
+														Total Hire Charges : 
+													</span>
 												</div>
 											</td>
 											<td>
@@ -371,8 +383,12 @@
 											<td></td>
 										</tr>
 										<tr>
-											<td colspan="6" style="font-size: 20px;font-weight: bold;text-align: center;">
-												<div class="align-txt">(for 30 days) Total Including Tax</div>
+											<td colspan="6" style="text-align: right;">
+												<div class="align-txt">
+													<span style="font-size: 20px;font-weight: bold;text-align: center;">
+														(for 30 days) Total Including Tax
+													</span>
+												</div>
 											</td>
 											<td>
 												<div class="align-txt right-align-txt">

@@ -168,7 +168,7 @@ function calculateGst(gst_for = '', sub_tot = 0) {
 		jQuery('.gst_sgst_txt').text(sgst);
 		jQuery('.gst_sgst').val(sgst);
 
-		return (cgst + sgst);
+    	return (parseFloat(cgst) + parseFloat(sgst));
 	} else {
 		var igst = parseFloat(( sub_tot * 18 / 100 ).toFixed(2));
 		jQuery('.gst_igst_txt').text(igst);

@@ -65,6 +65,7 @@ function load_custom_wp_admin_style() {
 	wp_enqueue_script( 'jquery-ui-js', get_template_directory_uri() . '/admin/inc/js/jquery-ui.js', array('jquery'), false, false );
 	wp_enqueue_script('jquery-time-picker' ,  get_template_directory_uri(). '/admin/inc/js/jquery-ui-timepicker-addon.js',  array('jquery' ));	
 
+	wp_enqueue_script( 'hot_key',  get_template_directory_uri() . '/admin/inc/js/jquery.hotkeys.js', array('jquery'), false, false );
 	wp_enqueue_script( 'custom_script',  get_template_directory_uri() . '/admin/inc/js/custom-script.js', array('jquery'), false, false );
 	wp_localize_script( 'custom_script', 'frontendajax', array( 'ajaxurl' => admin_url( 'admin-ajax.php' )));
 	wp_localize_script( 'custom_script', 'home_page', array( 'url' => home_url( '/' ) ));
