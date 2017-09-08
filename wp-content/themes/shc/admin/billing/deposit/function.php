@@ -133,6 +133,7 @@ function create_deposit() {
 
 	$detail_main = array(
 		'financial_year' => $financial_year,
+		'ref_number' => $params['ref_number'],
 		'master_id' => $params['master_id'],
 		'customer_id' => $params['customer_id'],
 		'site_id' => $params['site_id'],

@@ -74,7 +74,7 @@
 		<div class="col-lg-9">
 			<div class="x_panel">
 				<div class="x_title">
-					<h2>Security Deposit</h2>
+					<h2>Quotation</h2>
 					<div class="clearfix"></div>
 				</div>
 				<div class="x_content">
@@ -116,11 +116,19 @@
 							</div>
 							<div class="address-line">Address : <span class="address-txt"><?php echo ($customer_detail->address) ? $customer_detail->address : ''; ?></span>
 							</div>
+
+
 							<div class="address-line">
-								Discount : <input type="radio" name="discount_avail" value="yes" style="margin-top: -2px;"> Yes &nbsp;&nbsp; <input type="radio" name="discount_avail" value="no" style="margin-top: -2px;" checked> No
+								Discount : <input type="radio" name="hiring_discount_avail" class="hiring_discount_avail" value="yes" style="margin-top: -2px;"> Yes &nbsp;&nbsp; <input type="radio" name="hiring_discount_avail" class="hiring_discount_avail" value="no" style="margin-top: -2px;" checked> No
 								<input type="hidden" name="discount_yes" class="discount_yes" value="<?php echo $site_detail->discount; ?>">
 								<input type="hidden" name="discount_no" class="discount_no" value="0.00">
 							</div>
+							<div class="address-line">
+								Tax For : <input type="radio" class="tax_from" name="tax_from" value="no_tax" style="margin-top: -2px;"> No Tax &nbsp;&nbsp; <input type="radio" class="tax_from" name="tax_from" value="vat" style="margin-top: -2px;"> VAT &nbsp;&nbsp; <input type="radio" class="tax_from" name="tax_from" value="gst" style="margin-top: -2px;" checked> GST
+							</div>
+
+
+
 						</div>
 						<div class="col-lg-6">
 							<div class="address-line">Date : <span class="deposit-date"><input type="text" name="date" id="datepicker" class="financial_date" value="<?php echo $deposit_date; ?>" style="border-color: rgba(118, 118, 118, 0);height: 34px;margin: 0;"></span></div>
@@ -144,16 +152,18 @@
 											<th rowspan="2" style="width:50px;" class="center-th"><div>S.No</div></th>
 											<th rowspan="2" class="center-th" style="min-width: 200px;"><div>Description</div></th>
 											<th rowspan="2" class="center-th" style="width:100px;">
-												<div>Qty</div>
+												<div>Quantity</div>
 											</th>
 											<th rowspan="2" class="center-th" style="width:80px;">
 												<div>Unit Price</div>
 											</th>
 											<th colspan="2">
-												<div>Rate/30 days</div>
+												<div>Rate / 30 days</div>
 											</th>
 											<th colspan="2">
-												<div>Amount @ <input type="text" name="amt_times" class="amt_times" value="3" style="width: 25px;height: 20px;"> Times</div>
+												<div>  Hiring Charges For 30 Days
+													<input type="hidden" name="amt_times" class="amt_times" value="1" style="width: 25px;height: 20px;"> 
+												</div>
 											</th>
 											<th rowspan="2">
 												<div>Action</div>
@@ -206,14 +216,8 @@
 									</tbody>
 									<tfooter>
 										<tr>
-											<td colspan="4" style="text-align:center"><b>Actual Total </b></td>
-											<td class="minimum_pay_td">
-												<div class="align-txt t_rs_tot_txt">0</div>
-												<input type="hidden" class="total_thirty_days" value="0.00" name="for_thirty_days">
-											</td>
-											<td>
-												<div class="align-txt t_ps_tot_txt">00</div>
-											</td>
+											<td colspan="6" style="text-align:center"><b> Total </b></td>
+
 											<td class="deposit_tot_td">
 												<div class="align-txt n_rs_tot_txt">0</div>
 												<input type="hidden" class="total_ninety_days" value="0.00" name="for_ninety_days">
@@ -223,37 +227,170 @@
 											</td>
 											<td colspan="2"></td>
 										</tr>
-										<tr>
-											<td colspan="6" style="text-align:center">
-												<div>
+										
+
+										<tr class="discount_tr"><!-- discount_tr -->
+											<td colspan="6" style="text-align: right;">
+												<div class="align-txt">
 													<b>Discount % </b>
-													<input type="text" name="discount_percentage" class="discount_percentage_deposit" value="0.00" style="width:45px;" readonly="readonly">
+													<input type="text" name="discount_percentage" class="discount_percentage" value="0.00" style="width:45px;height: 30px;" readonly="readonly">
 												</div>
 											</td>
-											<td class="deposit_tot_td">
-												<div class="align-txt rs_discount_txt">0</div>
-												<input type="hidden" class="discount_amt" value="0.00" name="discount_amt">
+											<td>
+												<div class="align-txt right-align-txt">
+													<span class="discount_txt">0</span>
+													<input type="hidden" class="discount_amt" name="discount_amt" value="0.00">
+												</div>
 											</td>
 											<td>
-												<div class="align-txt p_discount_txt">00</div>
+												<div class="align-txt discount_txt_p">00</div>
 											</td>
-											<td colspan="2"></td>
+											<td></td>
+										</tr>
+										<tr class="discount_tr">
+											<td colspan="6" style="text-align: right;">
+												<div class="align-txt">
+													Total Hire Charges : 
+												</div>
+											</td>
+											<td>
+												<div class="align-txt right-align-txt">
+													<span class="after_discount_txt">0</span>
+													<input type="hidden" class="after_discount_amt" name="after_discount_amt" value="0.00">
+												</div>
+											</td>
+											<td>
+												<div class="align-txt after_discount_txt_p">00</div>
+											</td>
+											<td></td>
+										</tr>
+
+
+
+									<?php if(isset($site_detail->gst_for) && $site_detail->gst_for == 'igst') { ?>
+										<tr class="gst_tr tax_tr"> <!-- gst_tr tax_tr -->
+											<td colspan="6" style="text-align: right;">
+												<div class="align-txt">IGST - 9%: </div>
+												<input type="hidden" class="gst_percentage" value="18.00">
+											</td>
+											<td>
+												<div class="align-txt right-align-txt">
+													<span class="gst_igst_txt">0</span>
+													<input type="hidden" class="gst_igst" name="gst_igst" value="0.00">
+												</div>
+											</td>
+											<td>
+												<div class="align-txt gst_igst_txt_p">00</div>
+											</td>
+											<td></td>
+										</tr>
+									<?php } else {
+									?>
+										<tr class="gst_tr tax_tr"><!-- gst_tr tax_tr -->
+											<td colspan="6" style="text-align: right;">
+												<div class="align-txt">CGST - 9% : </div>
+												<input type="hidden" class="gst_percentage" value="9.00">
+											</td>
+											<td>
+												<div class="align-txt right-align-txt">
+													<span class="gst_cgst_txt">0</span>
+													<input type="hidden" class="gst_cgst" name="gst_cgst" value="0.00">
+												</div>
+											</td>
+											<td>
+												<div class="align-txt gst_cgst_txt_p">00</div>
+											</td>
+											<td></td>
+										</tr>
+										<tr class="gst_tr tax_tr"><!-- gst_tr tax_tr -->
+											<td colspan="6" style="text-align: right;">
+												<div class="align-txt">SGST - 9% : </div>
+												<input type="hidden" class="gst_percentage" value="0.00">
+											</td>
+											<td>
+												<div class="align-txt right-align-txt">
+													<span class="gst_sgst_txt">0</span>
+													<input type="hidden" class="gst_sgst" name="gst_sgst" value="0.00">
+												</div>
+											</td>
+											<td>
+												<div class="align-txt gst_sgst_txt_p">00</div>
+											</td>
+											<td></td>
+										</tr>
+									<?php
+									} ?>
+										<tr class="vat_tr tax_tr"> <!-- vat_tr tax_tr -->
+											<td colspan="6" style="text-align: right;">
+												<div class="align-txt">VAT - 5% : </div>
+												<input type="hidden" class="vat_percentage" value="5.00">
+											</td>
+											<td>
+												<div class="align-txt right-align-txt">
+													<span class="vat_amt_txt">0</span>
+													<input type="hidden" class="vat_amt" name="vat_amt" value="0.00">
+												</div>
+											</td>
+											<td>
+												<div class="align-txt vat_amt_txt_p">00</div>
+											</td>
+											<td></td>
+										</tr>
+										<tr class="tax_tr"> <!-- tax_tr -->
+											<td colspan="6" style="text-align: right;">
+												<div class="align-txt">Total Including Tax : </div>
+											</td>
+											<td>
+												<div class="align-txt gst_div right-align-txt">
+													<span class="total_include_tax_txt">0</span>
+													<input type="hidden" class="total_include_tax_amt" name="total_include_tax_amt" value="0.00">
+													<!-- gst_include_total -->
+												</div>
+											</td>
+											<td>
+												<div class="align-txt total_include_tax_txt_p">
+													00
+												</div>
+											</td>
+											<td></td>
+										</tr>
+
+										<tr>
+											<td colspan="6" style="text-align: right;">
+												<div class="align-txt">Round Off : </div>
+											</td>
+											<td>
+												<div class="align-txt right-align-txt">
+													<input type="text" class="round_off_rs right-align-txt" value="0" style="border-color: rgba(118, 118, 118, 0);height:34px;margin:0;width: 45px;padding: 0;text-align:right;">
+													<input type="hidden" name="round_off" value="0.00">
+												</div>
+											</td>
+											<td>
+												<input type="text" class="round_off_ps right-align-txt" value="00" style="border-color: rgba(118, 118, 118, 0);height:34px;margin:0;width: 45px;padding: 0;text-align:left;">
+											</td>
+											<td></td>
 										</tr>
 										<tr>
-											<td colspan="6" style="text-align:center">
-												<div>
-													<b>Total </b>
-												</div>
-											</td>
-											<td class="deposit_tot_td">
-												<div class="align-txt rs_tot_txt">0</div>
-												<input type="hidden" class="total" value="0.00" name="total">
+											<td colspan="6" style="font-size: 20px;font-weight: bold;text-align: center;">
+												<div class="align-txt">(for 30 days) Total Including Tax</div>
 											</td>
 											<td>
-												<div class="align-txt ps_tot_txt">00</div>
+												<div class="align-txt right-align-txt">
+													<span class="hiring_tot_txt ">0</span>
+													<input type="hidden" name="gst_for" class="gst_for"  value="<?php echo isset($site_detail->gst_for) ? $site_detail->gst_for : 'cgst'; ?>">
+													<input type="hidden" class="hiring_tot_val" name="hiring_tot" value="0.00">
+												</div>
 											</td>
-											<td colspan="2"></td>
+											<td>
+												<div class="align-txt hiring_tot_txt_p">
+													00
+												</div>
+											</td>
+											<td></td>
 										</tr>
+
+
+
 									<tfooter>
 								</table>
 
@@ -267,77 +404,10 @@
 
 							<div class="row">
 								<div class="col-lg-6">
-									<div style="height:50px;padding-bottom:15px;">
-								
-									</div>
-									<div class="check-block">
-										<div class="row">
-											<div class="col-lg-3">
-												Loading Charges 
-											</div>
-											<div class="col-lg-9">
-												<div class="check-container">
-													<input type="hidden" name="cheque_detail[0][cheque_detail_id]" value="0">
-													<table class="table table-bordered">
-														<tbody>
-															<tr>
-																<td style="width:150px;">Loading : </td>
-																<td>
-																	<input type="text" name="loading" style="border-color: rgba(118, 118, 118, 0);width: 100%;height: 25px;margin: 0;padding: 0;" class="deposit-charge-input loading" value="0.00">
-																</td>
-															</tr>
-															<tr>
-																<td>Transport : </td>
-																<td>
-																	<input type="text" name="transportation" style="border-color: rgba(118, 118, 118, 0);width: 100%;height: 25px;margin: 0;padding: 0;" class="deposit-charge-input transportation" value="0.00">
-																</td>
-															</tr>
-															<tr>
-																<td>Total :</td>
-																<td>
-																	<input type="text" name="loading_total" style="border-color: rgba(118, 118, 118, 0);width: 100%;height: 25px;margin: 0;padding: 0;" class="deposit-charge-input loading_total" value="0.00">
-																</td>
-															</tr>
-														</tbody>
-													</table>
-												</div>
-											</div>
-										</div>
-									</div>
+									
 								</div>
 								<div class="col-lg-6">
-									<div class="rupee-txt" style="padding-bottom:15px;">
-										Rupees : 
-										<span class="rupee-words" style="border-bottom: 2px dotted;padding-bottom: 5px;line-height: 35px;">
-										</span>
-									</div>
-									<div class="check-block">
-										<div class="row">
-											<div class="col-lg-3">
-												Received By <br>
-												Chash / Cheque
-											</div>
-											<div class="col-lg-9">
-												<div class="check-container">
-													<input type="hidden" name="cheque_detail[0][cheque_detail_id]" value="0">
-													<table class="table table-bordered">
-														<tr>
-															<td  style="width:150px;">Cheque No : </td>
-															<td><input type="text" name="cheque_detail[0][cheque_no]" style="border-color: rgba(118, 118, 118, 0);width: 100%;height: 25px;margin: 0;padding: 0;" value="0.00"></td>
-														</tr>
-														<tr>
-															<td>Date : </td>
-															<td><input type="text" name="cheque_detail[0][cheque_date]" class="datepicker" style="border-color: rgba(118, 118, 118, 0);width: 100%;height: 25px;margin: 0;padding: 0;" value="0.00"></td>
-														</tr>
-														<tr>
-															<td>Amount Rs. :</td>
-															<td><input type="text" name="cheque_detail[0][cheque_amt]" style="border-color: rgba(118, 118, 118, 0);width: 100%;height: 25px;margin: 0;padding: 0;" value="0.00"></td>
-														</tr>
-													</table>
-												</div>
-											</div>
-										</div>
-									</div>
+									
 								</div>
 
 								<div class="col-lg-12">

@@ -69,7 +69,8 @@ global $src_capabilities;
 	    'dashicons-id',
 	    7
 	);
-	add_submenu_page('master', 'New Master', 'New Master', $src_capabilities['billing']['permission']['new_master'], 'master', 'master' );
+	add_submenu_page('master', 'New Master', 'Master', $src_capabilities['billing']['permission']['new_master'], 'master', 'master' );
+	add_submenu_page('master', 'New Quotation', 'Quotation', $src_capabilities['billing']['permission']['new_deposit'], 'new_quotation', 'new_quotation' );
 	add_submenu_page('master', 'New Deposit', 'Deposit', $src_capabilities['billing']['permission']['new_deposit'], 'deposit', 'new_deposit' );
 	add_submenu_page('master', 'New Delivery', 'Delivery', $src_capabilities['billing']['permission']['new_delivery'], 'new_delivery', 'new_delivery' );
 	add_submenu_page('master', 'New Return', 'Return', $src_capabilities['billing']['permission']['new_return'], 'new_return', 'new_return' );
@@ -174,6 +175,9 @@ function list_roles() {
 
 function master() {
     require 'billing/master/add-master.php';
+}
+function new_quotation() {
+    require 'billing/quotation/add-quotation.php';
 }
 function new_deposit() {
     require 'billing/deposit/add-deposit.php';

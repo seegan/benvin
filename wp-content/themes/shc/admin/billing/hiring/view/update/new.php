@@ -29,8 +29,6 @@
 			$existin_bill = getExistBillData($_GET['id'], $bill_from, $bill_to);
 		}
 	}
-
-
 ?>
 
 <div class="container">
@@ -135,21 +133,32 @@
 					<div class="form-horizontal form-label-left" id="create_billing">
 						<div class="col-lg-6">
 							<?php
-							if($master_data) {
-								echo "<div class='address-line'>MRI : ".$master_data['master_data']->id."</div>";
-								echo"<input type='hidden' name='site_id' class='site_id' value='".$site_id."'>";
+								if($master_data) {
+									echo "<div class='address-line'>";
+									echo "<div style='float:left;width: 200px;'>";
+									echo "MRI : ".$master_data['master_data']->id;
+									echo "</div>";
+									echo "<div style='float:left;width: 200px;'>";
+									echo "Ref.<input type='text' name='ref_number' style='width: 150px;border-color: rgba(118, 118, 118, 0);height: 34px;margin: 0;'>";
+									echo "</div>";
+									echo "<div style='clear:both;'></div>";
+									echo "</div>";
+									echo "<input type='hidden' name='master_id' value='".$master_data['master_data']->id."'>";
 
 
-								echo '<div class="address-line">Bill No : ';
-								echo '	<span class="deposit-time">';
-								echo $site_detail->company_id."/HB <input type='text' style='border-color: rgba(118, 118, 118, 0);height: 34px;margin: 0;' value='".$site_detail->next_bill_no."' name='bill_no' class='bill bill_no'>";
-								echo '<img src="'.get_template_directory_uri() . '/admin/inc/images/5.gif" style="width: 20px;display:none;" class="loadin-billfrom">';
-								echo '<img src="'.get_template_directory_uri() . '/admin/inc/images/check.png" style="width: 20px;display:none;" class="loadin-check">';
-								echo '<img src="'.get_template_directory_uri() . '/admin/inc/images/cross.png" style="width: 20px;display:none;" class="loadin-cross">';
-								echo '	</span>';
-								echo '<input type="hidden" class="billno_action" value="shc_hiring">';
-								echo '</div>';
-							}
+
+									echo"<input type='hidden' name='site_id' class='site_id' value='".$site_id."'>";
+
+									echo '<div class="address-line">Bill No : ';
+									echo '	<span class="deposit-time">';
+									echo $site_detail->company_id."/HB <input type='text' style='border-color: rgba(118, 118, 118, 0);height: 34px;margin: 0;' value='".$site_detail->next_bill_no."' name='bill_no' class='bill bill_no'>";
+									echo '<img src="'.get_template_directory_uri() . '/admin/inc/images/5.gif" style="width: 20px;display:none;" class="loadin-billfrom">';
+									echo '<img src="'.get_template_directory_uri() . '/admin/inc/images/check.png" style="width: 20px;display:none;" class="loadin-check">';
+									echo '<img src="'.get_template_directory_uri() . '/admin/inc/images/cross.png" style="width: 20px;display:none;" class="loadin-cross">';
+									echo '	</span>';
+									echo '<input type="hidden" class="billno_action" value="shc_hiring">';
+									echo '</div>';
+								}
 							?>
 							<div class="customer-name">Customer Name : M/s 
 								<span class="customer-name"><?php echo ($customer_detail->name) ? $customer_detail->name : ''; ?></span>

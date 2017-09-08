@@ -68,7 +68,7 @@ function load_custom_wp_admin_style() {
 	wp_enqueue_script( 'custom_script',  get_template_directory_uri() . '/admin/inc/js/custom-script.js', array('jquery'), false, false );
 	wp_localize_script( 'custom_script', 'frontendajax', array( 'ajaxurl' => admin_url( 'admin-ajax.php' )));
 	wp_localize_script( 'custom_script', 'home_page', array( 'url' => home_url( '/' ) ));
-	wp_localize_script( 'custom_script', 'admin_page', array( 'deposit' => admin_url('admin.php?page=deposit'), 'delivery' => admin_url('admin.php?page=new_delivery'), 'return' => admin_url('admin.php?page=new_return'), 'hiring' => admin_url('admin.php?page=new_hiring'), 'obc' => admin_url('admin.php?page=new_obc'), 'statement' => admin_url('admin.php?page=new_statement')  ));
+	wp_localize_script( 'custom_script', 'admin_page', array( 'quotation' => admin_url('admin.php?page=new_quotation'), 'deposit' => admin_url('admin.php?page=deposit'), 'delivery' => admin_url('admin.php?page=new_delivery'), 'return' => admin_url('admin.php?page=new_return'), 'hiring' => admin_url('admin.php?page=new_hiring'), 'obc' => admin_url('admin.php?page=new_obc'), 'statement' => admin_url('admin.php?page=new_statement')  ));
 
 }
 add_action( 'admin_enqueue_scripts', 'load_custom_wp_admin_style' );
@@ -87,6 +87,7 @@ require get_template_directory() . '/admin/employee/function.php';
 
 
 require get_template_directory() . '/admin/billing/master/function.php';
+require get_template_directory() . '/admin/billing/quotation/function.php';
 require get_template_directory() . '/admin/billing/deposit/function.php';
 require get_template_directory() . '/admin/billing/delivery/function.php';
 require get_template_directory() . '/admin/billing/return/function.php';

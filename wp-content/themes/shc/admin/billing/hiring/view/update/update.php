@@ -71,7 +71,18 @@
 						<div class="col-lg-6">
 							<?php
 							if($master_data) {
-								echo "<div class='address-line'>MRI : ".$master_data['master_data']->id."</div>";
+
+								echo "<div class='address-line'>";
+								echo "<div style='float:left;width: 200px;'>";
+								echo "MRI : ".$master_data['master_data']->id;
+								echo "</div>";
+								echo "<div style='float:left;width: 200px;'>";
+								echo "Ref. ".$bill_data['hiring_data']->ref_number;
+								echo "</div>";
+								echo "<div style='clear:both;'></div>";
+								echo "</div>";
+
+
 								if($bill_data) {
 									$bill_number = billNumberText($bill_data['hiring_data']->bill_from_comp, $bill_data['hiring_data']->bill_no, 'MRR');
 									echo "<div class='address-line'>No. ".$bill_number['bill_no']."</div>";

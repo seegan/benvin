@@ -4951,7 +4951,7 @@ input[type=text].to_date:hover {
     border:0 !important;
 }
 .align-txt {
-    line-height: 10px;
+    line-height: 30px;
     position: relative;
 }
 .right-align-txt {
@@ -5040,8 +5040,6 @@ input[type=text].to_date:hover {
     border-radius: 5px;
     color: #fff;
 }
-
-
 
 .filter-section input[type="text"] {
     width: 100%;

@@ -92,7 +92,18 @@
 						<div class="col-lg-6">
 							<?php
 							if($master_data) {
-								echo "<div class='address-line'>MRI : ".$master_data['master_data']->id."</div>";
+
+								echo "<div class='address-line'>";
+								echo "<div style='float:left;width: 200px;'>";
+								echo "MRI : ".$master_data['master_data']->id;
+								echo "</div>";
+								echo "<div style='float:left;width: 200px;'>";
+								echo "Ref. ".$return_data['return_data']->ref_number;
+								echo "</div>";
+								echo "<div style='clear:both;'></div>";
+								echo "</div>";
+
+
 								if($return_date) {
 
 									$bill_number = billNumberText($return_data['return_data']->bill_from_comp, $return_data['return_data']->bill_no, 'MRR');

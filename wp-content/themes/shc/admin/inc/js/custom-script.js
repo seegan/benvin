@@ -277,6 +277,9 @@ function populate_site_select_search(v = 'new', type = 'deposit') {
       templateSelection: formatDepositState1
   }).on("select2:select", function (e) {
 
+    if(type == 'quotation') {
+      window.location = admin_page.quotation+'&id='+e.params.data.id;
+    }
     if(type == 'deposit') {
       window.location = admin_page.deposit+'&id='+e.params.data.id;
     }
@@ -295,6 +298,8 @@ function populate_site_select_search(v = 'new', type = 'deposit') {
     if(type == 'statement') {
       window.location = admin_page.statement+'&id='+e.params.data.id;
     }
+
+
 
   });
 
@@ -385,4 +390,10 @@ function inWordsFull(num) {
 
     return rs_txt + con + ps_txt +' Only';
 
+}
+
+
+function splitRupee(rupee_txt = '') {
+  var n_substr = rupee_txt.toString().split('.');
+  return n_substr;
 }

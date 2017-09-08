@@ -48,7 +48,7 @@ function create_return() {
 
 	if(isset($params['action']) && $params['action'] == 'new_return') {
 
-		$return_data = array('financial_year' => $financial_year, 'master_id' => $master_id, 'return_date' => $return_date, 'is_return' => $is_return, 'vehicle_number' => $vehicle_number, 'driver_name' => $driver_name, 'driver_mobile' => $driver_mobile);
+		$return_data = array('ref_number' => $params['ref_number'], 'financial_year' => $financial_year, 'master_id' => $master_id, 'return_date' => $return_date, 'is_return' => $is_return, 'vehicle_number' => $vehicle_number, 'driver_name' => $driver_name, 'driver_mobile' => $driver_mobile);
 
 		$return_data['updated_by'] = $loggdin_user;
 
@@ -107,7 +107,7 @@ function create_return() {
 
 		$return_id = isset($params['return_id']) ? $params['return_id'] : 0;
 
-		$wpdb->update($return_table, array('financial_year' => $financial_year, 'return_date' => $return_date, 'is_return' => $is_return, 'vehicle_number' => $vehicle_number, 'driver_name' => $driver_name, 'driver_mobile' => $driver_mobile), array('id' => $return_id) );
+		$wpdb->update($return_table, array('ref_number' => $params['ref_number'], 'financial_year' => $financial_year, 'return_date' => $return_date, 'is_return' => $is_return, 'vehicle_number' => $vehicle_number, 'driver_name' => $driver_name, 'driver_mobile' => $driver_mobile), array('id' => $return_id) );
 		create_admin_history(array('updated_by' => $loggdin_user, 'update_in' => $return_id, 'detail' => 'return_update' ));
 		
 		$wpdb->update($return_detail_table, array('active' => 0), array('return_id' => $return_id));

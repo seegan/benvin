@@ -85,8 +85,17 @@
 						<div class="col-lg-6">
 							<?php
 							if($master_data) {
-								echo "<div class='address-line'>No. BA/MRI : ".$master_data['master_data']->id."</div>";
+								echo "<div class='address-line'>";
+								echo "<div style='float:left;width: 200px;'>";
+								echo "MRI : ".$master_data['master_data']->id;
+								echo "</div>";
+								echo "<div style='float:left;width: 200px;'>";
+								echo "Ref.<input type='text' name='ref_number' style='width: 150px;border-color: rgba(118, 118, 118, 0);height: 34px;margin: 0;'>";
+								echo "</div>";
+								echo "<div style='clear:both;'></div>";
+								echo "</div>";
 								echo "<input type='hidden' name='master_id' value='".$master_data['master_data']->id."'>";
+
 
 								echo '<div class="address-line">Bill No : ';
 								echo '	<span class="deposit-time">';
