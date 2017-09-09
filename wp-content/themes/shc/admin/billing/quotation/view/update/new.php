@@ -21,7 +21,7 @@
 			$customer_id = $master_data['master_data']->customer_id;
 			$site_id = $master_data['master_data']->site_id;
 			$customer_detail = getCustomerData($customer_id);
-			$site_detail = getSiteData($site_id, $bill_for = 'shc_deposit', $deposit_date);
+			$site_detail = getSiteData($site_id, $bill_for = 'shc_quotation', $deposit_date);
 		}
 
 	}
@@ -78,7 +78,7 @@
 					<div class="clearfix"></div>
 				</div>
 				<div class="x_content">
-					<div class="form-horizontal form-label-left" id="create_deposit">
+					<div class="form-horizontal form-label-left" id="create_quotation">
 
 
 						<div class="col-lg-6">
@@ -103,14 +103,14 @@
 									echo '<img src="'.get_template_directory_uri() . '/admin/inc/images/check.png" style="width: 20px;display:none;" class="loadin-check">';
 									echo '<img src="'.get_template_directory_uri() . '/admin/inc/images/cross.png" style="width: 20px;display:none;" class="loadin-cross">';
 									echo '	</span>';
-									echo '<input type="hidden" class="billno_action" value="shc_deposit">';
+									echo '<input type="hidden" class="billno_action" value="shc_quotation">';
 									echo '</div>';
 
 								}
 							?>
 
 
-							<div class="customer-name">Customer Name : M/s  
+							<div class="customer-name">Customer Name : 
 								<span class="customer-name"><?php echo ($customer_detail->name) ? $customer_detail->name : ''; ?></span>
 								<input type="hidden" class="customer_id" name="customer_id" value="<?php echo $customer_id; ?>">
 							</div>
@@ -145,8 +145,8 @@
 
 
 						<div class="col-lg-12">
-							<div class="deposit-repeater deposit_detail" style="margin-top:20px;">
-								<table class="table table-bordered" data-repeater-list="deposit_detail">
+							<div class="deposit-repeater quotation_detail" style="margin-top:20px;">
+								<table class="table table-bordered" data-repeater-list="quotation_detail">
 									<thead>
 										<tr>
 											<th rowspan="2" style="width:50px;" class="center-th"><div>S.No</div></th>
@@ -181,7 +181,7 @@
 										<tr data-repeater-item class="repeterin div-table-row" class="repeterin div-table-row" data-lotid="0" data-stockbal="0">
 											<td>
 												<div class="rowno align-txt">1</div>
-												<input type="hidden" class="sale_detail_id" name="sale_detail_id" value="0">
+												<input type="hidden" class="quotation_detail_id" name="quotation_detail_id" value="0">
 												<input type="hidden" class="lot_id_orig" name="lot_id_orig" value="0">
 											</td>
 											<td>
@@ -230,7 +230,7 @@
 
 											<td class="deposit_tot_td">
 												<div class="align-txt n_rs_tot_txt">0</div>
-												<input type="hidden" class="total_ninety_days" value="0.00" name="for_ninety_days">
+												<input type="hidden" class="total_ninety_days" value="0.00" name="sub_total">
 											</td>
 											<td>
 												<div class="align-txt n_ps_tot_txt">00</div>
@@ -428,8 +428,8 @@
 
 								<div class="col-lg-12">
 									<div style="float:right;">
-	                          			<input type='hidden' name='action' class='action' value='create_deposit'>
-	                          			<button type='submit' class='btn btn-success create_deposit'>Submit</button>
+	                          			<input type='hidden' name='action' class='action' value='create_quotation'>
+	                          			<button type='submit' class='btn btn-success create_quotation'>Submit</button>
 			                       	</div>
 								</div>
 							</div>

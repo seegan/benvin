@@ -8,10 +8,7 @@ function load_deposit_scripts() {
 		wp_enqueue_script( 'deposit-script-dub', get_template_directory_uri() . '/admin/billing/inc/js/deposit-dub.js', array('jquery'), false, false );
 	}
 }
-
-
-
-	add_action( 'admin_enqueue_scripts', 'load_deposit_scripts' );
+add_action( 'admin_enqueue_scripts', 'load_deposit_scripts' );
 
 function getDepositDetail($deposit_id = '') {
 	global $wpdb;

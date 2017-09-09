@@ -9,4 +9,132 @@ function load_quotation_scripts() {
 	}
 }
 add_action( 'admin_enqueue_scripts', 'load_quotation_scripts' );
+
+
+
+
+function create_quotation() {
+	global $wpdb;
+	$data['msg'] 	= 'Something Went Wrong! Please Try Again!';
+	$data['redirect'] 	= 0;
+	$data['success'] = 0;
+	$loggdin_user = get_current_user_id();	
+	$params = array();
+	parse_str($_POST['data'], $params);
+
+	$quotation_table = $wpdb->prefix.'shc_quotation';
+	$quotation_detail_table = $wpdb->prefix.'shc_quotation_detail';
+
+	$quotation_date = $params['date'].' '.$params['time'].':00';
+	$financial_year = getFinancialYear( $params['date'] );
+
+	//$bill_detail = getBillDetail( $params['customer_id'], 'quotation');
+
+
+	$detail_main = array(
+		'financial_year' => $financial_year,
+		'ref_number' => isset($params['ref_number']) ? $params['ref_number'] : '',
+		'master_id' => isset($params['master_id']) ? $params['master_id'] : 0,
+		'customer_id' => isset($params['customer_id']) ? $params['customer_id'] : 0,
+		'site_id' => isset($params['site_id']) ? $params['site_id'] : 0,
+		'quotation_date' 	=> isset($quotation_date) ? $quotation_date : '0000-00-00',
+		'sub_total' => isset($params['sub_total']) ? $params['sub_total'] : 0.00,
+		'discount_avail' => isset($params['hiring_discount_avail']) ? $params['hiring_discount_avail'] : 'no',
+		'discount_percentage' => isset($params['discount_percentage']) ? $params['discount_percentage'] : 0.00,
+		'discount_amt' => isset($params['discount_amt']) ? $params['discount_amt'] : 0.00,
+		'after_discount_amt' => isset($params['after_discount_amt']) ? $params['after_discount_amt'] : 0.00,
+		'tax_from' => isset($params['tax_from']) ? $params['tax_from'] : 'gst',
+		'gst_for' => isset($params['gst_for']) ? $params['gst_for'] : 'cgst',
+		'igst_amt' => isset($params['gst_igst']) ? $params['gst_igst'] : 0.00,
+		'cgst_amt' => isset($params['gst_cgst']) ? $params['gst_cgst'] : 0.00,
+		'sgst_amt' => isset($params['gst_sgst']) ? $params['gst_sgst'] : 0.00,
+		'vat_amt' => isset($params['vat_amt']) ? $params['vat_amt'] : 0.00,
+		'tax_include_tot' => isset($params['total_include_tax_amt']) ? $params['total_include_tax_amt'] : 0.00,
+		'round_off' => $params['round_off'],
+		'hiring_total' => (isset($params['hiring_discount_avail']) && $params['hiring_discount_avail'] == 'yes') ? $params['after_discount_amt'] : $params['sub_total'],
+		'for_thirty_days' => isset($params['hiring_tot']) ? $params['hiring_tot'] : 0.00,
+	);
+
+
+
+	if(isset($params['action']) && $params['action'] == 'create_quotation') {
+
+
+		$bill_no_data = getCorrectBillNumber($params['bill_no'], $params['site_id'], 'shc_quotatio', $params['date']);
+
+		$detail_main['bill_from_comp'] = $bill_no_data['bill_from_comp'];
+		$detail_main['bill_no'] = $bill_no_data['bill_no'];
+		$detail_main['updated_by'] = $loggdin_user;
+
+		$wpdb->insert($quotation_table, $detail_main);
+		$quotation_id = $wpdb->insert_id;
+
+		create_admin_history(array('updated_by' => $loggdin_user, 'update_in' => $quotation_id, 'detail' => 'quotation_create' ));
+
+	} else {
+
+		$quotation_id = isset($params['quotation_id']) ? $params['quotation_id'] : 0;
+		$wpdb->update($quotation_table, $detail_main, array('id' => $quotation_id));
+
+		create_admin_history(array('updated_by' => $loggdin_user, 'update_in' => $quotation_id, 'detail' => 'quotation_update' ));
+
+		$loadin_update_select = "SELECT * FROM ${loading_table} WHERE quotation_id = ${quotation_id} AND master_id = ".$params['master_id'];
+		
+		if($wpdb->get_row($loadin_update_select)) {
+			$wpdb->update($loading_table, array('loading_charge' => $loading_total, 'quotation_date' => $quotation_date, 'active' => 1 ), array('quotation_id' => $quotation_id, 'master_id' => $params['master_id']) );
+
+			$wpdb->update($loading_detail_table, array( 'charge_amt' => $loading, 'active' => 1 ), array('quotation_id' => $quotation_id, 'charge_for' => 'loading') );
+			$wpdb->update($loading_detail_table, array( 'charge_amt' => $transportation, 'active' => 1 ), array('quotation_id' => $quotation_id, 'charge_for' => 'transportation') );
+		} else {
+			$wpdb->insert($loading_table, array('quotation_id' => $quotation_id, 'master_id' => $params['master_id'], 'loading_charge' => $loading_total, 'quotation_date' => $quotation_date ) );
+			$loading_id = $wpdb->insert_id;
+
+			$wpdb->insert($loading_detail_table, array('quotation_id' => $quotation_id, 'loading_id' => $loading_id, 'charge_for' => 'loading', 'charge_amt' => $loading ) );
+			$wpdb->insert($loading_detail_table, array('quotation_id' => $quotation_id, 'loading_id' => $loading_id, 'charge_for' => 'transportation', 'charge_amt' => $transportation ) );
+		}
+
+	}
+
+
+	$wpdb->update($quotation_detail_table, array('active' => 0), array('quotation_id' => $quotation_id));
+
+	if($quotation_id) {
+
+
+		if( isset($params['quotation_detail']) ) {
+			foreach($params['quotation_detail'] as $d_value) {
+				if(isset($d_value['lot_id_orig']) AND $d_value['lot_id_orig'] != 0) {
+
+					$detail_data = array(
+						'quotation_id' 	=> $quotation_id,
+						'lot_id' 		=> $d_value['lot_id_orig'],
+						'qty' 			=> $d_value['qty'],
+						'unit_price' 	=> $d_value['unit_price'],
+						'rate_thirty' 	=> $d_value['thirty_rs_price'],
+						'rate_ninety' 	=> $d_value['ninety_rs_price'],
+						'active' 		=> 1
+						);
+
+					if($d_value['quotation_detail_id'] != 0) {
+						$wpdb->update($quotation_detail_table, $detail_data, array('id' => $d_value['quotation_detail_id'], 'quotation_id' => $quotation_id));
+					} else {
+						$wpdb->insert($quotation_detail_table, $detail_data);
+					}
+				}
+			}
+		}
+
+
+
+		$data['success'] = 1;
+		$data['msg'] 	= 'Quotation Updated!';
+		$redirect_url = 'admin.php?page=new_quotation&id='.$params['master_id'].'&quotation_id='.$quotation_id;
+		$data['redirect'] = network_admin_url( $redirect_url );
+		//$data['redirect'] = 0;
+	}
+	echo json_encode($data);
+	die();
+}
+add_action( 'wp_ajax_create_quotation', 'create_quotation' );
+add_action( 'wp_ajax_nopriv_create_quotation', 'create_quotation' );
 ?>
