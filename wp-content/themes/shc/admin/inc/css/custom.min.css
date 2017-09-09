@@ -5047,6 +5047,6 @@ input[type=text].to_date:hover {
 .rupee-txt {
     text-transform:capitalize;
 }
-.discount_tr, .vat_tr, .discount_avail_yes  {
+.discount_tr, .vat_tr  {
     display: none;
 }

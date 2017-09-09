@@ -1,17 +1,14 @@
  <?php
  	$master_data = false;
-	$security_data = false;
-	$cheque_data = false;
 	$customer_detail = false;
 	$site_detail = false;
 	
 	$customer_id = 0;
 	$site_id = 0;
 
-	$deposit_date = date('Y-m-d');
-	$deposit_time = date('H:i');
 
-
+	$quotation_detail = $quotation_data['quotation_data'];
+	$quotation_list = $quotation_data['quotation_detail'];
 
 	if(isset($_GET['id'])) {
 		$master_data = getMasterDetail($_GET['id']);
@@ -21,24 +18,10 @@
 			$customer_id = $master_data['master_data']->customer_id;
 			$site_id = $master_data['master_data']->site_id;
 			$customer_detail = getCustomerData($customer_id);
-			$site_detail = getSiteData($site_id);	
-
-
-			if(isset($_GET['deposit_id'])) {
-				$security_data = getDepositDetail($_GET['deposit_id']);
-				$security_data = ($security_data) ? $security_data : false;
-				if($security_data) {
-					$deposit_date = date('Y-m-d', strtotime($security_data['deposit_data']->deposit_date));
-					$deposit_time = date('H:i', strtotime($security_data['deposit_data']->deposit_date));
-				}
-
-				$cheque_data = getDepositChequeData($_GET['deposit_id']);
-				$cheque_data = ($cheque_data) ? $cheque_data : false;
-			}
+			$site_detail = getSiteData($site_id);
 		}
 
 	}
-
 ?>
 <style type="text/css">
 	.address-line, .customer-name {
@@ -88,50 +71,65 @@
 		<div class="col-lg-9">
 			<div class="x_panel">
 				<div class="x_title">
-					<h2>Security Deposit</h2>
+					<h2>Quotation</h2>
 					<div class="clearfix"></div>
 				</div>
 				<div class="x_content">
-					<div class="form-horizontal form-label-left" id="create_deposit">
+					<div class="form-horizontal form-label-left" id="create_quotation">
 
 
 						<div class="col-lg-6">
 							<?php
+
+
+
 								if($master_data) {
 									echo "<div class='address-line'>";
 									echo "<div style='float:left;width: 200px;'>";
 									echo "MRI : ".$master_data['master_data']->id;
 									echo "</div>";
 									echo "<div style='float:left;width: 200px;'>";
-									echo "Ref.<input type='text' name='ref_number' style='width: 150px;border-color: rgba(118, 118, 118, 0);height: 34px;margin: 0;' value='".$security_data['deposit_data']->ref_number."'>";
+									echo "Ref.<input type='text' name='ref_number' style='width: 150px;border-color: rgba(118, 118, 118, 0);height: 34px;margin: 0;' value='".$quotation_data['quotation_data']->ref_number."'>";
 									echo "</div>";
 									echo "<div style='clear:both;'></div>";
 									echo "</div>";
 									echo "<input type='hidden' name='master_id' value='".$master_data['master_data']->id."'>";
 
 
-									if($security_data) { 
-										$bill_number = billNumberText($security_data['deposit_data']->bill_from_comp, $security_data['deposit_data']->bill_no, 'SD');
-										echo "<div class='address-line'>No.".$bill_number['bill_no']."</div>";
-									}
-								} else {
-									echo "<div>";
-									echo "<div class='address-line' style='float:left;'>No. MRI : <input type='text' class='master_id' name='master_id' value='".$master_data['master_data']->id."'></div>";
-									echo "<button type='submit' class='btn btn-success open_deposit' style='float:left;margin-left:10px;'>Submit</button>";
-									echo "<div style='clear:both;'></div></div>";
+									echo '<div class="address-line">Bill No : ';
+									echo '	<span class="deposit-time">';
+									echo $site_detail->company_id."Quotation No. <input type='text' style='border-color: rgba(118, 118, 118, 0);height: 34px;margin: 0;' value='".$quotation_data['quotation_data']->bill_no."' name='bill_no' class='bill bill_no'>";
+									echo '<img src="'.get_template_directory_uri() . '/admin/inc/images/5.gif" style="width: 20px;display:none;" class="loadin-billfrom">';
+									echo '<img src="'.get_template_directory_uri() . '/admin/inc/images/check.png" style="width: 20px;display:none;" class="loadin-check">';
+									echo '<img src="'.get_template_directory_uri() . '/admin/inc/images/cross.png" style="width: 20px;display:none;" class="loadin-cross">';
+									echo '	</span>';
+									echo '<input type="hidden" class="billno_action" value="shc_quotation">';
+									echo '</div>';
+
 								}
 							?>
-							<div class="customer-name">Customer Name : M/s  
+
+
+							<div class="customer-name">Customer Name : 
 								<span class="customer-name"><?php echo ($customer_detail->name) ? $customer_detail->name : ''; ?></span>
 								<input type="hidden" class="customer_id" name="customer_id" value="<?php echo $customer_id; ?>">
 							</div>
 							<div class="address-line">Address : <span class="address-txt"><?php echo ($customer_detail->address) ? $customer_detail->address : ''; ?></span>
 							</div>
+
 							<div class="address-line">
-								Discount : <input type="radio" name="discount_avail" value="yes" style="margin-top: -2px;" <?php  echo (isset($security_data['deposit_data']) && $security_data['deposit_data']->discount_avail == 'yes')  ? 'checked' : ''; ?> > Yes &nbsp;&nbsp; <input type="radio" name="discount_avail" value="no" style="margin-top: -2px;" <?php  echo (isset($security_data['deposit_data']) && $security_data['deposit_data']->discount_avail != 'yes')  ? 'checked' : ''; ?> > No
-								<input type="hidden" name="discount_yes" class="discount_yes" value="<?php  echo (isset($security_data['deposit_data']) && $security_data['deposit_data']->discount_percentage != '0.00')  ? $security_data['deposit_data']->discount_percentage : '0.00'; ?>">
+								Discount : <input type="radio" name="hiring_discount_avail" class="hiring_discount_avail" value="yes" style="margin-top: -2px;" <?php echo (isset($quotation_detail->discount_avail) && $quotation_detail->discount_avail == 'yes') ? 'checked' : ''; ?> > Yes &nbsp;&nbsp; <input type="radio" name="hiring_discount_avail" class="hiring_discount_avail" value="no" style="margin-top: -2px;" <?php echo (isset($quotation_detail->discount_avail) && $quotation_detail->discount_avail == 'no') ? 'checked' : ''; ?>> No
+								<input type="hidden" name="discount_yes" class="discount_yes" value="<?php echo $site_detail->discount; ?>">
 								<input type="hidden" name="discount_no" class="discount_no" value="0.00">
 							</div>
+							<div class="address-line">
+								Tax For : 
+								<input type="radio" class="tax_from" name="tax_from" value="no_tax" style="margin-top: -2px;" <?php echo (isset($quotation_detail->tax_from) && $quotation_detail->tax_from == 'no_tax') ? 'checked' : ''; ?>> No Tax &nbsp;&nbsp; 
+								<input type="radio" class="tax_from" name="tax_from" value="vat" style="margin-top: -2px;" <?php echo (isset($quotation_detail->tax_from) && $quotation_detail->tax_from == 'vat') ? 'checked' : ''; ?>> VAT &nbsp;&nbsp; 
+								<input type="radio" class="tax_from" name="tax_from" value="gst" style="margin-top: -2px;"  <?php echo (isset($quotation_detail->tax_from) && $quotation_detail->tax_from == 'gst') ? 'checked' : ''; ?>> GST
+							</div>
+
+
 
 						</div>
 						<div class="col-lg-6">
@@ -149,25 +147,27 @@
 
 
 						<div class="col-lg-12">
-							<div class="deposit-repeater deposit_detail" style="margin-top:20px;">
-								<table class="table table-bordered" data-repeater-list="deposit_detail">
+							<div class="deposit-repeater quotation_detail" style="margin-top:20px;">
+								<table class="table table-bordered" data-repeater-list="quotation_detail">
 									<thead>
 										<tr>
 											<th rowspan="2" style="width:50px;" class="center-th"><div>S.No</div></th>
 											<th rowspan="2" class="center-th" style="min-width: 200px;"><div>Description</div></th>
 											<th rowspan="2" class="center-th" style="width:100px;">
-												<div>Qty</div>
+												<div>Quantity</div>
 											</th>
 											<th rowspan="2" class="center-th" style="width:80px;">
 												<div>Unit Price</div>
 											</th>
 											<th colspan="2">
-												<div>Rate/30 days</div>
+												<div>Rate / 30 days</div>
 											</th>
 											<th colspan="2">
-												<div>Amount @ <input type="text" name="amt_times" class="amt_times" value="<?php echo (isset($security_data['deposit_data']->amt_times)) ? $security_data['deposit_data']->amt_times : 3; ?>" style="width: 25px;height: 20px;"> Times</div>
+												<div>  Hiring Charges For 30 Days
+													<input type="hidden" name="amt_times" class="amt_times" value="1" style="width: 25px;height: 20px;"> 
+												</div>
 											</th>
-											<th colspan="2">
+											<th rowspan="2">
 												<div>Action</div>
 											</th>
 										</tr>
@@ -176,172 +176,285 @@
 											<th style="width:40px;">Ps.</th>
 											<th style="width:120px;">Rs.</th>
 											<th style="width:40px;">Ps.</th>
-											<th style="width:40px;">Pay</th>
-											<th style="width:40px;">Delete</th>
 										</tr>
 									</thead>
 									<tbody>
 									<?php
-										if($security_data['deposit_detail']) {
+										if($quotation_list) {
 											$i = 1;
-											foreach ($security_data['deposit_detail'] as $key => $d_value) {
-												$data_thirty = splitCurrency($d_value->rate_thirty);
-												$data_ninety = splitCurrency($d_value->rate_ninety);
-									?>
+											foreach ($quotation_list as $key => $q_value) {
+												$data_thirty = splitCurrency($q_value->rate_thirty);
+												$data_ninety = splitCurrency($q_value->rate_ninety);
+										?>
 										<tr data-repeater-item class="repeterin div-table-row" class="repeterin div-table-row" data-lotid="0" data-stockbal="0">
 											<td>
 												<div class="rowno align-txt"><?php echo $i; ?></div>
-												<input type="hidden" class="sale_detail_id" name="sale_detail_id" value="<?php echo $d_value->id; ?>">
-												<input type="hidden" class="lot_id_orig" name="lot_id_orig" value="<?php echo $d_value->lot_id; ?>">
+												<input type="hidden" class="sale_detail_id" name="sale_detail_id" value="<?php echo $q_value->id; ?>">
+												<input type="hidden" class="lot_id_orig" name="lot_id_orig" value="<?php echo $q_value->lot_id; ?>">
 											</td>
 											<td>
-												<select name="lot_number" class="lot_id" tabindex="-1" aria-hidden="true" data-dvalue="<?php echo $d_value->id; ?>" data-dtext="<?php echo $d_value->lot_no; ?>" data-dname="<?php echo $d_value->product_name; ?>" data-dtype="<?php echo $d_value->product_type; ?>"></select>
+												<select name="lot_number" class="lot_id" tabindex="-1" aria-hidden="true" data-dvalue="<?php echo $q_value->id; ?>" data-dtext="<?php echo $q_value->lot_no; ?>" data-dname="<?php echo $q_value->product_name; ?>" data-dtype="<?php echo $q_value->product_type; ?>"></select>
 											</td>
 											<td>
-												<input type="text" name="qty" style="border-color: rgba(118, 118, 118, 0);width:80px;height:34px;margin:0;" class="dpt_qty" value="<?php echo $d_value->qty; ?>">
+												<input type="text" name="qty" style="border-color: rgba(118, 118, 118, 0);width:80px;height:34px;margin:0;" class="dpt_qty" value="<?php echo $q_value->qty; ?>">
 											</td>
 											<td>
-												<div class="align-txt unit_price_txt"><?php echo $d_value->unit_price; ?></div>
-												<input type="hidden" name="unit_price" class="unit_price" value="<?php echo $d_value->unit_price; ?>">
+												<div class="align-txt unit_price_txt"><?php echo $q_value->unit_price; ?></div>
+												<input type="hidden" name="unit_price" class="unit_price" value="<?php echo $q_value->unit_price; ?>">
 											</td>
 											<td>
 												<div class="align-txt t_rs_txt"><?php echo $data_thirty['rs']; ?></div>
-												<input type="hidden" name="thirty_rs_price" value="<?php echo $d_value->rate_thirty; ?>" class="thirty_rs_price">
+												<input type="hidden" name="thirty_rs_price" value="<?php echo $q_value->rate_thirty; ?>" class="thirty_rs_price">
 											</td>
 											<td>
 												<div class="align-txt t_ps_txt"><?php echo $data_thirty['ps']; ?></div>
 											</td>
 											<td>
 												<div class="align-txt n_rs_txt"><?php echo $data_ninety['rs']; ?></div>
-												<input type="hidden" name="ninety_rs_price" value="<?php echo $d_value->rate_ninety; ?>" class="ninety_rs_price">
+												<input type="hidden" name="ninety_rs_price" value="<?php echo $q_value->rate_ninety; ?>" class="ninety_rs_price">
 											</td>
 											<td>
 												<div class="align-txt n_ps_txt"><?php echo $data_ninety['ps']; ?></div>
 											</td>
 											<td>
-												<div class="align-txt">
-													<input type="checkbox" style="margin-top: -5px;">
-												</div>
-											</td>
-											<td>
 												<a href="#" data-repeater-delete="" style="font-size: 16px;font-weight: bold; color: #ff0000;line-height: 30px;">x</a>
 												<input type="hidden" value="Delete">
 											</td>
 										</tr>
-									<?php
-												$i++;
+										<?php
 											}
-										} else {
-									?>
-										<tr data-repeater-item class="repeterin div-table-row" class="repeterin div-table-row" data-lotid="0" data-stockbal="0">
-											<td>
-												<div class="rowno align-txt">1</div>
-												<input type="hidden" class="sale_detail_id" name="sale_detail_id" value="0">
-												<input type="hidden" class="lot_id_orig" name="lot_id_orig" value="0">
-											</td>
-											<td>
-												<select name="lot_number" class="lot_id" tabindex="-1" aria-hidden="true"></select>
-											</td>
-											<td>
-												<input type="text" name="qty" value="1" style="border-color: rgba(118, 118, 118, 0);width:80px;height:34px;margin:0;" class="dpt_qty">
-											</td>
-											<td>
-												<div class="align-txt unit_price_txt">0.00</div>
-												<input type="hidden" name="unit_price" class="unit_price" value="0.00">
-											</td>
-											<td>
-												<div class="align-txt t_rs_txt">0</div>
-												<input type="hidden" name="thirty_rs_price" value="0.00" class="thirty_rs_price">
-											</td>
-											<td>
-												<div class="align-txt t_ps_txt">00</div>
-											</td>
-											<td>
-												<div class="align-txt n_rs_txt">0</div>
-												<input type="hidden" name="ninety_rs_price" value="0.00" class="ninety_rs_price">
-											</td>
-											<td>
-												<div class="align-txt n_ps_txt">00</div>
-											</td>
-											<td>
-												<div class="align-txt">
-													<input type="checkbox" style="margin-top: -5px;">
-												</div>
-											</td>
-											<td>
-												<a href="#" data-repeater-delete="" style="font-size: 16px;font-weight: bold; color: #ff0000;line-height: 30px;">x</a>
-												<input type="hidden" value="Delete">
-											</td>
-										</tr>
-									<?php
 										}
 									?>
 
 									</tbody>
-											<?php
-												$thirty_total = ($security_data && $security_data['deposit_data']->total_thirty_days) ? $security_data['deposit_data']->total_thirty_days : 0.00;
-												$thirty_total_data = splitCurrency($thirty_total);
-
-												$ninety_total = ($security_data && $security_data['deposit_data']->total_ninety_days) ? $security_data['deposit_data']->total_ninety_days : 0.00;
-												$ninety_total_data = splitCurrency($ninety_total);
-
-												$discount_amt = (isset( $security_data['deposit_data'] ) && $security_data['deposit_data']->discount_amt) ? $security_data['deposit_data']->discount_amt : 0.00;
-												$discount_total_data = splitCurrency($discount_amt);
-
-												$total_amt = (isset( $security_data['deposit_data'] ) && $security_data['deposit_data']->total) ? $security_data['deposit_data']->total : 0.00;
-												$total_data = splitCurrency($total_amt);
-
-											?>
 									<tfooter>
-										<tr>
-											<td colspan="4" style="text-align:center"><b>Actual Total </b></td>
-											<td class="minimum_pay_td">
-												<div class="align-txt t_rs_tot_txt"><?php echo $thirty_total_data['rs']  ?></div>
-												<input type="hidden" class="total_thirty_days" value="<?php  echo $thirty_total; ?>" name="for_thirty_days">
+									<?php
+										$discount_display = ( isset($quotation_detail->discount_avail) && $quotation_detail->discount_avail == 'yes') ? 'table-row' : 'none';
+										$no_tax_avail = ( isset($quotation_detail->tax_from) && $quotation_detail->tax_from == 'no_tax' ) ? 'none' : 'table-row';
+										$igst_avail = ( isset($quotation_detail->tax_from) && $quotation_detail->tax_from == 'gst' && $quotation_detail->gst_for == 'igst' ) ? 'table-row' : 'none';
+										$cgst_avail = ( isset($quotation_detail->tax_from) && $quotation_detail->tax_from == 'gst' && $quotation_detail->gst_for == 'cgst' ) ? 'table-row' : 'none';
+										$vat_avail = ( isset($quotation_detail->tax_from) && $quotation_detail->tax_from == 'vat') ? 'table-row' : 'none';
+
+										$sub_total_amt = (isset( $quotation_detail->sub_total ) && $quotation_detail->sub_total) ? $quotation_detail->sub_total : 0.00;
+										$sub_total_data = splitCurrency($sub_total_amt);
+
+										$discount_percentage = (isset( $quotation_detail->discount_percentage ) && $quotation_detail->discount_percentage) ? $quotation_detail->discount_percentage : 0.00;
+
+										$discount_amt = (isset( $quotation_detail->discount_amt ) && $quotation_detail->discount_amt) ? $quotation_detail->discount_amt : 0.00;
+										$discount_data = splitCurrency($discount_amt);
+
+										$after_discount_amt = (isset( $quotation_detail->after_discount_amt ) && $quotation_detail->after_discount_amt) ? $quotation_detail->after_discount_amt : 0.00;
+										$after_discount_data = splitCurrency($after_discount_amt);
+
+
+										$igst_amt = (isset( $quotation_detail->igst_amt ) && $quotation_detail->igst_amt) ? $quotation_detail->igst_amt : 0.00;
+										$igst_data = splitCurrency($igst_amt);
+
+										$cgst_amt = (isset( $quotation_detail->cgst_amt ) && $quotation_detail->cgst_amt) ? $quotation_detail->cgst_amt : 0.00;
+										$cgst_data = splitCurrency($cgst_amt);
+
+										$sgst_amt = (isset( $quotation_detail->sgst_amt ) && $quotation_detail->sgst_amt) ? $quotation_detail->sgst_amt : 0.00;
+										$sgst_data = splitCurrency($sgst_amt);
+
+										$vat_amt = (isset( $quotation_detail->vat_amt ) && $quotation_detail->vat_amt) ? $quotation_detail->vat_amt : 0.00;
+										$vat_data = splitCurrency($vat_amt);
+
+										$tax_include_tot = (isset( $quotation_detail->tax_include_tot ) && $quotation_detail->tax_include_tot) ? $quotation_detail->tax_include_tot : 0.00;
+										$tax_data = splitCurrency($tax_include_tot);
+
+										$round_off = (isset( $quotation_detail->round_off ) && $quotation_detail->round_off) ? $quotation_detail->round_off : 0.00;
+										$round_off_data = splitCurrency($round_off);
+
+										$for_thirty_days= (isset( $quotation_detail->for_thirty_days ) && $quotation_detail->for_thirty_days) ? $quotation_detail->for_thirty_days : 0.00;
+										$thirty_days_data = splitCurrency($for_thirty_days);
+
+									?>
+										<tr class="discount_tr" style="display: <?php echo $discount_display; ?>">
+											<td colspan="6" style="text-align:right">
+											<div class="align-txt">
+												<span class="discount_avail_yes">
+													Total : 
+												</span>
 											</td>
-											<td>
-												<div class="align-txt t_ps_tot_txt"><?php echo $thirty_total_data['ps']  ?></div>
-											</td>
+
 											<td class="deposit_tot_td">
-												<div class="align-txt n_rs_tot_txt"><?php echo $ninety_total_data['rs']  ?></div>
-												<input type="hidden" class="total_ninety_days" value="<?php  echo $ninety_total; ?>" name="for_ninety_days">
+												<div class="align-txt n_rs_tot_txt"><?php echo $sub_total_data['rs']; ?></div>
+												<input type="hidden" class="total_ninety_days" value="<?php echo $sub_total_amt; ?>" name="sub_total">
 											</td>
 											<td>
-												<div class="align-txt n_ps_tot_txt"><?php echo $ninety_total_data['ps']  ?></div>
+												<div class="align-txt n_ps_tot_txt"><?php echo $sub_total_data['ps']; ?></div>
 											</td>
 											<td colspan="2"></td>
 										</tr>
-										<tr>
-											<td colspan="6" style="text-align:center">
-												<div>
+										
+
+										<tr class="discount_tr" style="display: <?php echo $discount_display; ?>"><!-- discount_tr -->
+											<td colspan="6" style="text-align: right;">
+												<div class="align-txt">
 													<b>Discount % </b>
-													<input type="text" name="discount_percentage" class="discount_percentage_deposit" value="<?php  echo (isset($security_data['deposit_data']) && $security_data['deposit_data']->discount_percentage != '0.00')  ? $security_data['deposit_data']->discount_percentage : '0.00'; ?>" style="width:45px;" <?php  echo (isset($security_data['deposit_data']) && $security_data['deposit_data']->discount_avail != 'yes')  ? 'readonly=readonly' : ''; ?> >
+													<input type="text" name="discount_percentage" class="discount_percentage" value="<?php echo $discount_percentage; ?>" style="width:45px;height: 30px;" readonly="readonly">
 												</div>
 											</td>
-											<td class="deposit_tot_td">
-												<div class="align-txt rs_discount_txt"><?php echo $discount_total_data['rs']  ?></div>
-												<input type="hidden" class="discount_amt" value="<?php  echo (isset($security_data['deposit_data']) && $security_data['deposit_data']->discount_amt != '0.00')  ? $security_data['deposit_data']->discount_amt : '0.00'; ?>" name="discount_amt">
+											<td>
+												<div class="align-txt right-align-txt">
+													<span class="discount_txt"><?php echo $discount_data['rs']; ?></span>
+													<input type="hidden" class="discount_amt" name="discount_amt" value="<?php echo $discount_amt; ?>">
+												</div>
 											</td>
 											<td>
-												<div class="align-txt p_discount_txt"><?php echo $discount_total_data['ps']  ?></div>
+												<div class="align-txt discount_txt_p"><?php echo $discount_data['ps']; ?></div>
 											</td>
-											<td colspan="2"></td>
+											<td></td>
+										</tr>
+										<tr class="">
+											<td colspan="6" style="text-align: right;">
+												<div class="align-txt">
+													<span style="font-size: 20px;font-weight: bold;text-align: center;">
+														Total Hire Charges : 
+													</span>
+												</div>
+											</td>
+											<td>
+												<div class="align-txt right-align-txt">
+													<span class="after_discount_txt"><?php echo $after_discount_data['rs']; ?></span>
+													<input type="hidden" class="after_discount_amt" name="after_discount_amt" value="<?php echo $after_discount_amt; ?>">
+												</div>
+											</td>
+											<td>
+												<div class="align-txt after_discount_txt_p"><?php echo $after_discount_data['ps']; ?></div>
+											</td>
+											<td></td>
+										</tr>
+
+
+
+									<?php if(isset($quotation_detail->gst_for) && $quotation_detail->gst_for == 'igst') { ?>
+										<tr class="gst_tr tax_tr" style="display:<?php echo $igst_avail; ?>"> <!-- gst_tr tax_tr -->
+											<td colspan="6" style="text-align: right;">
+												<div class="align-txt">IGST - 9%: </div>
+												<input type="hidden" class="gst_percentage" value="18.00">
+											</td>
+											<td>
+												<div class="align-txt right-align-txt">
+													<span class="gst_igst_txt"><?php echo $igst_data['rs']; ?></span>
+													<input type="hidden" class="gst_igst" name="gst_igst" value="<?php echo $igst_amt; ?>">
+												</div>
+											</td>
+											<td>
+												<div class="align-txt gst_igst_txt_p"><?php echo $igst_data['ps']; ?></div>
+											</td>
+											<td></td>
+										</tr>
+									<?php } else {
+									?>
+										<tr class="gst_tr tax_tr" style="display:<?php echo $cgst_avail; ?>"><!-- gst_tr tax_tr -->
+											<td colspan="6" style="text-align: right;">
+												<div class="align-txt">CGST - 9% : </div>
+												<input type="hidden" class="gst_percentage" value="9.00">
+											</td>
+											<td>
+												<div class="align-txt right-align-txt">
+													<span class="gst_cgst_txt"><?php echo $cgst_data['rs']; ?></span>
+													<input type="hidden" class="gst_cgst" name="gst_cgst" value="<?php echo $cgst_amt; ?>">
+												</div>
+											</td>
+											<td>
+												<div class="align-txt gst_cgst_txt_p"><?php echo $cgst_data['ps']; ?></div>
+											</td>
+											<td></td>
+										</tr>
+										<tr class="gst_tr tax_tr" style="display:<?php echo $cgst_avail; ?>"><!-- gst_tr tax_tr -->
+											<td colspan="6" style="text-align: right;">
+												<div class="align-txt">SGST - 9% : </div>
+												<input type="hidden" class="gst_percentage" value="0.00">
+											</td>
+											<td>
+												<div class="align-txt right-align-txt">
+													<span class="gst_sgst_txt"><?php echo $sgst_data['rs']; ?></span>
+													<input type="hidden" class="gst_sgst" name="gst_sgst" value="<?php echo $sgst_amt; ?>">
+												</div>
+											</td>
+											<td>
+												<div class="align-txt gst_sgst_txt_p"><?php echo $sgst_data['ps']; ?></div>
+											</td>
+											<td></td>
+										</tr>
+									<?php
+									} ?>
+										<tr class="vat_tr tax_tr" style="display:<?php echo $vat_avail; ?>"> <!-- vat_tr tax_tr -->
+											<td colspan="6" style="text-align: right;">
+												<div class="align-txt">VAT - 5% : </div>
+												<input type="hidden" class="vat_percentage" value="5.00">
+											</td>
+											<td>
+												<div class="align-txt right-align-txt">
+													<span class="vat_amt_txt"><?php echo $vat_data['rs']; ?></span>
+													<input type="hidden" class="vat_amt" name="vat_amt" value="<?php echo $vat_amt; ?>">
+												</div>
+											</td>
+											<td>
+												<div class="align-txt vat_amt_txt_p"><?php echo $vat_data['ps']; ?></div>
+											</td>
+											<td></td>
+										</tr>
+										<tr class="vat_tr tax_tr" style="display:<?php echo $vat_avail; ?>"> <!-- vat_tr tax_tr -->
+										<tr class="tax_tr" style="display:<?php echo $no_tax_avail; ?>"> <!-- tax_tr -->
+											<td colspan="6" style="text-align: right;">
+												<div class="align-txt">Total Including Tax : </div>
+											</td>
+											<td>
+												<div class="align-txt gst_div right-align-txt">
+													<span class="total_include_tax_txt"><?php echo $tax_data['rs']; ?></span>
+													<input type="hidden" class="total_include_tax_amt" name="total_include_tax_amt" value="<?php echo $tax_include_tot; ?>">
+													<!-- gst_include_total -->
+												</div>
+											</td>
+											<td>
+												<div class="align-txt total_include_tax_txt_p">
+													<?php echo $tax_data['ps']; ?>
+												</div>
+											</td>
+											<td></td>
+										</tr>
+
+										<tr>
+											<td colspan="6" style="text-align: right;">
+												<div class="align-txt">Round Off : </div>
+											</td>
+											<td>
+												<div class="align-txt right-align-txt">
+													<input type="text" class="round_off_rs right-align-txt" value="<?php echo $round_off_data['rs']; ?>" style="border-color: rgba(118, 118, 118, 0);height:34px;margin:0;width: 45px;padding: 0;text-align:right;">
+													<input type="hidden" name="round_off" value="<?php echo $round_off; ?>">
+												</div>
+											</td>
+											<td>
+												<input type="text" class="round_off_ps right-align-txt" value="<?php echo $round_off_data['ps']; ?>" style="border-color: rgba(118, 118, 118, 0);height:34px;margin:0;width: 45px;padding: 0;text-align:left;">
+											</td>
+											<td></td>
 										</tr>
 										<tr>
-											<td colspan="6" style="text-align:center">
-												<div>
-													<b>Total </b>
+											<td colspan="6" style="text-align: right;">
+												<div class="align-txt">
+													<span style="font-size: 20px;font-weight: bold;text-align: center;">
+														(for 30 days) Total Including Tax
+													</span>
 												</div>
 											</td>
-											<td class="deposit_tot_td">
-												<div class="align-txt rs_tot_txt"><?php echo $total_data['rs']  ?></div>
-												<input type="hidden" class="total" value="<?php  echo (isset($security_data['deposit_data']) && $security_data['deposit_data']->total != '0.00')  ? $security_data['deposit_data']->total : '0.00'; ?>" name="total">
+											<td>
+												<div class="align-txt right-align-txt">
+													<span class="hiring_tot_txt "><?php echo $thirty_days_data['rs'] ?></span>
+													<input type="hidden" name="gst_for" class="gst_for"  value="<?php echo isset($site_detail->gst_for) ? $site_detail->gst_for : 'cgst'; ?>">
+													<input type="hidden" class="hiring_tot_val" name="hiring_tot" value="<?php echo $for_thirty_days ?>">
+												</div>
 											</td>
 											<td>
-												<div class="align-txt ps_tot_txt"><?php echo $total_data['ps']  ?></div>
+												<div class="align-txt hiring_tot_txt_p">
+													<?php echo $thirty_days_data['ps'] ?>
+												</div>
 											</td>
-											<td colspan="2"></td>
+											<td></td>
 										</tr>
+
 
 
 									<tfooter>
@@ -357,131 +470,16 @@
 
 							<div class="row">
 								<div class="col-lg-6">
-
-									<div style="height:50px;padding-bottom:15px;">
-										
-									</div>
-
-
-									<div class="check-block">
-										<div class="row">
-											<div class="col-lg-3">
-												Loading Charges 
-											</div>
-											<div class="col-lg-9">
-												<div class="check-container">
-													<input type="hidden" name="cheque_detail[0][cheque_detail_id]" value="0">
-													<table class="table table-bordered">
-														<tbody>
-															<tr>
-																<td style="width:150px;">Loading : </td>
-																<td>
-																	<input type="text" name="loading" style="border-color: rgba(118, 118, 118, 0);width: 100%;height: 25px;margin: 0;padding: 0;" class="deposit-charge-input loading" value="<?php echo getLoadingData($_GET['deposit_id'], 'loading') ?>">
-																</td>
-															</tr>
-															<tr>
-																<td>Transport : </td>
-																<td>
-																	<input type="text" name="transportation" style="border-color: rgba(118, 118, 118, 0);width: 100%;height: 25px;margin: 0;padding: 0;" class="deposit-charge-input transportation" value="<?php echo getLoadingData($_GET['deposit_id'], 'transportation') ?>">
-																</td>
-															</tr>
-															<tr>
-																<td>Total :</td>
-																<td>
-																	<input type="text" name="loading_total" style="border-color: rgba(118, 118, 118, 0);width: 100%;height: 25px;margin: 0;padding: 0;" class="deposit-charge-input loading_total" value="<?php echo getLoadingData($_GET['deposit_id'], 'total') ?>">
-																</td>
-															</tr>
-														</tbody>
-													</table>
-												</div>
-											</div>
-										</div>
-									</div>
+									
 								</div>
 								<div class="col-lg-6">
-									<div class="rupee-txt" style="padding-bottom:15px;">
-										Rupees : 
-										<span class="rupee-words" style="border-bottom: 2px dotted;padding-bottom: 5px;line-height: 35px;">
-											<?php 
-												if(isset($security_data['deposit_data']->total_ninety_days)) {
-													echo ucfirst( convert_number_to_words_full($security_data['deposit_data']->total_ninety_days) );
-												} else {
-													echo "0";
-												}
-
-											?>
-										</span>
-									</div>
-									<div class="check-block">
-										<div class="row">
-											<div class="col-lg-3">
-												Received By <br>
-												Chash / Cheque
-											</div>
-											<div class="col-lg-9">
-												<?php
-												if($cheque_data && $cheque_data['cheque_data']) {
-													foreach ($cheque_data['cheque_data'] as $cd_value) {
-												?>
-													<div class="check-container">
-														<input type="hidden" name="cheque_detail[0][cheque_detail_id]" value="<?php echo $cd_value->id ?>">
-														<table class="table table-bordered">
-															<tr>
-																<td  style="width:150px;">Cheque No : </td>
-																<td><input type="text" name="cheque_detail[0][cheque_no]" style="border-color: rgba(118, 118, 118, 0);width: 100%;height: 25px;margin: 0;padding: 0;" value="<?php echo $cd_value->cheque_no ?>"></td>
-															</tr>
-															<tr>
-																<td>Date : </td>
-																<td><input type="text" name="cheque_detail[0][cheque_date]" class="datepicker" style="border-color: rgba(118, 118, 118, 0);width: 100%;height: 25px;margin: 0;padding: 0;" value="<?php echo $cd_value->cheque_date ?>"></td>
-															</tr>
-															<tr>
-																<td>Amount Rs. :</td>
-																<td><input type="text" name="cheque_detail[0][cheque_amt]" style="border-color: rgba(118, 118, 118, 0);width: 100%;height: 25px;margin: 0;padding: 0;" value="<?php echo $cd_value->cheque_amount ?>"></td>
-															</tr>
-														</table>
-													</div>
-												<?php
-													}
-												} else {
-												?>
-													<div class="check-container">
-														<input type="hidden" name="cheque_detail[0][cheque_detail_id]" value="0">
-														<table class="table table-bordered">
-															<tr>
-																<td  style="width:150px;">Cheque No : </td>
-																<td><input type="text" name="cheque_detail[0][cheque_no]" style="border-color: rgba(118, 118, 118, 0);width: 100%;height: 25px;margin: 0;padding: 0;"></td>
-															</tr>
-															<tr>
-																<td>Date : </td>
-																<td><input type="text" name="cheque_detail[0][cheque_date]" class="datepicker" style="border-color: rgba(118, 118, 118, 0);width: 100%;height: 25px;margin: 0;padding: 0;"></td>
-															</tr>
-															<tr>
-																<td>Amount Rs. :</td>
-																<td><input type="text" name="cheque_detail[0][cheque_amt]" style="border-color: rgba(118, 118, 118, 0);width: 100%;height: 25px;margin: 0;padding: 0;"></td>
-															</tr>
-														</table>
-													</div>
-												<?php
-												}
-												?>
-
-											</div>
-										</div>
-									</div>
+									
 								</div>
 
 								<div class="col-lg-12">
 									<div style="float:right;">
-			                          	<?php 
-			                          		if($security_data) {
-			                          			echo "<input type='hidden' name='deposit_id' value='".$security_data['deposit_data']->id."'>";
-			                          			echo "<input type='hidden' name='action' class='action' value='update_deposit'>";
-			                          			echo "<button type='submit' class='btn btn-success create_deposit'>Update</button>";
-			                          		} else {
-			                          			echo "<input type='hidden' name='action' class='action' value='create_deposit'>";
-			                          			echo "<button type='submit' class='btn btn-success create_deposit'>Submit</button>";
-			                          		}
-			                          	?>
+	                          			<input type='hidden' name='action' class='action' value='create_quotation'>
+	                          			<button type='submit' class='btn btn-success create_quotation'>Submit</button>
 			                       	</div>
 								</div>
 							</div>

@@ -98,7 +98,7 @@
 
 									echo '<div class="address-line">Bill No : ';
 									echo '	<span class="deposit-time">';
-									echo $site_detail->company_id."/SD <input type='text' style='border-color: rgba(118, 118, 118, 0);height: 34px;margin: 0;' value='".$site_detail->next_bill_no."' name='bill_no' class='bill bill_no'>";
+									echo $site_detail->company_id."Quotation No. <input type='text' style='border-color: rgba(118, 118, 118, 0);height: 34px;margin: 0;' value='".$site_detail->next_bill_no."' name='bill_no' class='bill bill_no'>";
 									echo '<img src="'.get_template_directory_uri() . '/admin/inc/images/5.gif" style="width: 20px;display:none;" class="loadin-billfrom">';
 									echo '<img src="'.get_template_directory_uri() . '/admin/inc/images/check.png" style="width: 20px;display:none;" class="loadin-check">';
 									echo '<img src="'.get_template_directory_uri() . '/admin/inc/images/cross.png" style="width: 20px;display:none;" class="loadin-cross">';
@@ -215,17 +215,12 @@
 										</tr>
 									</tbody>
 									<tfooter>
-										<tr>
+										<tr class="discount_tr">
 											<td colspan="6" style="text-align:right">
 											<div class="align-txt">
-												<span style="font-size: 20px;font-weight: bold;text-align: center;" class="discount_avail_no">
-														Total Hire Charges : 
-													</span>
-												</div>
-												<span class="discount_avail_yes">
+												<span>
 													Total : 
 												</span>
-												
 											</td>
 
 											<td class="deposit_tot_td">
@@ -257,7 +252,7 @@
 											</td>
 											<td></td>
 										</tr>
-										<tr class="discount_tr">
+										<tr>
 											<td colspan="6" style="text-align: right;">
 												<div class="align-txt">
 													<span style="font-size: 20px;font-weight: bold;text-align: center;">

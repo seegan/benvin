@@ -39,14 +39,12 @@ jQuery(document).ready(function () {
     var discount_avail = jQuery('input[name=hiring_discount_avail]:checked').val();
     if(discount_avail == 'yes') {
       jQuery('.discount_tr').css('display', 'table-row');
-      jQuery('.discount_avail_yes').css('display', 'inline-block');
       jQuery('.discount_avail_no').css('display', 'none');
       jQuery('.discount_percentage').val(jQuery('.discount_yes').val()).change();
       jQuery('.discount_percentage').attr('readonly', false);
     } else {
       jQuery('.discount_tr').css('display', 'none');
       jQuery('.discount_avail_no').css('display', 'inline-block');
-      jQuery('.discount_avail_yes').css('display', 'none');
       jQuery('.discount_percentage').val(jQuery('.discount_no').val()).change();
       jQuery('.discount_percentage').attr('readonly', true);
     }

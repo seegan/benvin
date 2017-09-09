@@ -231,52 +231,8 @@
 									<?php
 												$i++;
 											}
-										} else {
+										} 
 									?>
-										<tr data-repeater-item class="repeterin div-table-row" class="repeterin div-table-row" data-lotid="0" data-stockbal="0">
-											<td>
-												<div class="rowno align-txt">1</div>
-												<input type="hidden" class="sale_detail_id" name="sale_detail_id" value="0">
-												<input type="hidden" class="lot_id_orig" name="lot_id_orig" value="0">
-											</td>
-											<td>
-												<select name="lot_number" class="lot_id" tabindex="-1" aria-hidden="true"></select>
-											</td>
-											<td>
-												<input type="text" name="qty" value="1" style="border-color: rgba(118, 118, 118, 0);width:80px;height:34px;margin:0;" class="dpt_qty">
-											</td>
-											<td>
-												<div class="align-txt unit_price_txt">0.00</div>
-												<input type="hidden" name="unit_price" class="unit_price" value="0.00">
-											</td>
-											<td>
-												<div class="align-txt t_rs_txt">0</div>
-												<input type="hidden" name="thirty_rs_price" value="0.00" class="thirty_rs_price">
-											</td>
-											<td>
-												<div class="align-txt t_ps_txt">00</div>
-											</td>
-											<td>
-												<div class="align-txt n_rs_txt">0</div>
-												<input type="hidden" name="ninety_rs_price" value="0.00" class="ninety_rs_price">
-											</td>
-											<td>
-												<div class="align-txt n_ps_txt">00</div>
-											</td>
-											<td>
-												<div class="align-txt">
-													<input type="checkbox" style="margin-top: -5px;">
-												</div>
-											</td>
-											<td>
-												<a href="#" data-repeater-delete="" style="font-size: 16px;font-weight: bold; color: #ff0000;line-height: 30px;">x</a>
-												<input type="hidden" value="Delete">
-											</td>
-										</tr>
-									<?php
-										}
-									?>
-
 									</tbody>
 											<?php
 												$thirty_total = ($security_data && $security_data['deposit_data']->total_thirty_days) ? $security_data['deposit_data']->total_thirty_days : 0.00;

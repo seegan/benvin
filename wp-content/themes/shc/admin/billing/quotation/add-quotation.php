@@ -24,7 +24,7 @@
 </style>
 
 <?php
-	if( isset($_GET['id']) && isset($_GET['quotation_id'])  && $security_data = getDepositDetail($_GET['quotation_id']) ) { 
+	if( isset($_GET['id']) && isset($_GET['quotation_id'])  && $quotation_data = getQutationDetail($_GET['quotation_id']) ) {
 		include( get_template_directory().'/admin/billing/quotation/view/update/update.php' );
 	} else if( isset($_GET['id']) ) {  
 		include( get_template_directory().'/admin/billing/quotation/view/update/new.php' );
