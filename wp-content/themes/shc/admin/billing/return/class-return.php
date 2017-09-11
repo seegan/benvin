@@ -64,11 +64,11 @@ END )
 
 FROM 
 
-( SELECT dd.* FROM ${delivery_detail} as dd JOIN ${delivery_table} as d ON d.id = dd.delivery_id  WHERE dd.master_id = ${master_id} AND dd.active = 1 AND d.active = 1  ) as del
+( SELECT dd.* FROM ${delivery_detail} as dd JOIN ${delivery_table} as d ON d.id = dd.delivery_id  WHERE dd.master_id = ${master_id} AND dd.active = 1 AND d.active = 1 AND date(d.delivery_date) <= date('$return_date')  ) as del
 
 LEFT JOIN
 
-(SELECT rd.delivery_detail_id, sum(rd.qty) tot_return FROM ${return_detail} as rd JOIN ${return_table} as r ON r.id= rd.return_id WHERE rd.master_id = ${master_id} AND rd.active = 1 AND r.active = 1 GROUP BY rd.delivery_detail_id) as ret
+(SELECT rd.delivery_detail_id, sum(rd.qty) tot_return FROM ${return_detail} as rd JOIN ${return_table} as r ON r.id= rd.return_id WHERE rd.master_id = ${master_id} AND rd.active = 1 AND r.active = 1 AND date(r.return_date) <= date('$return_date') GROUP BY rd.delivery_detail_id) as ret
 
 ON del.id = ret.delivery_detail_id WHERE 
 
@@ -84,7 +84,6 @@ END )
     
 ) > 0 ) as f JOIN ${lots_table} as l ON l.id = f.lot_id ORDER BY f.lot_id ASC, f.delivery_date ASC";
 //var_dump($return_query); die();
-
 
 
 $return_group = "SELECT f.lot_id, SUM(f.qty) as qty, f.rate_per_unit, SUM(f.return_qty) as return_qty, SUM(f.return_pending) as return_pending, l.product_name, l.product_type, l.buying_price FROM 
@@ -112,11 +111,11 @@ END )
 
 FROM 
 
-( SELECT dd.* FROM ${delivery_detail} as dd JOIN ${delivery_table} as d ON d.id = dd.delivery_id  WHERE dd.master_id = ${master_id} AND dd.active=1 AND d.active = 1 ) as del
+( SELECT dd.* FROM ${delivery_detail} as dd JOIN ${delivery_table} as d ON d.id = dd.delivery_id  WHERE dd.master_id = ${master_id} AND dd.active=1 AND d.active = 1 AND date(d.delivery_date) <= date('$return_date') ) as del
 
 LEFT JOIN
 
-(SELECT rd.delivery_detail_id, sum(rd.qty) tot_return FROM ${return_detail} as rd JOIN ${return_table} as r ON r.id= rd.return_id WHERE rd.master_id = ${master_id} AND rd.active = 1 AND r.active = 1 GROUP BY rd.delivery_detail_id) as ret
+(SELECT rd.delivery_detail_id, sum(rd.qty) tot_return FROM ${return_detail} as rd JOIN ${return_table} as r ON r.id= rd.return_id WHERE rd.master_id = ${master_id} AND rd.active = 1 AND r.active = 1 AND date(r.return_date) <= date('$return_date') GROUP BY rd.delivery_detail_id) as ret
 
 ON del.id = ret.delivery_detail_id WHERE 
 

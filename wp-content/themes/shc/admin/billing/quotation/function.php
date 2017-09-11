@@ -78,28 +78,12 @@ function create_quotation() {
 
 		create_admin_history(array('updated_by' => $loggdin_user, 'update_in' => $quotation_id, 'detail' => 'quotation_update' ));
 
-		$loadin_update_select = "SELECT * FROM ${loading_table} WHERE quotation_id = ${quotation_id} AND master_id = ".$params['master_id'];
-		
-		if($wpdb->get_row($loadin_update_select)) {
-			$wpdb->update($loading_table, array('loading_charge' => $loading_total, 'quotation_date' => $quotation_date, 'active' => 1 ), array('quotation_id' => $quotation_id, 'master_id' => $params['master_id']) );
-
-			$wpdb->update($loading_detail_table, array( 'charge_amt' => $loading, 'active' => 1 ), array('quotation_id' => $quotation_id, 'charge_for' => 'loading') );
-			$wpdb->update($loading_detail_table, array( 'charge_amt' => $transportation, 'active' => 1 ), array('quotation_id' => $quotation_id, 'charge_for' => 'transportation') );
-		} else {
-			$wpdb->insert($loading_table, array('quotation_id' => $quotation_id, 'master_id' => $params['master_id'], 'loading_charge' => $loading_total, 'quotation_date' => $quotation_date ) );
-			$loading_id = $wpdb->insert_id;
-
-			$wpdb->insert($loading_detail_table, array('quotation_id' => $quotation_id, 'loading_id' => $loading_id, 'charge_for' => 'loading', 'charge_amt' => $loading ) );
-			$wpdb->insert($loading_detail_table, array('quotation_id' => $quotation_id, 'loading_id' => $loading_id, 'charge_for' => 'transportation', 'charge_amt' => $transportation ) );
-		}
-
 	}
 
 
 	$wpdb->update($quotation_detail_table, array('active' => 0), array('quotation_id' => $quotation_id));
 
 	if($quotation_id) {
-
 
 		if( isset($params['quotation_detail']) ) {
 			foreach($params['quotation_detail'] as $d_value) {
@@ -155,7 +139,6 @@ function getQutationDetail($quotation_id = '') {
 
 
 	$detail_query = "SELECT f.*, l.lot_no, l.product_name, l.product_type FROM ( SELECT qd.* FROM ${quotation_table} as q JOIN ${quotation_detail} as qd ON q.id = qd.quotation_id WHERE q.active = 1 AND qd.active = 1 AND qd.quotation_id = ${quotation_id} ) as f JOIN ${lots_table} as l ON l.id = f.lot_id";
-	
 	$data['quotation_detail'] = $wpdb->get_results($detail_query);
 
 	return $data;

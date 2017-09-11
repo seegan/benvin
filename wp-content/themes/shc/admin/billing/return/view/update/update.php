@@ -27,14 +27,16 @@
 
 			if(isset($_GET['return_id'])) {
 				$return_items = (isset($return_data['return_detail']) && $return_data['return_detail'])  ? $return_data['return_detail'] : false;
+
 				$group_items = (isset($return_data['group_detail']) && $return_data['group_detail'])  ? $return_data['group_detail'] : false;
 				$return_detail = (isset($return_data['return_data']) && $return_data['return_data']) ? $return_data['return_data'] : false;
 
 				$return_date = (isset($return_data['return_data']->return_date)) ? date('Y-m-d', strtotime($return_data['return_data']->return_date)) : date('Y-m-d');
 				$return_time = (isset($return_data['return_data']->return_date)) ? date('H:i', strtotime($return_data['return_data']->return_date)) : date('H:i');
-/*
-				$unloading_data = $return_data['unloading_data'];
-				$unloading_detail = $return_data['unloading_detail'];*/
+
+
+				$pending_items = getPendingItems($_GET['id'], $return_date);
+
 			}
 		}
 	}
@@ -124,113 +126,25 @@
 								</select>
 							</div>
 							<div class="address-line">Phone : <span class="site-phone"><?php echo ($site_detail) ? $site_detail->phone_number : ''; ?></span></div>
+							<button class="btn btn-success return_update_again">Modify This Return</button>
 						</div>
 						<div class="col-lg-12">
 
 
-							<div class="return_detail_group" style="margin-top:20px;">
-								<table class="table table-bordered" data-repeater-list="return_detail">
-									<thead>
-										<tr>
-											<th rowspan="2" style="width:50px;" class="center-th"><div>S.No</div></th>
-											<th rowspan="2" colspan="3" class="center-th" style="min-width: 200px;"><div>Description</div></th>
-											<th rowspan="2" class="center-th" style="width:100px;">
-												<div>Qty</div>
-											</th>
-											<th rowspan="2" style="width:50px;" class="center-th"><div>Action</div></th>
-										</tr>
-									</thead>
-									<tbody>
-									<?php
+							
+
+						<div class="update_detail">
+							<?php
+								include( get_template_directory().'/admin/billing/return/view/update/update-detail.php' );
+							?>
+						</div>
+						<div class="update_full" style="display: none;">
+							<?php
+								include( get_template_directory().'/admin/billing/return/view/update/update-full.php' );
+							?>
+						</div>
 
 
-										if($group_items  && count($group_items) > 0) {
-											$i = 1;
-											foreach ($group_items as $g_value) {
-									?>
-										<tr class="div-table-row" data-repeater-item class="repeterin div-table-row" >
-											<td>
-												<div class="rowno align-txt"><?php echo $i; ?></div>
-												<input type="hidden" class="lot_id" name="lot_id" value="<?php echo $g_value->lot_id; ?>">
-											</td>
-											<td colspan="3">
-												<div class="align-txt">
-													<span><?php echo $g_value->product_name ?></span>
-													<span><?php echo $g_value->product_type ?></span>
-												</div>
-											</td>
-											<td>
-												<div class="align-txt">
-													<input type="text" name="qty" style="border-color: rgba(118, 118, 118, 0);height:34px;margin:0;" class="return_qty" value="<?php echo $g_value->qty; ?>" >
-												</div>
-											</td>
-											<td>
-												<a href="#" data-repeater-delete="" style="font-size: 16px;font-weight: bold; color: #ff0000;line-height: 30px;">x</a>
-												<input type="hidden" value="Delete">
-											</td>
-										</tr>
-									<?php
-												$i++;
-											}
-										}
-
-									?>
-										<tr>
-											<td colspan="2">
-												<div class="align-txt">
-													<div style="float:left;width:150px; line-height: 15px;">Vehicle Number : </div>
-													<div>
-													<input type="text" class="group_vehicle_number" name="vehicle_number" style="border: 0;border-bottom: 2px dotted;padding: 0;" value="<?php echo (isset($return_detail->vehicle_number)) ? $return_detail->vehicle_number : ''; ?>"></div>
-												</div>
-											</td>
-											<td colspan="2"><div class="align-txt"><div class="return-charge-txt">Unloading</div></div></td>
-											<td colspan="2"><div class="align-txt"><div class="return-charge-val">Rs. <input type="text" name="unloading" class="return-charge-input unloading" value="<?php echo getUnloadingData($_GET['return_id'], 'unloading') ?>"></div></div></td>
-										</tr>
-										<tr>
-											<td colspan="2">
-												<div class="align-txt">
-													<div style="float:left;width:150px; line-height: 15px;">Driver Name : </div>
-													<div>
-														<input type="text" class="group_driver_name" name="driver_name" style="border: 0;border-bottom: 2px dotted;padding: 0;" value="<?php echo (isset($return_detail->driver_name)) ? $return_detail->driver_name : ''; ?>">
-													</div>
-												</div>
-											</td>
-											<td colspan="2"><div class="align-txt"><div class="return-charge-txt">Transportation</div></div></td>
-											<td colspan="2"><div class="align-txt"><div class="return-charge-val">Rs. <input type="text" name="transportation" class="return-charge-input transportation" value="<?php echo getUnloadingData($_GET['return_id'], 'transportation') ?>"></div></div></td>
-										</tr>
-										<tr>
-											<td colspan="2">
-												<div class="align-txt">
-													<div style="float:left;width:150px; line-height: 15px;">Mobile Number : </div>
-													<div>
-														<input type="text" class="group_driver_mobile" name="driver_mobile" style="border: 0;border-bottom: 2px dotted;padding: 0;" value="<?php echo (isset($return_detail->driver_mobile)) ? $return_detail->driver_mobile : ''; ?>">
-													</div>
-												</div>
-											</td>
-											<td colspan="2"><div class="align-txt"><div class="return-charge-txt">Damage (as Per detail overleaf)</div></div></td>
-											<td colspan="2"><div class="align-txt"><div class="return-charge-val">Rs. <input type="text" name="damage" class="return-charge-input damage" value="<?php echo getUnloadingData($_GET['return_id'], 'damage') ?>"></div></div></td>
-										</tr>
-										<tr>
-											<td colspan="2"></td>
-											<td colspan="2"><div class="align-txt"><div class="return-charge-txt">Total</div></div></td>
-											<td colspan="2"><div class="align-txt"><div class="return-charge-val">Rs. <input type="text" name="total" class="return-charge-input total" value="<?php echo getUnloadingData($_GET['return_id'], 'total') ?>"></div></div></td>
-										</tr>
-									</tbody>
-								</table>
-							</div>
-
-
-
-							<div style="float:right;">
-	                          	<?php 
-	                          		/*if($master_data) {
-	                          			echo "<input type='hidden' name='master_id' value='".$master_data['master_data']->id."'>";
-	                          			echo "<input type='hidden' name='return_id' value='".$_GET['return_id']."'>";
-	                          			echo "<input type='hidden' name='action' class='action' value='update_return'>";
-										echo "<button type='submit' class='btn btn-success create_return'>Update Return</button>";
-	                          		}*/
-	                          	?>
-	                       	</div>
 
 						</div>
 					</div>
@@ -238,5 +152,24 @@
 			</div>
 		</div>
 	</div>
-
 </div>
+
+<script type="text/javascript">
+	jQuery(document).ready(function () {
+		jQuery('.return_update_again').live('click', function(){
+			jQuery('.update_detail').css('display','none');
+			jQuery('.update_full').css('display','block');
+
+			jQuery('.update_detail .div-table-row').each(function(){
+				var lot_id = jQuery(this).find('.lot_id').val();
+				var return_qty = jQuery(this).find('.return_qty').val();
+
+				jQuery('[data-lotid="'+lot_id+'"]').val(return_qty).change();
+			});
+
+		});
+
+		
+		
+	});
+</script>

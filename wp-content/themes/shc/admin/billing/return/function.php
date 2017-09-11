@@ -46,6 +46,7 @@ function create_return() {
 	$driver_name = (isset($params['driver_name']) && $params['driver_name'] != '') ? $params['driver_name'] : '';
 	$driver_mobile = (isset($params['driver_mobile']) && $params['driver_mobile'] != '') ? $params['driver_mobile'] : '';
 
+
 	if(isset($params['action']) && $params['action'] == 'new_return') {
 
 		$return_data = array('ref_number' => $params['ref_number'], 'financial_year' => $financial_year, 'master_id' => $master_id, 'return_date' => $return_date, 'is_return' => $is_return, 'vehicle_number' => $vehicle_number, 'driver_name' => $driver_name, 'driver_mobile' => $driver_mobile);
@@ -105,6 +106,9 @@ function create_return() {
 
 	if(isset($params['action']) && $params['action'] == 'update_return') {
 
+
+
+
 		$return_id = isset($params['return_id']) ? $params['return_id'] : 0;
 
 		$wpdb->update($return_table, array('ref_number' => $params['ref_number'], 'financial_year' => $financial_year, 'return_date' => $return_date, 'is_return' => $is_return, 'vehicle_number' => $vehicle_number, 'driver_name' => $driver_name, 'driver_mobile' => $driver_mobile), array('id' => $return_id) );
@@ -123,9 +127,13 @@ function create_return() {
 
 		if($return_id) {
 
-			foreach ($params['return_detail'] as $r_value) {
-				$wpdb->update($return_detail_table, array( 'qty' => $r_value['qty'], 'return_date' => $return_date, 'active' => 1 ), array('id' => $r_value['return_detail_id']) );
+			foreach ($params['return_detail'] as $n_value) {
+
+				if($n_value['delivery_detail_id'] != 0 && $n_value['delivery_detail_id'] != '' && $n_value['qty'] != 0 && $n_value['qty'] != '') {
+					$wpdb->insert($return_detail_table, array('return_id' => $return_id, 'master_id' => $master_id, 'lot_id' => $n_value['lot_id'], 'delivery_detail_id' => $n_value['delivery_detail_id'] , 'qty' => $n_value['qty'], 'return_date' => $return_date ));
+				}
 			}
+			
 			$data['success'] = 1;
 			$data['msg'] 	= 'Return Updated!';
 			$redirect_url = 'admin.php?page=new_return&id='.$master_id.'&return_id='.$return_id;

@@ -6,7 +6,6 @@
 	$customer_id = 0;
 	$site_id = 0;
 
-
 	$quotation_detail = $quotation_data['quotation_data'];
 	$quotation_list = $quotation_data['quotation_detail'];
 
@@ -19,6 +18,9 @@
 			$site_id = $master_data['master_data']->site_id;
 			$customer_detail = getCustomerData($customer_id);
 			$site_detail = getSiteData($site_id);
+
+			$quotation_date = date('Y-m-d', strtotime($quotation_detail->quotation_date));
+			$quotation_time = date('H:i', strtotime($quotation_detail->quotation_date));
 		}
 
 	}
@@ -119,7 +121,7 @@
 
 							<div class="address-line">
 								Discount : <input type="radio" name="hiring_discount_avail" class="hiring_discount_avail" value="yes" style="margin-top: -2px;" <?php echo (isset($quotation_detail->discount_avail) && $quotation_detail->discount_avail == 'yes') ? 'checked' : ''; ?> > Yes &nbsp;&nbsp; <input type="radio" name="hiring_discount_avail" class="hiring_discount_avail" value="no" style="margin-top: -2px;" <?php echo (isset($quotation_detail->discount_avail) && $quotation_detail->discount_avail == 'no') ? 'checked' : ''; ?>> No
-								<input type="hidden" name="discount_yes" class="discount_yes" value="<?php echo $site_detail->discount; ?>">
+								<input type="hidden" name="discount_yes" class="discount_yes" value="<?php echo $quotation_detail->discount_percentage; ?>">
 								<input type="hidden" name="discount_no" class="discount_no" value="0.00">
 							</div>
 							<div class="address-line">
@@ -133,9 +135,9 @@
 
 						</div>
 						<div class="col-lg-6">
-							<div class="address-line">Date : <span class="deposit-date"><input type="text" name="date" id="datepicker" class="financial_date" value="<?php echo $deposit_date; ?>" style="border-color: rgba(118, 118, 118, 0);height: 34px;margin: 0;"></span></div>
+							<div class="address-line">Date : <span class="deposit-date"><input type="text" name="date" id="datepicker" class="financial_date" value="<?php echo $quotation_date; ?>" style="border-color: rgba(118, 118, 118, 0);height: 34px;margin: 0;"></span></div>
 							
-							<div class="address-line">Time : <span class="deposit-time"><input type="time" name="time" value="<?php echo $deposit_time; ?>" style="border-color: rgba(118, 118, 118, 0);height: 34px;margin: 0;"></span></div>
+							<div class="address-line">Time : <span class="deposit-time"><input type="time" name="time" value="<?php echo $quotation_time; ?>" style="border-color: rgba(118, 118, 118, 0);height: 34px;margin: 0;"></span></div>
 							<div class="address-line">Site : 
 								<select type="text" name="delivery_site_name" class="delivery_site_name" data-dvalue='<?php echo ($site_id) ? $site_id : ""; ?>' data-sitename='<?php echo ($site_detail) ? $site_detail->site_name : ""; ?>'>
 								</select>
@@ -478,7 +480,8 @@
 
 								<div class="col-lg-12">
 									<div style="float:right;">
-	                          			<input type='hidden' name='action' class='action' value='create_quotation'>
+										<input type='hidden' name='quotation_id' value='<?php echo $quotation_detail->id; ?>'>
+	                          			<input type='hidden' name='action' class='action' value='update_quotation'>
 	                          			<button type='submit' class='btn btn-success create_quotation'>Submit</button>
 			                       	</div>
 								</div>
