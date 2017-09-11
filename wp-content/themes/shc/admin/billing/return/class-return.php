@@ -203,5 +203,23 @@ END )
 	}
 
 
+	function get_LostData($lost_id = 0) {
+		global $wpdb;
+		$lots_table = $wpdb->prefix.'shc_lots';
+		$lost_table = $wpdb->prefix.'shc_lost';
+		$lost_detail = $wpdb->prefix.'shc_lost_detail';
+
+		$query = "SELECT * FROM ${lost_table} WHERE active = 1 AND return_id = ${lost_id}";
+
+		if($data['lost_data'] = $wpdb->get_row($query)) {
+			$lost_detail_query = "SELECT lot.lot_no, lot.product_name, lot.product_type, f.* FROM ${lots_table} as lot JOIN ( SELECT ld.id, ld.lot_id, ld.lost_qty, ld.lost_unit_price, ld.lost_total  FROM ${lost_table} as l JOIN ${lost_detail} as ld ON l.id = ld.lost_id WHERE ld.active = 1 AND l.active = 1 AND l.return_id = ${lost_id} ) as f ON lot.id = f.lot_id";
+
+			$data['lost_detail'] = $wpdb->get_results($lost_detail_query);
+		}
+
+		return $data;
+	}
+
+
 
 }

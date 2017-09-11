@@ -108,8 +108,6 @@ function create_quotation() {
 			}
 		}
 
-
-
 		$data['success'] = 1;
 		$data['msg'] 	= 'Quotation Updated!';
 		$redirect_url = 'admin.php?page=new_quotation&id='.$params['master_id'].'&quotation_id='.$quotation_id;
@@ -122,10 +120,6 @@ function create_quotation() {
 add_action( 'wp_ajax_create_quotation', 'create_quotation' );
 add_action( 'wp_ajax_nopriv_create_quotation', 'create_quotation' );
 
-
-
-
-
 function getQutationDetail($quotation_id = '') {
 	global $wpdb;
 	$quotation_table = $wpdb->prefix.'shc_quotation';
@@ -134,13 +128,12 @@ function getQutationDetail($quotation_id = '') {
 
 	$query = "SELECT * FROM ${quotation_table} WHERE active = 1 AND id = ${quotation_id}";
 
-
 	$data['quotation_data'] = $wpdb->get_row($query);
-
 
 	$detail_query = "SELECT f.*, l.lot_no, l.product_name, l.product_type FROM ( SELECT qd.* FROM ${quotation_table} as q JOIN ${quotation_detail} as qd ON q.id = qd.quotation_id WHERE q.active = 1 AND qd.active = 1 AND qd.quotation_id = ${quotation_id} ) as f JOIN ${lots_table} as l ON l.id = f.lot_id";
 	$data['quotation_detail'] = $wpdb->get_results($detail_query);
 
 	return $data;
 }
+
 ?>

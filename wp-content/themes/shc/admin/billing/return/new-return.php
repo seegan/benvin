@@ -17,10 +17,15 @@
     	width: 110px;
 	}
 </style>
-
 <?php
 	if( isset($_GET['id']) && isset($_GET['return_id'])  && $return_data = getReturnData($_GET['return_id']) ) {
-		include( get_template_directory().'/admin/billing/return/view/update/update.php' );
+
+		if( isset( $return_data['return_data']->is_return ) && $return_data['return_data']->is_return == 0 ) {
+			$lost_data = getLostData($_GET['return_id']);
+			include( get_template_directory().'/admin/billing/return/view/update/lost-update.php' );
+		} else {
+			include( get_template_directory().'/admin/billing/return/view/update/update.php' );
+		}
 	} else if( isset($_GET['id']) ) {
 		include( get_template_directory().'/admin/billing/return/view/update/new.php' );
 	} else {
