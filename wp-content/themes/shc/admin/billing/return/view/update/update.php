@@ -35,7 +35,7 @@
 				$return_time = (isset($return_data['return_data']->return_date)) ? date('H:i', strtotime($return_data['return_data']->return_date)) : date('H:i');
 
 
-				$pending_items = getPendingItems($_GET['id'], $return_date);
+				$pending_items = getPendingItemsUpdate($_GET['id'], $return_date);
 
 			}
 		}
@@ -104,6 +104,7 @@
 								echo "</div>";
 								echo "<div style='clear:both;'></div>";
 								echo "</div>";
+								echo "<input type='hidden' name='return_status' value='return'>";
 
 
 								if($return_date) {

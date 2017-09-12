@@ -22,6 +22,7 @@
 
 		if( isset( $return_data['return_data']->is_return ) && $return_data['return_data']->is_return == 0 ) {
 			$lost_data = getLostData($_GET['return_id']);
+
 			include( get_template_directory().'/admin/billing/return/view/update/lost-update.php' );
 		} else {
 			include( get_template_directory().'/admin/billing/return/view/update/update.php' );

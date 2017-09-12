@@ -120,9 +120,10 @@
       	<?php 
       		if($master_data) {
       			echo "<input type='hidden' name='master_id' class='master_id_input' value='".$master_data['master_data']->id."'>";
-				echo "<button type='submit' class='btn btn-success update_return'>Update Lost</button>";
+				echo "<button type='submit' class='btn btn-success update_lost'>Update Lost</button>";
       			echo "<input type='hidden' name='return_id' value='".$return_data['return_data']->id."'>";
-				echo "<input type='hidden' name='action' class='action' value='update_return'>";
+      			echo "<input type='hidden' name='lost_id' value='".$lost_data['lost_data']->id."'>";
+				echo "<input type='hidden' name='action' class='action' value='update_lost'>";
       		}
       	?>
    	</div>

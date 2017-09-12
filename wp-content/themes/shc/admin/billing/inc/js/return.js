@@ -34,15 +34,15 @@ jQuery(document).ready(function(){
 
 
   //On click create delivery submit button
-  jQuery('.update_return').on('click', function(){
+  jQuery('.update_lost').on('click', function(){
     jQuery('#lightbox').css('display','block');
     jQuery.ajax({
       type: "POST",
       dataType : "json",
       url: frontendajax.ajaxurl,
       data: {
-          action : 'update_return',
-          data : jQuery('#update_return :input').serialize(),
+          action : 'update_lost',
+          data : jQuery('#update_lost :input').serialize(),
       },
       success: function (data) {
         clearPopup();

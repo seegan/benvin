@@ -35,12 +35,11 @@
 				$return_time = (isset($return_data['return_data']->return_date)) ? date('H:i', strtotime($return_data['return_data']->return_date)) : date('H:i');
 
 
-				$pending_items = getPendingItems($_GET['id'], $return_date);
+				$pending_items = getPendingItemsUpdate($_GET['id'], $return_date);
 
 			}
 		}
 	}
-
 
 ?>
 
@@ -90,7 +89,7 @@
 					<div class="clearfix"></div>
 				</div>
 				<div class="x_content">
-					<div class="form-horizontal form-label-left" id="update_return">
+					<div class="form-horizontal form-label-left" id="update_lost">
 						<div class="col-lg-6">
 							<?php
 							if($master_data) {
@@ -100,7 +99,7 @@
 								echo "MRI : ".$master_data['master_data']->id;
 								echo "</div>";
 								echo "<div style='float:left;width: 200px;'>";
-								echo "Ref. ".$return_data['return_data']->ref_number;
+								echo "Ref. <input type='text' name='ref_number' value='".$return_data['return_data']->ref_number."' style='width: 150px;border-color: rgba(118, 118, 118, 0);height: 34px;margin: 0;'>";
 								echo "</div>";
 								echo "<div style='clear:both;'></div>";
 								echo "</div>";
