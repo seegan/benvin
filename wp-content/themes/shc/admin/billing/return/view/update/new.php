@@ -134,7 +134,8 @@
 									<thead>
 										<tr>
 											<th rowspan="2" style="width:50px;" class="center-th"><div>S.No</div></th>
-											<th rowspan="2" colspan="3" class="center-th" style="min-width: 200px;"><div>Description</div></th>
+											<th rowspan="2" colspan="3" class="center-th" style="min-width: 200px;">
+												<div>Description</div></th>
 											<th colspan="3" class="center-th" style="width:80px;">
 												<div>Qty</div>
 											</th>

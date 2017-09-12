@@ -23,33 +23,39 @@ class Statement {
 
 	function get_AccountStatement($master_id = 0, $date_to = '0000-00-00') {
 		global $wpdb;
+		$loading_table = $wpdb->prefix.'shc_loading';
+		$deposit_table = $wpdb->prefix.'shc_deposit';
+		$hiring_table = $wpdb->prefix.'shc_hiring';
+		$obc_cheque_table = $wpdb->prefix.'shc_obc_cheque';
+		$lost_table = $wpdb->prefix.'shc_lost';
+		$return_table = $wpdb->prefix.'shc_return';
 
 		$query = "SELECT * FROM (
 
 			SELECT loading.* FROM
 			(
-				SELECT l.deposit_date as r_date, date(l.deposit_date) as bill_date, 'To Loading Charge' as description, CONCAT('SD ', l.deposit_id) as bill_ref, '' as credit,  l.loading_charge as debit  FROM wp_shc_loading as l JOIN wp_shc_deposit as d ON d.id = l.deposit_id WHERE l.active = 1 AND d.active = 1 AND l.master_id = ${master_id} AND date(l.deposit_date) <= date('${date_to}')
+				SELECT d.bill_from_comp, l.deposit_date as r_date, date(l.deposit_date) as bill_date, 'To Loading Charge' as description, CONCAT('SD ', d.bill_no) as bill_ref, '' as credit,  l.loading_charge as debit  FROM ${loading_table} as l JOIN ${deposit_table} as d ON d.id = l.deposit_id WHERE l.active = 1 AND d.active = 1 AND l.master_id = ${master_id} AND date(l.deposit_date) <= date('${date_to}')
 			) as loading
 
 			UNION ALL
 
 			SELECT hiring.* FROM
 			(
-				SELECT h.bill_date as r_date, date(h.bill_date) as bill_date, CONCAT('To Hire Bill (', h.bill_from ,' - ', h.bill_to ,')') as description, CONCAT('HB ', h.id) as bill_ref, '' as credit, h.hiring_total as debit FROM wp_shc_hiring as h WHERE h.active = 1 AND h.master_id = ${master_id} AND date(h.bill_date) <= date('${date_to}')    
+				SELECT h.bill_from_comp, h.bill_date as r_date, date(h.bill_date) as bill_date, CONCAT('To Hire Bill (', h.bill_from ,' - ', h.bill_to ,')') as description, CONCAT('HB ', h.bill_no) as bill_ref, '' as credit, h.hiring_total as debit FROM ${hiring_table} as h WHERE h.active = 1 AND h.master_id = ${master_id} AND date(h.bill_date) <= date('${date_to}')    
 			) as hiring
 
 			UNION ALL
 
 			SELECT cheque.* FROM
 			(
-				SELECT c.obc_date as r_date, date(c.obc_date) as bill_date, CONCAT('By Chq. ',c.cheque_no, ' Dt. ', date(c.obc_date)) as description, 'OBC' as bill_ref, c.cheque_amount as credit, '' as debit FROM wp_shc_obc_cheque as c WHERE c.master_id = ${master_id} AND date(c.obc_date) <= date('${date_to}')     
+				SELECT c.bill_from_comp as bill_from_comp, c.obc_date as r_date, date(c.obc_date) as bill_date, CONCAT('By Chq. ',c.cheque_no, ' Dt. ', date(c.obc_date)) as description, CONCAT('OBC ', c.bill_no) as bill_ref,  c.cheque_amount as credit, '' as debit FROM ${obc_cheque_table} as c WHERE c.master_id = ${master_id} AND date(c.obc_date) <= date('${date_to}') AND c.active = 1  
 			) as cheque
 
 			UNION ALL
 
 			SELECT lost.* FROM
 			(
-				SELECT NOW() as r_date, '' as bill_date, 'Missing Cost' as description, '' as bill_ref, '' as credit, SUM(lst.lost_total) as debit FROM wp_shc_lost as lst JOIN wp_shc_return as sr ON lst.return_id = sr.id WHERE lst.master_id = ${master_id} AND date(sr.return_date) <= date('${date_to}') AND lst.active = 1 AND sr.active = 1
+				SELECT sr.bill_from_comp, NOW() as r_date, '' as bill_date, 'Missing Cost' as description, '' as bill_ref, '' as credit, SUM(lst.lost_total) as debit FROM ${lost_table} as lst JOIN ${return_table} as sr ON lst.return_id = sr.id WHERE lst.master_id = ${master_id} AND date(sr.return_date) <= date('${date_to}') AND lst.active = 1 AND sr.active = 1
 			) as lost
 
 		    

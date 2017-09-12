@@ -213,6 +213,7 @@ function getCorrectBillNumber($bill_no = '', $site_id = '', $bill_for = false, $
 		$financial_year = getFinancialYear( $financial_date );
 
 		$bill_exist_query = "SELECT dep.bill_no FROM ${bill_for_table} as dep WHERE dep.bill_no = ${bill_no} AND dep.financial_year = ${financial_year} AND dep.bill_from_comp = ( SELECT c.bill_from_comp FROM wp_shc_customer_site as cs JOIN wp_shc_customers as c ON c.id = cs.customer_id WHERE cs.id = ${site_id} LIMIT 1 )";
+
 		
 		if($wpdb->get_row($bill_exist_query)) {
 			$query = "SELECT fc.*, comp.company_id, (CASE WHEN fc.bill_no is null THEN 1 ELSE fc.bill_no + 1 END) next_bill_no FROM (SELECT cs.*, c.bill_from_comp, (SELECT d.bill_no from ${bill_for_table} as d WHERE d.bill_from_comp = c.bill_from_comp AND d.financial_year = ${financial_year} ORDER BY bill_no DESC LIMIT 1 ) as bill_no FROM `wp_shc_customer_site` as cs JOIN wp_shc_customers as c ON c.id = cs.customer_id WHERE cs.id = ${site_id} ) as fc JOIN wp_shc_companies as comp ON comp.id = fc.bill_from_comp";
