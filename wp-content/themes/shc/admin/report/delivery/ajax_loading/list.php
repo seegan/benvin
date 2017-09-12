@@ -12,7 +12,7 @@
         'condition' => '',
     );
     $delivery_list = $deliverylist->delivery_list_pagination($result_args);
-
+    $company_ids = getCompanies('to_list');
 ?>
         <div class="x_content">
             <div class="table-responsive">
@@ -22,8 +22,8 @@
                             <th>
                                 S.No
                             </th>
-                            <th class="column-title">#DC</th>
                             <th class="column-title">#MRI</th>
+                            <th class="column-title">#DC</th>
                             <th class="column-title">Customer Name </th>
                             <th class="column-title">Site </th>
                             <th class="column-title">Site Address </th>
@@ -40,13 +40,16 @@
                             foreach ($delivery_list['result'] as $d_value) {
                                 $master_id = $d_value->master_id;
                                 $delivery_id = $d_value->id;
+
+                                $delivery_bill = $d_value->bill_no;
+                                $company_id = $d_value->bill_from_comp;
                     ?>
                                 <tr class="odd pointer">
                                     <td class="a-center ">
                                         <?php echo $i; ?>
                                     </td>
-                                    <td class=""><?php echo 'DC'.$delivery_id; ?></td>
                                     <td class=""><?php echo 'MRI'.$master_id; ?></td>
+                                    <td class=""><?php echo $company_ids[$company_id].'/DC '.$delivery_bill; ?></td>
                                     <td class=""><?php echo $d_value->name; ?></td>
                                     <td class=""><?php echo $d_value->site_name; ?></td>
                                     <td class=""><?php echo $d_value->site_address.', '.$d_value->phone_number; ?></i>

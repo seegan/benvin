@@ -14,12 +14,24 @@ function get_customer($customer_id = 0) {
     return $wpdb->get_row($query);
 }
 
-function getCompanies()
+function getCompanies($data_for = false)
 {
 	global $wpdb;
 	$companies_table = $wpdb->prefix.'shc_companies';
     $query = "SELECT * FROM ${companies_table} WHERE active = 1";
-    return $wpdb->get_results($query);
+    $data = $wpdb->get_results($query);
+    //var_dump($data);
+    if($data_for == 'to_list') {
+    	foreach ($data as $value) {
+    		$id = $value->id;
+    		$data_list[$id] = $value->company_id;
+    	}
+
+    	return $data_list;
+    } else {
+    	return $data;
+    }
+
 }
 
 function getCompaniesById($comp_id = 0)

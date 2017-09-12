@@ -96,6 +96,7 @@ require get_template_directory() . '/admin/billing/hiring/function.php';
 require get_template_directory() . '/admin/billing/obc/function.php';
 
 require get_template_directory() . '/admin/report/master/function.php';
+require get_template_directory() . '/admin/report/quotation/function.php';
 require get_template_directory() . '/admin/report/deposit/function.php';
 require get_template_directory() . '/admin/report/delivery/function.php';
 require get_template_directory() . '/admin/report/return/function.php';

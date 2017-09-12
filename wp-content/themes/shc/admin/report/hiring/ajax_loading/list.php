@@ -12,6 +12,7 @@
         'condition' => '',
     );
     $hiring_list = $hiringlist->hiring_list_pagination($result_args);
+    $company_ids = getCompanies('to_list');    
 ?>
         <div class="x_content">
             <div class="table-responsive">
@@ -37,13 +38,16 @@
                             foreach ($hiring_list['result'] as $c_value) {
                                 $bill_id = $c_value->id;
                                 $master_id = $c_value->master_id;
+
+                                $hiring_bill = $c_value->bill_no;
+                                $company_id = $c_value->bill_from_comp;
                     ?>
                                 <tr class="odd pointer">
                                     <td class="a-center ">
                                         <?php echo $i; ?>
                                     </td>
                                     <td class=""><?php echo 'MRI '.$c_value->master_id; ?></td>
-                                    <td class=""><?php echo 'HBI '.$c_value->id; ?></td>
+                                      <td class=""><?php echo $company_ids[$company_id].'/HB '.$hiring_bill; ?></td>
                                     <td class=""><?php echo $c_value->name; ?></i></td>
                                     <td class=""><?php echo $c_value->site_name; ?></td>
                                     <td class=""><?php echo '( '.$c_value->bill_from.' - '.$c_value->bill_to.' )'; ?></td>

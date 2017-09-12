@@ -12,7 +12,7 @@
         'condition' => '',
     );
     $return_list = $returnlist->return_list_pagination($result_args);
-
+    $company_ids = getCompanies('to_list');
 ?>
         <div class="x_content">
             <div class="table-responsive">
@@ -22,8 +22,8 @@
                             <th>
                                 S.No
                             </th>
-                            <th class="column-title">#MRR</th>
                             <th class="column-title">#MRI</th>
+                            <th class="column-title">#MRR</th>
                             <th class="column-title">Customer Name </th>
                             <th class="column-title">Site </th>
                             <th class="column-title">Site Address </th>
@@ -40,13 +40,16 @@
                             foreach ($return_list['result'] as $r_value) {
                                 $master_id = $r_value->master_id;
                                 $return_id = $r_value->id;
+
+                                $return_bill = $r_value->bill_no;
+                                $company_id = $r_value->bill_from_comp;
                     ?>
                                 <tr class="odd pointer">
                                     <td class="a-center ">
                                         <?php echo $i; ?>
                                     </td>
-                                    <td class=""><?php echo 'MRR'.$return_id; ?></td>
                                     <td class=""><?php echo 'MRI'.$master_id; ?></td>
+                                    <td class=""><?php echo $company_ids[$company_id].'/MRR '.$return_bill; ?></td>              
                                     <td class=""><?php echo $r_value->name; ?></td>
                                     <td class=""><?php echo $r_value->site_name; ?></td>
                                     <td class=""><?php echo $r_value->site_address.', '.$r_value->phone_number; ?></i>
