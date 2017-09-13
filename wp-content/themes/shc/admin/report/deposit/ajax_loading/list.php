@@ -48,14 +48,35 @@
                                     <td class="a-center ">
                                         <?php echo $i; ?>
                                     </td>
-                                    <td class=""><?php echo 'MRI'.$master_id; ?></td>
-                                    <td class=""><?php echo $company_ids[$company_id].'/SD '.$deposit_bill; ?></td>
+                                    <td class="">
+                                        <?php echo 'MRI '.$master_id; ?>
+                                    </td>
+                                    <td class="">
+                                        <a class="bill_txt" href="<?php echo admin_url('admin.php?page=deposit')."&id=".$master_id."&deposit_id=${deposit_id}"; ?>">
+                                            <?php echo $company_ids[$company_id].'/SD '.$deposit_bill; ?> 
+                                        </a>                                        
+                                    </td>
                                     <td class=""><?php echo $d_value->name; ?></td>
                                     <td class=""><?php echo $d_value->site_name; ?></td>
                                     <td class=""><?php echo $d_value->site_address.', '.$d_value->phone_number; ?></i>
                                     </td>
                                     <td class=""><?php echo $d_value->deposit_date; ?></td>
-                                    <td><a href="<?php echo admin_url('admin.php?page=deposit')."&id=".$master_id."&deposit_id=${deposit_id}"; ?>">View</a></td>
+                                    <td>
+                                        <div class="list_action">
+                                            <div class="open_record left-float">
+                                                <a href="<?php echo admin_url('admin.php?page=deposit')."&id=".$master_id."&deposit_id=${deposit_id}"; ?>">
+                                                    <img src="<?php echo get_template_directory_uri() . '/admin/inc/images/open-icon.png'?>">
+                                                </a>
+                                            </div>
+                                            <div class="print_record left-float" >
+                                              <img src="<?php echo get_template_directory_uri() . '/admin/inc/images/printer-icon.png'?>">
+                                            </div>                                        
+                                            <div class="delete_record left-float" data-action="shc_deposit" data-action-from="list" data-delete-id="<?php echo $deposit_id; ?>">
+                                                <img class="shake" src="<?php echo get_template_directory_uri() . '/admin/inc/images/remove-icon.png'?>">
+                                            </div> 
+                                            <div class="clear"></div>
+                                        </div>
+                                    </td>
                                 </tr>
                     <?php
                                 $i++;

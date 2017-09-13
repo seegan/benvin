@@ -49,7 +49,7 @@
                                     </td>
                                     <td class=""><?php echo 'MRI'.$master_id; ?></td>
                                     <td class="">
-                                        <a href="<?php echo admin_url('admin.php?page=new_quotation')."&id=".$master_id."&quotation_id=${quotation_id}"; ?>">
+                                        <a  class="bill_txt" href="<?php echo admin_url('admin.php?page=new_quotation')."&id=".$master_id."&quotation_id=${quotation_id}"; ?>">
                                             <?php echo $company_ids[$company_id].'/Q.No '.$quotation_bill; ?>    
                                         </a>
                                     </td>
@@ -68,7 +68,7 @@
                                             <div class="print_record left-float" >
                                               <img src="<?php echo get_template_directory_uri() . '/admin/inc/images/printer-icon.png'?>">
                                             </div>                                        
-                                            <div class="delete_record left-float" data-action="" data-delete-id="">
+                                            <div class="delete_record left-float" data-action="shc_quotation" data-action-from="list" data-delete-id="<?php echo $quotation_id; ?>">
                                                 <img class="shake" src="<?php echo get_template_directory_uri() . '/admin/inc/images/remove-icon.png'?>">
                                             </div> 
                                             <div class="clear"></div>

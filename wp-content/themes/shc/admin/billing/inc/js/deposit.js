@@ -103,7 +103,7 @@ jQuery(document).ready(function(){
   jQuery('.open_deposit').on('click', function(){
     var master_id = jQuery(this).parent().find('.master_id').val();
     window.location = admin_page.deposit+'&id='+master_id;
-  })
+  });
 
 
 });

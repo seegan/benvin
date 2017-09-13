@@ -76,6 +76,7 @@ add_action( 'admin_enqueue_scripts', 'load_custom_wp_admin_style' );
 
 
 
+require get_template_directory() . '/admin/function.php';
 
 require get_template_directory() . '/admin/menu-functions.php';
 require get_template_directory() . '/admin/roles/function.php';
@@ -347,6 +348,18 @@ function getFinancialYear( $current_date = '' ) {
 
 
 
+
+
+
+
+
+
+
+// Admin footer modification
+function remove_footer_admin() {
+	echo '<div class="delete-box" style="display:none;"><div class="action-block"></div></div>';
+}
+add_filter('admin_footer_text', 'remove_footer_admin');
 
 /*SELECT l.*,sale_bal.sale_unit, stock_bal.stock_total FROM wp_shc_lots as l LEFT JOIN 
 ( SELECT sd.lot_id, sum(sd.sale_unit) sale_unit FROM wp_shc_sale_detail as sd JOIN wp_shc_sale as s ON s.id = sd.sale_id WHERE s.locked = 1 AND s.active = 1 AND sd.item_status = 'open' AND sd.active = 1 GROUP BY sd.lot_id ) as sale_bal

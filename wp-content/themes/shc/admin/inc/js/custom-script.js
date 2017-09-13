@@ -36,8 +36,80 @@ jQuery(document).ready(function(){
 
   })
 
+
+
+
+
+
+
+
+  jQuery('.delete_record').live('click', function(){
+
+      var action = jQuery(this).attr('data-action');
+      var bill_id = jQuery(this).attr('data-delete-id');
+      var action_from = jQuery(this).attr('data-action-from');
+      if(action_from == 'list') {
+        var bill_txt = "Are you Sure to delete "+ jQuery(this).closest('tr').find('.bill_txt').text().trim()+"?";
+      } else {
+        var bill_txt = "Are you Sure to delete this data?";
+      }
+
+
+      jQuery( ".delete-box" ).dialog({
+          resizable: false,
+          height: "auto",
+          width: 400,
+          modal: true,
+          title: "Delete",
+          buttons: {
+              Yes: function() {
+                jQuery( this ).dialog( "close" );
+                recordDeleteAjax( bill_id, action, action_from);
+              },
+              No: function() {
+                jQuery( this ).dialog( "close" );
+              }
+          }
+      });
+      jQuery( ".delete-box .action-block" ).html(bill_txt);
+  });
   
 });
+
+
+  function recordDeleteAjax(bill_id = '', action = '', action_from = 'list') {
+    jQuery('#lightbox').css('display','block');
+    jQuery.ajax({
+      type: "POST",
+      dataType : "json",
+      url: frontendajax.ajaxurl,
+      data: {
+          action : 'delete_record',
+          bill_id : bill_id,
+          bill_action : action,
+          action_from : action_from,
+      },
+      success: function (data) {
+        clearPopup();
+        jQuery('#lightbox').css('display','none');
+
+        if(data.redirect != 0) { 
+            setTimeout(function() {
+                managePopupContent(data);
+            }, 1000);
+        } else {
+          location.reload();
+        }
+
+        if(data.success == 0) {
+            popItUp('Error', data.msg);
+        } else {
+            popItUp('Success', data.msg);
+        }
+      }
+    });
+
+  }
 
   /**
    * Decimal adjustment of a number.
