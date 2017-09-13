@@ -18,8 +18,9 @@
 	}
 </style>
 <?php
+	$menu_id = isset($_GET['id']) ? $_GET['id'] : false;
+	
 	if( isset($_GET['id']) && isset($_GET['return_id'])  && $return_data = getReturnData($_GET['return_id']) ) {
-
 		if( isset( $return_data['return_data']->is_return ) && $return_data['return_data']->is_return == 0 ) {
 			$lost_data = getLostData($_GET['return_id']);
 

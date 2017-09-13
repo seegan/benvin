@@ -24,6 +24,7 @@
 </style>
 
 <?php
+	$menu_id = isset($_GET['id']) ? $_GET['id'] : false;
 	if( isset($_GET['id']) && isset($_GET['quotation_id'])  && $quotation_data = getQutationDetail($_GET['quotation_id']) ) {
 		include( get_template_directory().'/admin/billing/quotation/view/update/update.php' );
 	} else if( isset($_GET['id']) ) {  

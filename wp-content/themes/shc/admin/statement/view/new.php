@@ -14,16 +14,10 @@
 
 		$customer_detail = getCustomerData($customer_id);
 		$site_detail = getSiteData($site_id);
-
 		$statement = getAccountStatement($master_id, $statement_date);
-
 		$lost_data = getLostStatement($master_id, $statement_date);
 	}
-
-
 	$company_ids = getCompanies('to_list');
-
-
 ?>
 
 <div class="container">
