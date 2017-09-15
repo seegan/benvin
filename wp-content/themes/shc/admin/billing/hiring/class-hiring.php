@@ -283,7 +283,8 @@ ON bill.id = sdd.id WHERE bill.bill_qty > 0 AND
 
 		$query2 = "SELECT fdf.id, fdf.master_id, fdf.lot_id, fdf.bill_qty as bill_qty, fdf.bill_from, fdf.bill_to, fdf.bill_days, fdf.total_days, fdf.bill_amount, fdf.got_return, fdf.product_name, fdf.product_type, fdf.rate_per_unit, fdf.delivery_date, fdf.min_bill, fdf.min_bill_amt, fdf.min_bill_bal FROM (".$query.") as fdf WHERE fdf.got_return = 'yes'";
 
-		$final_query = $query1 .' UNION ALL '.$query2;
+		$final_query = "SELECT * FROM (".$query1 .' UNION ALL '.$query2.") as full ORDER BY full.lot_id";
+		//$final_query = $query1 .' UNION ALL '.$query2;
 
 
 		$data['hiring_detail'] = $wpdb->get_results($final_query);

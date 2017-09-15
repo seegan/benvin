@@ -30,6 +30,12 @@ class Statement {
 		$lost_table = $wpdb->prefix.'shc_lost';
 		$return_table = $wpdb->prefix.'shc_return';
 
+
+/*		var_dump("SELECT loading.* FROM
+			(
+				SELECT d.bill_from_comp, l.deposit_date as r_date, date(l.deposit_date) as bill_date, 'To Loading Charge' as description, CONCAT('SD ', d.bill_no) as bill_ref, '' as credit,  l.loading_charge as debit  FROM ${loading_table} as l JOIN ${deposit_table} as d ON d.id = l.deposit_id WHERE l.active = 1 AND d.active = 1 AND l.master_id = ${master_id} AND date(l.deposit_date) <= date('${date_to}')
+			) as loading");*/
+
 		$query = "SELECT * FROM (
 
 			SELECT loading.* FROM

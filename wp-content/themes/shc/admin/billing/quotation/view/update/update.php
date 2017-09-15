@@ -191,6 +191,7 @@
 											</td>
 										</tr>
 										<?php
+												$i++;
 											}
 										}
 									?>
@@ -393,7 +394,7 @@
 											<td>
 												<div class="align-txt right-align-txt">
 													<input type="text" class="round_off_rs right-align-txt" value="<?php echo $round_off_data['rs']; ?>" style="border-color: rgba(118, 118, 118, 0);height:34px;margin:0;width: 45px;padding: 0;text-align:right;">
-													<input type="hidden" name="round_off" value="<?php echo $round_off; ?>">
+													<input type="hidden" name="round_off" value="<?php echo $round_off; ?>" class="round_off">
 												</div>
 											</td>
 											<td>

@@ -33,6 +33,7 @@ function create_lot(){
 
 	$wpdb->insert($lot_table, $params);
 	$lot_id = $wpdb->insert_id;
+
 	create_admin_history(array('updated_by' => $loggdin_user, 'update_in' => $lot_id, 'detail' => 'lot_create' ));
 
 	if($wpdb->insert_id) {

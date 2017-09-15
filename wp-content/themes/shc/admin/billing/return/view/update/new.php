@@ -139,8 +139,19 @@
 											</td>
 											<td colspan="3">
 												<div class="align-txt">
-													<span><?php echo $g_value->product_name ?></span>
-													<span><?php echo $g_value->product_type ?></span>
+													<div>
+														<div style="float: left;width:400px;">
+															<span><?php echo $g_value->product_name ?></span> 
+															<span><?php echo $g_value->product_type ?></span> 
+														</div>
+														<div style="float: left;">
+															<span><?php echo $g_value->lot_no ?></span> 
+														</div>
+														<div style="clear:both"></div>
+														
+													</div>
+
+													
 													<input type="hidden" name="lot_id" value="<?php echo $g_value->lot_id ?>">
 												</div>
 											</td>

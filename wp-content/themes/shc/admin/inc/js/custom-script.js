@@ -453,7 +453,7 @@ function inWordsFull(num) {
     var con = '';
     var ps_txt = '', rs_txt = '';
 
-    rs_txt = inWords(rs)+' Reupee';
+    rs_txt = inWords(rs);
 
     if(ps && ps != '00' ) {
       con = ' and ';

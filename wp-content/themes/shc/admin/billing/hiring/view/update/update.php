@@ -54,7 +54,7 @@
 
 
 								if($bill_data) {
-									$bill_number = billNumberText($bill_data['hiring_data']->bill_from_comp, $bill_data['hiring_data']->bill_no, 'MRR');
+									$bill_number = billNumberText($bill_data['hiring_data']->bill_from_comp, $bill_data['hiring_data']->bill_no, 'HB');
 									echo "<div class='address-line'>No. ".$bill_number['bill_no']."</div>";
 								}
 							}

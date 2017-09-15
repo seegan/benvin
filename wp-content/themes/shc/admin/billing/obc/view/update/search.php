@@ -5,22 +5,9 @@
 <div class="container">
 
 	<div class="row">
-		<div class="col-lg-3">
-			<div class="x_panel">
-				<div class="x_title">
-					<h2><small>Sessions</small></h2>
-					<div class="clearfix"></div>
-				</div>
-				<div class="x_content">
-					<ul>
-						<li><a href="">New Delivery</a></li>
-						<li>Delivery List</li>
-						<li>Return</li>
-						<li>Return List</li>
-					</ul>
-				</div>
-			</div>
-		</div>
+	<?php 
+		include( get_template_directory().'/admin/side-menu.php' );
+	?>
 		<div class="col-lg-9">
 			<div class="x_panel">
 				<div class="x_title">

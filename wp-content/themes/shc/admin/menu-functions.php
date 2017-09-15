@@ -75,7 +75,7 @@ global $src_capabilities;
 	add_submenu_page('master', 'New Delivery', 'Delivery', $src_capabilities['billing']['permission']['new_delivery'], 'new_delivery', 'new_delivery' );
 	add_submenu_page('master', 'New Return', 'Return', $src_capabilities['billing']['permission']['new_return'], 'new_return', 'new_return' );
 	add_submenu_page('master', 'New Hiring', 'Hiring Bill', $src_capabilities['billing']['permission']['new_bill'], 'new_hiring', 'new_hiring' );
-	add_submenu_page('master', 'New OBC', 'OBC', $src_capabilities['billing']['permission']['new_obc'], 'new_obc', 'new_obc' );
+	add_submenu_page('master', 'New Receipt', 'Receipt', $src_capabilities['billing']['permission']['new_obc'], 'new_obc', 'new_obc' );
 
 
 	add_menu_page(
@@ -93,7 +93,7 @@ global $src_capabilities;
 	add_submenu_page('master_report', 'Delivery List', 'Delivery List', $src_capabilities['report']['permission']['delivery_report'], 'delivery_report', 'delivery_report' );
 	add_submenu_page('master_report', 'Return List', 'Return List', $src_capabilities['report']['permission']['return_report'], 'return_report', 'return_report' );
 	add_submenu_page('master_report', 'Hiring List', 'Hiring List', $src_capabilities['report']['permission']['bill_report'], 'hiring_report', 'hiring_report' );
-	add_submenu_page('master_report', 'OBC List', 'OBC List', $src_capabilities['report']['permission']['obc_report'], 'obc_report', 'obc_report' );
+	add_submenu_page('master_report', 'Receipt List', 'Receipt List', $src_capabilities['report']['permission']['obc_report'], 'obc_report', 'obc_report' );
 	add_submenu_page('master_report', 'Statement', 'Statement', $src_capabilities['report']['permission']['statement'], 'new_statement', 'new_statement' );
 
 

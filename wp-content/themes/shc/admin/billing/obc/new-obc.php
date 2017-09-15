@@ -25,6 +25,7 @@
 </style>
 
 <?php
+	$menu_id = isset($_GET['id']) ? $_GET['id'] : false;
 	if( isset($_GET['id']) && isset($_GET['obc_id'])  && $obc_data = getObcData($_GET['obc_id'], $_GET['id']) )
 	{ 
 		include( get_template_directory().'/admin/billing/obc/view/update/update.php' );

@@ -154,7 +154,7 @@
 															<input type="radio" name="gst_for" value="igst" style="margin-top: -2px;" <?php echo ($s_value->gst_for == 'igst') ? 'checked' : '';?>> IGST
 														</div>
 														<div style="line-height: 45px;">
-															VAT : <input type="text" name="vat_number" placeholder="VAT Number" value="<?php echo $s_value->vat_number;?>">
+															TIN : <input type="text" name="vat_number" placeholder="VAT Number" value="<?php echo $s_value->vat_number;?>">
 														</div>
 													</td>
 													<td>
@@ -240,7 +240,7 @@
 											<th rowspan="2" style="width:50px;" class="center-th"><div>S.No</div></th>
 											<th rowspan="2" class="center-th" style="min-width: 200px;"><div>Description</div></th>
 											<th rowspan="2" class="center-th" style="width:100px;">
-												<div>Qty</div>
+												<div>Rate Per Day</div>
 											</th>
 											<th rowspan="2" class="center-th" style="width:100px;">
 												<div>Site</div>
