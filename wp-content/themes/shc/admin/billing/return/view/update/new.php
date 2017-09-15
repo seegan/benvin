@@ -25,48 +25,13 @@
 			$pending_items = getPendingItems($_GET['id'], $return_date);
 		}
 	}
-
 ?>
-
 <div class="container">
 
 	<div class="row">
-		<div class="col-lg-3">
-			<div class="x_panel">
-				<div class="x_title">
-					<h2><small>Sessions</small></h2>
-					<div class="clearfix"></div>
-				</div>
-				<div class="x_content">
-				<?php
-					$id_txt = (isset($_GET['id'])) ? '&id='.$_GET['id'] : '';
-				?>
-					<ul>
-						<li class="parallelogram"><a href="<?php echo admin_url('admin.php?page=new_delivery').$id_txt;  ?>">New Delivery</a></li>
-						<li class="parallelogram"><a href="<?php echo admin_url('admin.php?page=new_return').$id_txt; ?>">New Return</a></li>
-						<li class="parallelogram"><a href="<?php echo admin_url('admin.php?page=new_hiring').$id_txt; ?>">Generate Hiring Bill</a></li>
-					</ul>
-				</div>
-			</div>
-
-			<div class="x_panel">
-				<div class="x_title">
-					<h2><small>Sessions</small></h2>
-					<div class="clearfix"></div>
-				</div>
-				<div class="x_content">
-				<?php
-					$id_txt = (isset($_GET['id'])) ? '&id='.$_GET['id'] : '';
-				?>
-					<ul>
-						<li class="parallelogram"><a href="<?php echo admin_url('admin.php?page=new_delivery'); ?>">Delivery List</a></li>
-						<li class="parallelogram"><a href="<?php echo admin_url('admin.php?page=new_return'); ?>">Return List</a></li>
-						<li class="parallelogram"><a href="<?php echo admin_url('admin.php?page=new_hiring'); ?>">Hiring Bill List</a></li>
-					</ul>
-				</div>
-			</div>
-
-		</div>
+	<?php 
+		include( get_template_directory().'/admin/side-menu.php' );
+	?>
 		<div class="col-lg-9">
 			<div class="x_panel">
 				<div class="x_title">
@@ -134,7 +99,8 @@
 									<thead>
 										<tr>
 											<th rowspan="2" style="width:50px;" class="center-th"><div>S.No</div></th>
-											<th rowspan="2" colspan="3" class="center-th" style="min-width: 200px;"><div>Description</div></th>
+											<th rowspan="2" colspan="3" class="center-th" style="min-width: 200px;">
+												<div>Description</div></th>
 											<th colspan="3" class="center-th" style="width:80px;">
 												<div>Qty</div>
 											</th>

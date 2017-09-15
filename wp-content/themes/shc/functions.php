@@ -76,6 +76,7 @@ add_action( 'admin_enqueue_scripts', 'load_custom_wp_admin_style' );
 
 
 
+require get_template_directory() . '/admin/function.php';
 
 require get_template_directory() . '/admin/menu-functions.php';
 require get_template_directory() . '/admin/roles/function.php';
@@ -96,6 +97,7 @@ require get_template_directory() . '/admin/billing/hiring/function.php';
 require get_template_directory() . '/admin/billing/obc/function.php';
 
 require get_template_directory() . '/admin/report/master/function.php';
+require get_template_directory() . '/admin/report/quotation/function.php';
 require get_template_directory() . '/admin/report/deposit/function.php';
 require get_template_directory() . '/admin/report/delivery/function.php';
 require get_template_directory() . '/admin/report/return/function.php';
@@ -212,6 +214,7 @@ function getCorrectBillNumber($bill_no = '', $site_id = '', $bill_for = false, $
 		$financial_year = getFinancialYear( $financial_date );
 
 		$bill_exist_query = "SELECT dep.bill_no FROM ${bill_for_table} as dep WHERE dep.bill_no = ${bill_no} AND dep.financial_year = ${financial_year} AND dep.bill_from_comp = ( SELECT c.bill_from_comp FROM wp_shc_customer_site as cs JOIN wp_shc_customers as c ON c.id = cs.customer_id WHERE cs.id = ${site_id} LIMIT 1 )";
+
 		
 		if($wpdb->get_row($bill_exist_query)) {
 			$query = "SELECT fc.*, comp.company_id, (CASE WHEN fc.bill_no is null THEN 1 ELSE fc.bill_no + 1 END) next_bill_no FROM (SELECT cs.*, c.bill_from_comp, (SELECT d.bill_no from ${bill_for_table} as d WHERE d.bill_from_comp = c.bill_from_comp AND d.financial_year = ${financial_year} ORDER BY bill_no DESC LIMIT 1 ) as bill_no FROM `wp_shc_customer_site` as cs JOIN wp_shc_customers as c ON c.id = cs.customer_id WHERE cs.id = ${site_id} ) as fc JOIN wp_shc_companies as comp ON comp.id = fc.bill_from_comp";
@@ -345,6 +348,18 @@ function getFinancialYear( $current_date = '' ) {
 
 
 
+
+
+
+
+
+
+
+// Admin footer modification
+function remove_footer_admin() {
+	echo '<div class="delete-box" style="display:none;"><div class="action-block"></div></div>';
+}
+add_filter('admin_footer_text', 'remove_footer_admin');
 
 /*SELECT l.*,sale_bal.sale_unit, stock_bal.stock_total FROM wp_shc_lots as l LEFT JOIN 
 ( SELECT sd.lot_id, sum(sd.sale_unit) sale_unit FROM wp_shc_sale_detail as sd JOIN wp_shc_sale as s ON s.id = sd.sale_id WHERE s.locked = 1 AND s.active = 1 AND sd.item_status = 'open' AND sd.active = 1 GROUP BY sd.lot_id ) as sale_bal

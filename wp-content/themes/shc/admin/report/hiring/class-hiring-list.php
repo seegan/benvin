@@ -16,6 +16,11 @@
 		        $this->mobile = isset($params['site_name']) ? $params['site_name'] : '';
 		        $this->bill_from = isset($params['bill_from']) ? $params['bill_from'] : '';
 		        $this->bill_to = isset($params['bill_to']) ? $params['bill_to'] : '';
+
+		        $this->financial_year = isset($params['financial_year']) ? $params['financial_year'] : date('Y');
+		        $this->bill_from_comp = isset($params['bill_from_comp']) ? $params['bill_from_comp'] : '-';
+		        $this->ref_number = isset($params['ref_number']) ? $params['ref_number'] : '';
+
 		    } else {
 		        $this->cpage = isset( $_GET['cpage'] ) ? abs( (int) $_GET['cpage'] ) : 1;
 		        $this->ppage = isset( $_GET['ppage'] ) ? abs( (int) $_GET['ppage'] ) : 20;
@@ -26,6 +31,11 @@
 		        $this->mobile = isset( $_GET['site_name'] ) ? $_GET['site_name']  : '';
 		        $this->bill_from = isset( $_GET['bill_from'] ) ? $_GET['bill_from']  : '';
 		        $this->bill_to = isset( $_GET['bill_to'] ) ? $_GET['bill_to']  : '';
+
+		        $this->financial_year = isset( $_GET['financial_year'] ) ? $_GET['financial_year']  : date('Y');
+		        $this->bill_from_comp = isset( $_GET['bill_from_comp'] ) ? $_GET['bill_from_comp']  : '-';
+		        $this->ref_number = isset( $_GET['ref_number'] ) ? $_GET['ref_number']  : '';
+
 		    }
 		}
 
@@ -48,11 +58,16 @@
 	        $page_arg['site_name'] = $this->site_name;
 	    	$page_arg['bill_from'] = $this->return_from;
 	    	$page_arg['bill_to'] = $this->return_to;
+
+	    	$page_arg['financial_year'] = $this->financial_year;
+	    	$page_arg['bill_from_comp'] = $this->bill_from_comp;
+	    	$page_arg['ref_number'] = $this->ref_number;
+
 		    $page_arg['cpage'] = '%#%';
 
 		    $condition = '';
 		   	if($this->id != '') {
-		    	$condition .= " AND f.id = ".$this->id." ";
+		    	$condition .= " AND f.bill_no = ".$this->id." ";
 		    }
 		   	if($this->master_id != '') {
 		    	$condition .= " AND f.master_id = ".$this->master_id." ";
@@ -62,6 +77,16 @@
 		    }
 		    if($this->site_name != '') {
 		    	$condition .= " AND s.site_name LIKE '".$this->site_name."%' ";
+		    }
+
+		   	if($this->financial_year != '-') {
+		    	$condition .= " AND f.financial_year = ".$this->financial_year." ";
+		    }
+		   	if($this->bill_from_comp != '-') {
+		    	$condition .= " AND f.bill_from_comp = ".$this->bill_from_comp." ";
+		    }
+		   	if($this->ref_number != '') {
+		    	$condition .= " AND f.ref_number = '".$this->ref_number."' ";
 		    }
 
 		    if($this->bill_from != '' && $this->bill_to != '') { 

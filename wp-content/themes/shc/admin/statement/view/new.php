@@ -14,12 +14,10 @@
 
 		$customer_detail = getCustomerData($customer_id);
 		$site_detail = getSiteData($site_id);
-
 		$statement = getAccountStatement($master_id, $statement_date);
-
 		$lost_data = getLostStatement($master_id, $statement_date);
 	}
-
+	$company_ids = getCompanies('to_list');
 ?>
 
 <div class="container">
@@ -110,7 +108,12 @@
 									<tbody>
 										<?php
 											if($statement) {
+										
 												foreach ($statement as $s_value) {
+													$company_id = $s_value->bill_from_comp;
+
+													if($s_value->description == 'Missing Cost'  ) {
+														if($s_value->debit && $s_value->debit != 0) {
 										?>
 													<tr>
 														<td>
@@ -120,7 +123,7 @@
 															<?php echo $s_value->description; ?>
 														</td>
 														<td>
-															<?php echo $s_value->bill_ref; ?>
+															
 														</td>
 														<td>
 															<?php echo $s_value->credit; ?>
@@ -129,6 +132,33 @@
 															<?php echo $s_value->debit; ?>
 														</td>
 													</tr>
+										<?php
+														}
+													} else {
+										?>
+													<tr>
+														<td>
+															<?php echo $s_value->bill_date; ?>
+														</td>
+														<td>
+															<?php echo $s_value->description; ?>
+														</td>
+														<td>
+															<?php
+																echo $company_ids[$company_id].'/'.$s_value->bill_ref;
+															?>
+														</td>
+														<td>
+															<?php echo $s_value->credit; ?>
+														</td>
+														<td>
+															<?php echo $s_value->debit; ?>
+														</td>
+													</tr>
+										<?php
+													}
+										?>
+
 										<?php
 												}
 											}
@@ -139,6 +169,10 @@
 
 
 
+<?php
+
+											if( $lost_data['lost_detail'] && $lost_data['lost_total'] ) {
+?>
 							<div class="deposit-repeater hiring_detail" style="margin-top:20px;">
 								<h2>Missing Cost</h2>
 								<table class="table table-bordered">
@@ -153,8 +187,6 @@
 									</thead>
 									<tbody>
 										<?php
-
-											if( $lost_data['lost_detail'] && $lost_data['lost_total'] ) {
 												$i = 1;
 												foreach ($lost_data['lost_detail'] as $ld_value) {
 										?>
@@ -183,13 +215,12 @@
 														<td colspan="4">Total</td>
 														<td><?php echo $lost_data['lost_total']->debit; ?></td>
 													</tr>
-										<?php
-											}
-										?>
 									</tbody>
 								</table>
 							</div>
-
+										<?php
+											}
+										?>
 						</div>
 					</div>
 				</div>

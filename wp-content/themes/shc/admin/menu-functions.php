@@ -88,6 +88,7 @@ global $src_capabilities;
 	    7
 	);
 	add_submenu_page('master_report', 'Master List', 'Master List', $src_capabilities['report']['permission']['master_report'], 'master_report', 'master_report' );
+	add_submenu_page('master_report', 'Quotation List', 'Quotation List', $src_capabilities['report']['permission']['master_report'], 'quotation_report', 'quotation_report' );	
 	add_submenu_page('master_report', 'Deposit List', 'Deposit List', $src_capabilities['report']['permission']['deposit_report'], 'deposit_report', 'deposit_report' );
 	add_submenu_page('master_report', 'Delivery List', 'Delivery List', $src_capabilities['report']['permission']['delivery_report'], 'delivery_report', 'delivery_report' );
 	add_submenu_page('master_report', 'Return List', 'Return List', $src_capabilities['report']['permission']['return_report'], 'return_report', 'return_report' );
@@ -202,6 +203,9 @@ function new_statement() {
 
 function master_report() {
     require 'report/master/list.php';
+}
+function quotation_report() {
+    require 'report/quotation/list.php';
 }
 function deposit_report() {
     require 'report/deposit/list.php';

@@ -12,7 +12,7 @@
         'condition' => '',
     );
     $obc_list = $obclist->obc_list_pagination($result_args);
-
+    $company_ids = getCompanies('to_list');    
 ?>
         <div class="x_content">
             <div class="table-responsive">
@@ -22,8 +22,8 @@
                             <th>
                                 S.No
                             </th>
-                            <th class="column-title">#MRR</th>
                             <th class="column-title">#MRI</th>
+                            <th class="column-title">#MRR</th>
                             <th class="column-title">Customer Name </th>
                             <th class="column-title">Site </th>
                             <th class="column-title">Cheque Detail </th>
@@ -41,13 +41,20 @@
                             foreach ($obc_list['result'] as $r_value) {
                                 $master_id = $r_value->master_id;
                                 $obc_id = $r_value->id;
+
+                                $obc_bill = $r_value->bill_no;
+                                $company_id = $r_value->bill_from_comp;
                     ?>
                                 <tr class="odd pointer">
                                     <td class="a-center ">
                                         <?php echo $i; ?>
                                     </td>
-                                    <td class=""><?php echo 'OBC '.$obc_id; ?></td>
                                     <td class=""><?php echo 'MRI '.$master_id; ?></td>
+                                    <td class="">
+                                        <a class="bill_txt" href="<?php echo admin_url('admin.php?page=new_obc')."&id=".$master_id."&obc_id=${obc_id}"; ?>">
+                                            <?php echo $company_ids[$company_id].'/OBC '.$obc_bill; ?> 
+                                        </a>
+                                    </td>
                                     <td class=""><?php echo $r_value->name; ?></td>
                                     <td class=""><?php echo $r_value->site_name; ?></td>
                                     <td class="">
@@ -58,7 +65,22 @@
                                         <?php echo $r_value->cheque_amount; ?>
                                     </td>
                                     <td class=""><?php echo $r_value->obc_date; ?></td>
-                                    <td><a href="<?php echo admin_url('admin.php?page=new_obc')."&id=".$master_id."&obc_id=${obc_id}"; ?>">View</a></td>
+                                    <td>
+                                        <div class="list_action">
+                                            <div class="open_record left-float">
+                                                <a href="<?php echo admin_url('admin.php?page=new_obc')."&id=".$master_id."&obc_id=${obc_id}"; ?>">
+                                                    <img src="<?php echo get_template_directory_uri() . '/admin/inc/images/open-icon.png'?>">
+                                                </a>
+                                            </div>
+                                            <div class="print_record left-float" >
+                                                <img src="<?php echo get_template_directory_uri() . '/admin/inc/images/printer-icon.png'?>">
+                                            </div>                                        
+                                            <div class="delete_record left-float" data-action="shc_hiring" data-action-from="list" data-delete-id="<?php echo $obc_id; ?>">
+                                                <img class="shake" src="<?php echo get_template_directory_uri() . '/admin/inc/images/remove-icon.png'?>">
+                                            </div> 
+                                            <div class="clear"></div>
+                                        </div>
+                                    </td>
                                 </tr>
                     <?php
                                 $i++;

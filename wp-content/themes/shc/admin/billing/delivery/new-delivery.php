@@ -25,8 +25,8 @@
 </style>
 
 <?php
+	$menu_id = isset($_GET['id']) ? $_GET['id'] : false;
 	if( isset($_GET['id']) && isset($_GET['delivery_id'])  && $delivery_data = getDeliveryData($_GET['delivery_id']) ) { 
-		
 		include( get_template_directory().'/admin/billing/delivery/view/update/update.php' );
 	} else if( isset($_GET['id']) ) {  
 		include( get_template_directory().'/admin/billing/delivery/view/update/new.php' );

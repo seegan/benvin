@@ -6,7 +6,7 @@
 	$customer_id = '';
 	$site_id = '';
 
-	$obc_date = date('Y-m-d');
+	$obc_date = isset($_GET['obc_date']) ? $_GET['obc_date'] : $obc_data->obc_date;
 	$obc_time = date('H:i');
 
 	if(isset($_GET['id'])) {
@@ -20,8 +20,6 @@
 
 			$customer_detail = getCustomerData($customer_id);
 			$site_detail = getSiteData($site_id);
-
-
 		}
 	}
 ?>
@@ -76,8 +74,25 @@
 						<div class="col-lg-6">
 							<?php
 							if($master_data) {
-								echo "<div class='address-line'> MRI : ".$master_data['master_data']->id."</div>";
+								echo "<div class='address-line'>";
+								echo "<div style='float:left;width: 200px;'>";
+								echo "MRI : ".$master_data['master_data']->id;
+								echo "</div>";
+								echo "<div style='float:left;width: 200px;'>";
+								echo "Ref.<input type='text' name='ref_number' style='width: 150px;border-color: rgba(118, 118, 118, 0);height: 34px;margin: 0;' value='".$obc_data->ref_number."'>";
+								echo "</div>";
+								echo "<div style='clear:both;'></div>";
+								echo "</div>";
+								echo "<input type='hidden' name='master_id' value='".$master_data['master_data']->id."'>";
+
+
+								if($obc_data) { 
+									$bill_number = billNumberText($obc_data->bill_from_comp, $obc_data->bill_no, 'OBC');
+									echo "<div class='address-line'>No.".$bill_number['bill_no']."</div>";
+								}
 							}
+
+
 							?>
 							<div class="customer-name">Customer Name : M/s 
 								<span class="customer-name"><?php echo ($customer_detail->name) ? $customer_detail->name : ''; ?></span>
@@ -91,13 +106,14 @@
 							<div class="address-line">Site : 
 								<select type="text" name="delivery_site_name" class="delivery_site_name" data-dvalue="<?php echo ($site_detail) ? $site_detail->id : ''; ?>"  data-sitename="<?php echo ($site_detail) ? $site_detail->site_name : ''; ?>">
 								</select>
+								<input type="hidden" name="site_id" class="site_id" value="<?php echo $site_id; ?>">
 							</div>
 							<div class="address-line">Phone : <span class="site-phone"><?php echo ($site_detail) ? $site_detail->phone_number : ''; ?></span></div>
 						</div>
 						<div class="col-lg-12">
 
 
-							<div class="obc_detail amt_update style="margin-top:20px;">
+							<div class="obc_detail amt_update" style="margin-top:20px;">
 
 								<div class="check-block">
 									<div class="row">
