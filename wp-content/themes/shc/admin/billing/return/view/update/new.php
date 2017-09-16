@@ -27,7 +27,6 @@
 	}
 ?>
 <div class="container">
-
 	<div class="row">
 	<?php 
 		include( get_template_directory().'/admin/side-menu.php' );
@@ -95,7 +94,7 @@
 
 						<div class="col-lg-12">
 							<div class="deposit-repeater return_detail_group" style="margin-top:20px;">
-								<table class="table table-bordered" data-repeater-list="return_detail_group">
+								<table class="table table-bordered">
 									<thead>
 										<tr>
 											<th rowspan="2" style="width:50px;" class="center-th"><div>S.No</div></th>
@@ -133,7 +132,7 @@
 											$i = 1;
 											foreach ($pending_items['grouping_detail'] as $g_value) {
 									?>
-										<tr class="div-table-row" class="repeterin div-table-row" data-repeater-item>
+										<tr class="div-table-row" class="div-table-row" data-repeater-item>
 											<td>
 												<div class="rowno align-txt"><?php echo $i; ?></div>
 											</td>
@@ -277,10 +276,13 @@
 	                          	?>
 	                       	</div>
 	                       	<button class="show_hide_btn" style="float:left;">Show / Hide Detail</button>
-
-
 						</div>
 
+						<div class="col-lg-12">
+							<div class="">
+								
+							</div>
+						</div>
 
 
 						
