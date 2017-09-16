@@ -21,6 +21,12 @@ jQuery(document).ready(function () {
 		calculateUnloadingCharge();
 	});
 
+	jQuery('.damage_charge').live('change keyup', function(){
+		calculateUnloadingCharge();
+	});
+
+
+
 	jQuery('.vehicle_number, .driver_name, .driver_mobile').on('change keyup', function(){
 		var vehicle_number = jQuery('.vehicle_number').val();
 		var driver_name = jQuery('.driver_name').val();
@@ -140,9 +146,13 @@ function calculateHiringTotal() {
 
 function calculateUnloadingCharge() {
 	var unloading = jQuery('.unloading').val();
+	unloading = parseFloat(unloading);
+	unloading = unloading.toFixed(2);
+
 	jQuery('.group_unloading').val(unloading).change();
 	
 	var transportation = jQuery('.transportation').val();
+
 	jQuery('.group_transportation').val(transportation).change();
 
 	var damage = jQuery('.damage').val();
@@ -152,12 +162,26 @@ function calculateUnloadingCharge() {
 
 	unloading = ( isInt(Number(unloading)) || isFloat(Number(unloading)) ) ? Number(unloading) : 0.00;
 	transportation = ( isInt(Number(transportation)) || isFloat(Number(transportation)) ) ? Number(transportation) : 0.00;
-	damage = ( isInt(Number(damage)) || isFloat(Number(damage)) ) ? Number(damage) : 0.00;
+	//damage = ( isInt(Number(damage)) || isFloat(Number(damage)) ) ? Number(damage) : 0.00;
+	damage = getDamageTotal();
+	damage = damage.toFixed(2);
+	jQuery('.damage').val(damage);
 
-	total = (unloading + transportation + damage);
+	total = ( parseFloat(unloading) + parseFloat(transportation) + parseFloat(damage) );
+	total = Math.round10(total.toFixed(3), -2);
+	total = total.toFixed(2);
 
 	jQuery('.total').val(total).change();
 	jQuery('.group_total').val(total).change();
 }
 
 
+function getDamageTotal() {
+	var temp = 0.00;
+	jQuery('.damage_charge').each(function(){
+		var damage_tot = jQuery(this).val();
+		temp = parseFloat(temp) + parseFloat(damage_tot);
+	});
+	temp = Math.round10(temp.toFixed(3), -2);
+	return temp;
+}

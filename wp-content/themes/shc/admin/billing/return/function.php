@@ -36,6 +36,9 @@ function create_return() {
 	$unloading_detail_table = $wpdb->prefix.'shc_unloading_detail';
 	$lost_table 			= $wpdb->prefix.'shc_lost';
 	$lost_detail_table 		= $wpdb->prefix.'shc_lost_detail';
+	
+	$damage_table 		= $wpdb->prefix.'shc_return_damage';
+	$damage_detail_table 		= $wpdb->prefix.'shc_return_damage_detail';
 
 	$return_date = $params['date'].' '.$params['time'].':00';
 	$financial_year = getFinancialYear( $params['date'] );
@@ -50,6 +53,9 @@ function create_return() {
 	$vehicle_number = (isset($params['vehicle_number']) && $params['vehicle_number'] != '') ? $params['vehicle_number'] : '';
 	$driver_name = (isset($params['driver_name']) && $params['driver_name'] != '') ? $params['driver_name'] : '';
 	$driver_mobile = (isset($params['driver_mobile']) && $params['driver_mobile'] != '') ? $params['driver_mobile'] : '';
+
+
+
 
 	if(isset($params['action']) && $params['action'] == 'new_return') {
 
@@ -117,6 +123,10 @@ function create_return() {
 		create_admin_history(array('updated_by' => $loggdin_user, 'update_in' => $return_id, 'detail' => 'return_update' ));
 		$wpdb->update($return_detail_table, array('active' => 0), array('return_id' => $return_id));
 
+
+		//$wpdb->update($damage_table, array('master_id' => $params['ref_number'], 'return_id' => $financial_year, 'return_date' => $return_date, 'is_return' => $is_return, 'vehicle_number' => $vehicle_number, 'driver_name' => $driver_name, 'driver_mobile' => $driver_mobile), array('id' => $return_id) );
+
+
 		$wpdb->update($unloading_table, array( 'unloading_charge' => $total, 'return_date' => $return_date ), array('return_id' => $return_id, 'master_id' => $master_id) );
 
 		$wpdb->update($unloading_detail_table, array( 'charge_amt' => $unloading ), array('return_id' => $return_id, 'charge_for' => 'unloading') );
@@ -131,6 +141,16 @@ function create_return() {
 					$wpdb->insert($return_detail_table, array('return_id' => $return_id, 'master_id' => $master_id, 'lot_id' => $n_value['lot_id'], 'delivery_detail_id' => $n_value['delivery_detail_id'] , 'qty' => $n_value['qty'], 'return_date' => $return_date ));
 				}
 			}
+
+			foreach ($params['damage_detail'] as $d_value) {
+				if($d_value['damage_detail_id'] != '' && $d_value['damage_charge'] != 0 && $d_value['damage_charge'] != '') {
+					$wpdb->insert($damage_table, array('return_id' => $return_id, 'master_id' => $master_id, 'damage_detail' => $d_value['damage_text'] , 'damage_charge' => $d_value['damage_charge']));
+				}
+			}
+
+
+
+
 			$data['success'] = 1;
 			$data['msg'] 	= 'Return Updated!';
 			$redirect_url = 'admin.php?page=new_return&id='.$master_id.'&return_id='.$return_id;

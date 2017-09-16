@@ -203,7 +203,7 @@
 												</div>
 											</td>
 											<td colspan="2" style=""><div class="align-txt"><div class="return-charge-txt">Unloading</div></div></td>
-											<td colspan="3"><div class="align-txt"><div class="return-charge-val">Rs. <input type="text"  class="return-charge-input unloading"></div></div></td>
+											<td colspan="3"><div class="align-txt"><div class="return-charge-val">Rs. <input type="text"  class="return-charge-input unloading" value="0.00"></div></div></td>
 										</tr>
 										<tr class="show_row_return">
 											<td colspan="2">
@@ -213,7 +213,7 @@
 												</div>
 											</td>
 											<td colspan="2" style=""><div class="align-txt"><div class="return-charge-txt">Transportation</div></div></td>
-											<td colspan="3"><div class="align-txt"><div class="return-charge-val">Rs. <input type="text"  class="return-charge-input transportation"></div></div></td>
+											<td colspan="3"><div class="align-txt"><div class="return-charge-val">Rs. <input type="text"  class="return-charge-input transportation" value="0.00"></div></div></td>
 										</tr>
 										<tr class="show_row_return">
 											<td colspan="2">
@@ -223,14 +223,14 @@
 												</div>
 											</td>
 											<td colspan="2" style=""><div class="align-txt"><div class="return-charge-txt">Damage (as Per detail overleaf)</div></div></td>
-											<td colspan="3"><div class="align-txt"><div class="return-charge-val">Rs. <input type="text"  class="return-charge-input damage"></div></div></td>
+											<td colspan="3"><div class="align-txt"><div class="return-charge-val">Rs. <input type="text"  class="return-charge-input damage" value="0.00"  readonly="readonly"></div></div></td>
 										</tr>
 										<tr class="show_row_return">
 											<td colspan="2"><div class="align-txt"></div></td>
 											<td colspan="2" style="">
 												<div class="align-txt"><div class="return-charge-txt">Total</div></div>
 											</td>
-											<td colspan="3"><div class="align-txt"><div class="return-charge-val">Rs. <input type="text"  class="return-charge-input total"></div></div></td>
+											<td colspan="3"><div class="align-txt"><div class="return-charge-val">Rs. <input type="text"  class="return-charge-input total" value="0.00"></div></div></td>
 										</tr>
 										<tr class="show_row_lost" style="display: none;">
 											<td colspan="6" style="">
@@ -259,6 +259,66 @@
 								</table>
 							</div>
 
+	                       	<button class="show_hide_btn" style="float:left;">Show / Hide Detail</button>
+						</div>
+
+
+
+						<div class="col-lg-12">
+							<div class="">
+
+
+								<div class="deposit-repeater1 damage_detail" style="margin-top:20px;">
+									<table class="table table-bordered" data-repeater-list="damage_detail">
+										<thead>
+											<tr>
+												<th class="center-th" style="width:50px;"><div>S.No</div></th>
+												<th>
+													<div>Damage Detail</div>
+												</th>
+												<th style="width:100px;">
+													<div>Amt</div>
+												</th>
+												<th style="width:50px;">
+													<div>Action</div>
+												</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr data-repeater-item class="repeterin div-table-row" class="repeterin div-table-row">
+												<td>
+													<div class="rowno align-txt">1</div>
+													<input type="hidden" class="damage_id" name="damage_id" value="0">
+												</td>
+												<td>
+													<div class="align-txt">
+														<textarea name="damage_text" style="width: 100%;height: 38px;padding: 5px;" placeholder="Damage Details here"></textarea>
+													</div>
+												</td>
+												<td>
+													<div class="align-txt">
+														<input type="text" name="damage_charge" value="0.00" style="width:70px;" class="damage_charge">
+													</div>
+												</td>
+												<td>
+													<div class="">
+														<a href="#" data-repeater-delete="" style="font-size: 16px;font-weight: bold; color: #ff0000;line-height: 30px;">x</a>
+														<input type="hidden" value="Delete">
+													</div>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+
+									<ul class="icons-labeled">
+										<li><a data-repeater-create href="javascript:void(0);" id="add_new_price_range"><span class="icon-block-color add-c"></span>Add Damage</a></li>
+									</ul>
+								</div>
+
+
+
+
+							</div>
 
 							<div style="float:right;">
 	                          	<?php 
@@ -275,14 +335,12 @@
 	                          		}
 	                          	?>
 	                       	</div>
-	                       	<button class="show_hide_btn" style="float:left;">Show / Hide Detail</button>
+
+
+
 						</div>
 
-						<div class="col-lg-12">
-							<div class="">
-								
-							</div>
-						</div>
+
 
 
 						

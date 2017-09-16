@@ -36,13 +36,6 @@ jQuery(document).ready(function(){
 
   })
 
-
-
-
-
-
-
-
   jQuery('.delete_record').live('click', function(){
 
       var action = jQuery(this).attr('data-action');
@@ -73,7 +66,41 @@ jQuery(document).ready(function(){
       });
       jQuery( ".delete-box .action-block" ).html(bill_txt);
   });
-  
+
+
+
+
+  jQuery('.deposit-repeater1').repeater({
+    defaultValues: {
+      damage_charge : '0.00',
+      damage_id : 0;
+    },
+    show: function () {
+      var count = 1;
+      jQuery('.deposit-repeater1 .repeterin').each(function(){
+        jQuery(this).find('.rowno').text(count);
+        count++;
+      });
+      jQuery(this).slideDown();
+    },
+    hide: function (deleteElement) {
+        if(confirm('Are you sure you want to delete this element?')) {
+          jQuery(this).slideUp(deleteElement);
+          var count = 1;
+          jQuery('.damage-repeater1 .repeterin').each(function(){ 
+            jQuery(this).find('.rowno').text(count);
+            count++;
+          })
+        }
+    },
+    ready: function (setIndexes) {
+    }
+  });
+
+
+
+
+
 });
 
 
