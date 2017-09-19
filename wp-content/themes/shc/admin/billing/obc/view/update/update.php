@@ -85,8 +85,21 @@
 								<div class="check-block">
 									<div class="row">
 										<div class="col-lg-3">
+										<?php
+											$cheque_selected = (isset($obc_data->received_by) && $obc_data->received_by == 'cheque') ? 'checked' : ''; 
+											$cash_selected = (isset($obc_data->received_by) && $obc_data->received_by == 'cash') ? 'checked' : ''; 
+											$neft_selected = (isset($obc_data->received_by) && $obc_data->received_by == 'neft') ? 'checked' : ''; 
+										?>
 											Received By <br>
-											Chash / Cheque
+											<div style="margin-top: 5px;">
+												<input type="radio" name="received_by" style="margin-top:-2px;" class="received_by" value="cheque" <?php echo $cheque_selected ?>> Cheque 
+											</div>
+											<div style="margin-top: 5px;">
+												<input type="radio" name="received_by" style="margin-top:-2px;" class="received_by" value="cash" <?php echo $cash_selected ?>> Cash 
+											</div>
+											<div style="margin-top: 5px;">
+												<input type="radio" name="received_by" style="margin-top:-2px;" class="received_by" value="neft" <?php echo $neft_selected ?>> NEFT/Other 
+											</div>
 										</div>
 										<div class="col-lg-9">
 											<?php
@@ -100,6 +113,12 @@
 															<td><input type="text" name="cheque_no" style="border-color: rgba(118, 118, 118, 0);width: 100%;height: 25px;margin: 0;padding: 0;" value="<?php echo $obc_data->cheque_no ?>"></td>
 														</tr>
 														<tr>
+															<td>Ref :</td>
+															<td>
+																<input type="text" name="obc_notes" style="border-color: rgba(118, 118, 118, 0);width: 100%;height: 25px;margin: 0;padding: 0;" value="<?php echo $obc_data->notes ?>">
+															</td>
+														</tr>
+														<tr>
 															<td>Date : </td>
 															<td><input type="text" name="cheque_date" class="datepicker" style="border-color: rgba(118, 118, 118, 0);width: 100%;height: 25px;margin: 0;padding: 0;" value="<?php echo $obc_data->cheque_date ?>"></td>
 														</tr>
@@ -109,7 +128,7 @@
 														</tr>
 														<tr>
 															<td>Notes :</td>
-															<td><textarea name="obc_notes" style="border-color: rgba(118, 118, 118, 0);width: 100%;height: 50px;margin: 0;padding: 10px 0;"><?php echo $obc_data->notes ?></textarea>
+															<td><textarea name="obc_extra_notes" style="border-color: rgba(118, 118, 118, 0);width: 100%;height: 50px;margin: 0;padding: 10px 0;"><?php echo $obc_data->extra_notes ?></textarea>
 															</td>
 														</tr>
 

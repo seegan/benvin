@@ -78,7 +78,7 @@
 					</div>
 				</td>
 				<td colspan="2"><div class="align-txt"><div class="return-charge-txt">Damage (as Per detail overleaf)</div></div></td>
-				<td colspan="2"><div class="align-txt"><div class="return-charge-val">Rs. <input type="text" class="return-charge-input" value="<?php echo getUnloadingData($_GET['return_id'], 'damage') ?>"></div></div></td>
+				<td colspan="2"><div class="align-txt"><div class="return-charge-val">Rs. <input type="text" class="return-charge-input" value="<?php echo getUnloadingData($_GET['return_id'], 'damage') ?>" readonly="readonly"></div></div></td>
 			</tr>
 			<tr>
 				<td colspan="2"></td>
@@ -88,3 +88,54 @@
 		</tbody>
 	</table>
 </div>
+
+<?php
+	if(isset($damage_data['damage_detail']) && count($damage_data['damage_detail']) > 0) { 
+?>
+<div class="damage_details" style="margin-top:20px;">
+	<h2>Damage Details</h2>
+
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th class="center-th" style="width:50px;"><div>S.No</div></th>
+					<th>
+						<div>Damage Detail</div>
+					</th>
+					<th style="width:100px;">
+						<div>Amt</div>
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+
+
+				<?php
+						$i = 1;
+						foreach ($damage_data['damage_detail'] as $d_value) {
+				?>
+					<tr class="div-table-row">
+						<td>
+							<div class="align-txt"><?php echo $i; ?></div>
+						</td>
+						<td>
+							<div class="align-txt">
+								<?php echo $d_value->damage_detail; ?>
+							</div>
+						</td>
+						<td>
+							<div class="align-txt">
+								<?php echo $d_value->damage_charge; ?>
+							</div>
+						</td>
+					</tr>
+				<?php
+							$i++;
+						}
+				?>
+			</tbody>
+		</table>
+</div>
+<?php
+}
+?>

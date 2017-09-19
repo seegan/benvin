@@ -36,6 +36,7 @@
 
 
 				$pending_items = getPendingItemsUpdate($_GET['id'], $return_date);
+				$damage_data = getDamageData($_GET['return_id']) ;
 
 			}
 		}
@@ -72,6 +73,7 @@
 								echo "<div style='clear:both;'></div>";
 								echo "</div>";
 								echo "<input type='hidden' name='return_status' value='return'>";
+								echo "<input type='hidden' name='damage_id' value='".$damage_data['damage_data']->id."'>";
 
 
 								if($return_date) {

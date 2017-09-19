@@ -14,10 +14,42 @@
 
 		$customer_detail = getCustomerData($customer_id);
 		$site_detail = getSiteData($site_id);
-		$statement = getAccountStatement($master_id, $statement_date);
+		$statement_data = getAccountStatement($master_id, $statement_date);
+
+		$statement = isset($statement_data['statement_data']) ? $statement_data['statement_data'] : false;
+		$cd_data = isset($statement_data['cd_total']) ? $statement_data['cd_total'] : false;
+
 		$lost_data = getLostStatement($master_id, $statement_date);
+		$damage_data = getDamageStatement($master_id, $statement_date);
 	}
 	$company_ids = getCompanies('to_list');
+
+
+	$credit_amount = 0.00;
+	$debit_amount = 0.00;
+	$credit_close = '';
+	$debit_close = '';
+
+	if( isset($cd_data->credit_total) && $cd_data->credit_total <= $cd_data->debit_total ) {
+		$credit_amount = number_format((float)$cd_data->debit_total, 2, '.', '');
+		$debit_amount = number_format((float)$cd_data->debit_total, 2, '.', '');
+	} else {
+		$credit_amount = number_format((float)$cd_data->credit_total, 2, '.', '');
+		$debit_amount = number_format((float)$cd_data->credit_total, 2, '.', '');
+	}
+
+	if($cd_data->cd_bal < 0) {
+		$credit_bal = number_format((float)(abs($cd_data->cd_bal)), 2, '.', '');
+		$debit_bal = '';
+	}
+	if($cd_data->cd_bal > 0) {
+		$credit_bal = '';
+		$debit_bal = number_format((float)(abs($cd_data->cd_bal)), 2, '.', '');
+	}
+	if($cd_data->cd_bal == 0) {
+		$credit_bal = '';
+		$debit_bal = '';
+	}
 ?>
 
 <div class="container">
@@ -66,9 +98,9 @@
 								<table class="table table-bordered">
 									<thead>
 										<tr>
-											<th rowspan="2" style="width:140px;" class="center-th"><div>Date</div></th>
+											<th rowspan="2" style="width:100px;" class="center-th"><div>Date</div></th>
 											<th rowspan="2" class="center-th"><div>Description</div></th>
-											<th rowspan="2" class="center-th"><div>Bill Ref</div></th>
+											<th rowspan="2" class="center-th" style="width:100px;"><div>Bill Ref</div></th>
 											<th rowspan="2" style="width:140px;" class="center-th"><div>Cr.</div></th>
 											<th rowspan="2" style="width:140px;" class="center-th"><div>Dr.</div></th>
 										</tr>
@@ -85,7 +117,7 @@
 										?>
 													<tr>
 														<td>
-															<?php echo $s_value->bill_date; ?>
+															<?php echo date("d-m-Y", strtotime($s_value->bill_date)); ?>
 														</td>
 														<td>
 															<?php echo $s_value->description; ?>
@@ -93,10 +125,10 @@
 														<td>
 															
 														</td>
-														<td>
+														<td class="right-align-txt">
 															<?php echo $s_value->credit; ?>
 														</td>
-														<td>
+														<td class="right-align-txt">
 															<?php echo $s_value->debit; ?>
 														</td>
 													</tr>
@@ -106,7 +138,7 @@
 										?>
 													<tr>
 														<td>
-															<?php echo $s_value->bill_date; ?>
+															<?php echo date("d-m-Y", strtotime($s_value->bill_date)); ?>
 														</td>
 														<td>
 															<?php echo $s_value->description; ?>
@@ -116,19 +148,44 @@
 																echo $company_ids[$company_id].'/'.$s_value->bill_ref;
 															?>
 														</td>
-														<td>
+														<td class="right-align-txt">
 															<?php echo $s_value->credit; ?>
 														</td>
-														<td>
+														<td class="right-align-txt">
 															<?php echo $s_value->debit; ?>
 														</td>
 													</tr>
 										<?php
 													}
-										?>
-
-										<?php
 												}
+										?>
+													<tr>
+														<td colspan="3">
+															<div class="center-txt" style="font-size: 13px;font-weight: 600;">
+																Closing Balance
+															</div>
+														</td>
+														<td class="right-align-txt">
+															<?php echo $credit_bal ?>
+														</td>
+														<td class="right-align-txt">
+															<?php echo $debit_bal ?>
+														</td>
+													</tr>
+													<tr>
+														<td colspan="3">
+															<div class="center-txt" style="font-size: 13px;font-weight: 600;">
+																Total
+															</div>
+														</td>
+														<td class="right-align-txt">
+															<?php echo $credit_amount; ?>
+														</td>
+														<td class="right-align-txt">
+															<?php echo $debit_amount; ?>
+														</td>
+													</tr>
+										<?php
 											}
 										?>
 									</tbody>
@@ -137,10 +194,9 @@
 
 
 
-<?php
-
-											if( $lost_data['lost_detail'] && $lost_data['lost_total'] ) {
-?>
+							<?php
+								if( $lost_data['lost_detail'] && $lost_data['lost_total'] ) {
+							?>
 							<div class="deposit-repeater hiring_detail" style="margin-top:20px;">
 								<h2>Missing Cost</h2>
 								<table class="table table-bordered">
@@ -150,7 +206,7 @@
 											<th rowspan="2" class="center-th"><div>Description</div></th>
 											<th rowspan="2" class="center-th"><div>Qty</div></th>
 											<th rowspan="2" style="width:140px;" class="center-th"><div>Rate</div></th>
-											<th rowspan="2" style="width:140px;" class="center-th"><div>Amount</div></th>
+											<th rowspan="2" style="width:140px;" class="right-align-txt"><div>Amount</div></th>
 										</tr>
 									</thead>
 									<tbody>
@@ -171,7 +227,7 @@
 														<td>
 															<?php echo $ld_value->lost_unit_price; ?>
 														</td>
-														<td>
+														<td class="right-align-txt">
 															<?php echo $ld_value->lost_total; ?>
 														</td>
 													</tr>
@@ -181,14 +237,64 @@
 										?>
 													<tr>
 														<td colspan="4">Total</td>
-														<td><?php echo $lost_data['lost_total']->debit; ?></td>
+														<td class="right-align-txt"><?php echo $lost_data['lost_total']->debit; ?></td>
 													</tr>
 									</tbody>
 								</table>
 							</div>
+							<?php
+								}
+							?>
+
+
+
+							<?php
+								if( $damage_data['damage_detail'] && $damage_data['damage_total'] ) {
+							?>
+							<div class="deposit-repeater hiring_detail" style="margin-top:20px;">
+								<h2>Damage Detail</h2>
+								<table class="table table-bordered">
+									<thead>
+										<tr>
+											<th rowspan="2" style="width:80px;" class="center-th"><div>SL#</div></th>
+											<th rowspan="2" class="center-th"><div>Description</div></th>
+											<th rowspan="2" style="width:140px;" class="center-th"><div>Amount</div></th>
+										</tr>
+									</thead>
+									<tbody>
 										<?php
-											}
+												$i = 1;
+												foreach ($damage_data['damage_detail'] as $dd_value) {
 										?>
+													<tr>
+														<td>
+															<?php echo $i; ?>
+														</td>
+														<td>
+															<?php echo $dd_value->damage_detail; ?>
+														</td>
+														<td class="right-align-txt">
+															<?php echo $dd_value->damage_charge; ?>
+														</td>
+													</tr>
+										<?php
+													$i++;
+												}
+										?>
+													<tr>
+														<td colspan="2">Total</td>
+														<td class="right-align-txt"><?php echo $damage_data['damage_total']->debit; ?></td>
+													</tr>
+									</tbody>
+								</table>
+							</div>
+							<?php
+								}
+							?>
+
+
+
+
 						</div>
 					</div>
 				</div>

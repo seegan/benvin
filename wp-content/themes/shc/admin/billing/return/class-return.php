@@ -256,6 +256,20 @@ END )
 	}
 
 
+	function get_DamageData($return_id = 0) {
+		global $wpdb;
+		$damage_table = $wpdb->prefix.'shc_return_damage';
+		$damage_detail_table = $wpdb->prefix.'shc_return_damage_detail';
+
+		$data_query = "SELECT * from ${damage_table} as d WHERE d.active = 1 AND d.return_id = ${return_id}";
+		$data['damage_data'] = $wpdb->get_row($data_query);
+
+		$query = "SELECT dd.* FROM ${damage_table} as d JOIN ${damage_detail_table} as dd ON d.id = dd.damage_id WHERE d.return_id = ${return_id} AND d.active = 1 AND dd.active = 1";
+		$data['damage_detail'] = $wpdb->get_results($query);
+
+		return $data;
+	}
+
 
 	function get_ReturnData($return_id = 0) {
 		global $wpdb;

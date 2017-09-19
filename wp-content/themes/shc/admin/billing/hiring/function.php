@@ -24,7 +24,7 @@ function get_deposit_site_list() {
 	$customers_table = $wpdb->prefix.'shc_customers';
 	$site_table = $wpdb->prefix.'shc_customer_site';
 
-	$query = "SELECT d.id, cs.site_name, cs.phone_number, cs.site_address, c.name  FROM ${master_table} as d JOIN ${customers_table} as c ON d.customer_id = c.id JOIN ${site_table} as cs ON d.site_id = cs.id WHERE ( cs.site_name LIKE '${search}%' OR cs.phone_number LIKE '${search}%' OR cs.site_address LIKE '${search}%' OR d.id = '${search}' ) ";
+	$query = "SELECT d.id, cs.site_name, cs.phone_number, cs.site_address, c.name  FROM ${master_table} as d JOIN ${customers_table} as c ON d.customer_id = c.id JOIN ${site_table} as cs ON d.site_id = cs.id WHERE ( c.name LIKE '%${search}%' OR cs.site_name LIKE '%${search}%' OR cs.phone_number LIKE '${search}%' OR cs.site_address LIKE '${search}%' OR d.id = '${search}' ) ";
 
 	if( $data['items'] = $wpdb->get_results( $query, ARRAY_A ) ) {
 		$data['success'] = 1;

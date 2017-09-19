@@ -88,7 +88,15 @@
 									<div class="row">
 										<div class="col-lg-3">
 											Received By <br>
-											Chash / Cheque
+											<div style="margin-top: 5px;">
+												<input type="radio" name="received_by" style="margin-top:-2px;" class="received_by" checked value="cheque"> Cheque 
+											</div>
+											<div style="margin-top: 5px;">
+												<input type="radio" name="received_by" style="margin-top:-2px;" class="received_by" value="cash"> Cash 
+											</div>
+											<div style="margin-top: 5px;">
+												<input type="radio" name="received_by" style="margin-top:-2px;" class="received_by" value="neft"> NEFT/Other 
+											</div>
 										</div>
 										<div class="col-lg-9">
 											<div class="check-container">
@@ -96,7 +104,13 @@
 												<table class="table table-bordered">
 													<tr>
 														<td  style="width:150px;">Cheque No : </td>
-														<td><input type="text" name="cheque_no" style="border-color: rgba(118, 118, 118, 0);width: 100%;height: 25px;margin: 0;padding: 0;"></td>
+														<td><input type="text" name="cheque_no" style="border-color: rgba(118, 118, 118, 0);width: 100%;height: 25px;margin: 0;padding: 0;" value="Chq.No "></td>
+													</tr>
+													<tr>
+														<td>Ref :</td>
+														<td>
+															<input type="text" name="obc_notes" style="border-color: rgba(118, 118, 118, 0);width: 100%;height: 25px;margin: 0;padding: 0;">
+														</td>
 													</tr>
 													<tr>
 														<td>Date : </td>
@@ -108,7 +122,7 @@
 													</tr>
 													<tr>
 														<td>Notes :</td>
-														<td><textarea name="obc_notes" style="border-color: rgba(118, 118, 118, 0);width: 100%;height: 50px;margin: 0;padding: 10px 0;"></textarea>
+														<td><textarea name="obc_extra_notes" style="border-color: rgba(118, 118, 118, 0);width: 100%;height: 50px;margin: 0;padding: 10px 0;"></textarea>
 														</td>
 													</tr>
 												</table>

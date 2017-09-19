@@ -5106,3 +5106,6 @@ input[type=text].to_date:hover {
 .ui-button {
     padding: .4em 1em !important;
 }
+.center-txt {
+    text-align: center;
+}

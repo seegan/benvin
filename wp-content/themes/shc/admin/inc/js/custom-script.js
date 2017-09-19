@@ -73,7 +73,7 @@ jQuery(document).ready(function(){
   jQuery('.deposit-repeater1').repeater({
     defaultValues: {
       damage_charge : '0.00',
-      damage_id : 0;
+      damage_id : 0,
     },
     show: function () {
       var count = 1;

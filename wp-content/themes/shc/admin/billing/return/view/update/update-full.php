@@ -130,7 +130,7 @@
 					<td colspan="3">
 						<div class="align-txt">
 							<div class="return-charge-val">Rs. 
-								<input type="text"  class="return-charge-input damage" value="<?php echo getUnloadingData($_GET['return_id'], 'damage') ?>">
+								<input type="text"  class="return-charge-input damage" value="<?php echo getUnloadingData($_GET['return_id'], 'damage') ?>" readonly="readonly">
 							</div>
 						</div>
 					</td>
@@ -174,6 +174,101 @@
 			</tbody>
 		</table>
 	</div>
+
+
+
+
+
+
+<?php
+	if(isset($damage_data['damage_detail'])) {
+?>
+
+
+	<div class="deposit-repeater1 damage_detail" style="margin-top:20px;">
+		<h2>Damage Detailsssss</h2>
+		<table class="table table-bordered" data-repeater-list="damage_detail">
+			<thead>
+				<tr>
+					<th class="center-th" style="width:50px;"><div>S.No</div></th>
+					<th>
+						<div>Damage Detail</div>
+					</th>
+					<th style="width:100px;">
+						<div>Amt</div>
+					</th>
+					<th style="width:50px;">
+						<div>Action</div>
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php
+					if(count($damage_data['damage_detail']) > 0) {
+						$i = 1;
+						foreach ($damage_data['damage_detail'] as $d_value) {
+				?>
+				<tr data-repeater-item class="repeterin div-table-row" class="repeterin div-table-row">
+					<td>
+						<div class="rowno align-txt">1</div>
+					</td>
+					<td>
+						<div class="align-txt">
+							<textarea name="damage_text" style="width: 100%;height: 38px;padding: 5px;" placeholder="Damage Details here"><?php echo $d_value->damage_detail; ?></textarea>
+						</div>
+					</td>
+					<td>
+						<div class="align-txt">
+							<input type="text" name="damage_charge" value="<?php echo $d_value->damage_charge; ?>" style="width:70px;" class="damage_charge">
+						</div>
+					</td>
+					<td>
+						<div class="">
+							<a href="#" data-repeater-delete="" style="font-size: 16px;font-weight: bold; color: #ff0000;line-height: 30px;">x</a>
+							<input type="hidden" value="Delete">
+						</div>
+					</td>
+				</tr>
+				<?php
+						}
+					} else {
+				?>
+				<tr data-repeater-item class="repeterin div-table-row" class="repeterin div-table-row">
+					<td>
+						<div class="rowno align-txt">1</div>
+					</td>
+					<td>
+						<div class="align-txt">
+							<textarea name="damage_text" style="width: 100%;height: 38px;padding: 5px;" placeholder="Damage Details here"></textarea>
+						</div>
+					</td>
+					<td>
+						<div class="align-txt">
+							<input type="text" name="damage_charge" value="0.00" style="width:70px;" class="damage_charge">
+						</div>
+					</td>
+					<td>
+						<div class="">
+							<a href="#" data-repeater-delete="" style="font-size: 16px;font-weight: bold; color: #ff0000;line-height: 30px;">x</a>
+							<input type="hidden" value="Delete">
+						</div>
+					</td>
+				</tr>
+				<?php
+					}
+				?>
+			</tbody>
+		</table>
+
+		<ul class="icons-labeled">
+			<li><a data-repeater-create href="javascript:void(0);" id="add_new_price_range"><span class="icon-block-color add-c"></span>Add Damage</a></li>
+		</ul>
+	</div>
+<?php
+}
+?>
+
+
 
 
 	<div style="float:right;">

@@ -18,4 +18,9 @@ function getLostStatement($master_id = 0, $date_to = '0000-00-00') {
 	$lost_data = new Statement();
 	return $lost_data->get_LostStatement($master_id, $date_to);
 }
+
+function getDamageStatement($master_id = 0, $date_to = '0000-00-00') {
+	$lost_data = new Statement();
+	return $lost_data->get_DamageStatement($master_id, $date_to);
+}
 ?>
