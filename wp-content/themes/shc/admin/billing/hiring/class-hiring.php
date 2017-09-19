@@ -19,7 +19,6 @@ class Hiring {
 	    }
 	}
 
-
 	function get_HiringItems($master_id = 0, $bill_from, $bill_to) {
 		global $wpdb;
 		$lots_table = $wpdb->prefix.'shc_lots';
@@ -312,6 +311,30 @@ ON bill.id = sdd.id WHERE bill.bill_qty > 0 AND
 
 			$data['hiring_detail'] = $wpdb->get_results($detail_query);
 
+			return $data;
+		}
+		return false;
+	}
+
+
+	function get_BillHiringDataPrint($bill_id = 0) {
+		global $wpdb;
+	
+		$hiring_table = $wpdb->prefix.'shc_hiring';
+		$hiring_detail_table = $wpdb->prefix.'shc_hiring_detail';
+		$lot_table = $wpdb->prefix.'shc_lots';
+
+		$hiring_query = "SELECT * FROM ${hiring_table} WHERE active = 1 AND id = ${bill_id}";
+		$hiring_data = $wpdb->get_row($hiring_query);
+
+		if($hiring_data) {
+			$data['hiring_data'] = $hiring_data;
+
+			/*$detail_query = "SELECT hd.*, l.product_name, l.product_type FROM ${hiring_detail_table} as hd JOIN ${lot_table} as l ON hd.lot_id = l.id WHERE hd.hiring_bill_id = ${bill_id} AND hd.active = 1";*/
+
+			$detail_query = "SELECT hd.lot_id, SUM(hd.qty) as qty, hd.bill_from, hd.bill_to, hd.bill_days, hd.rate_per_day, SUM(hd.amount) as amount, hd.min_checked, SUM(hd.hiring_amt),   l.product_name, l.product_type FROM ${hiring_detail_table} as hd JOIN ${lot_table} as l ON hd.lot_id = l.id WHERE hd.hiring_bill_id = ${bill_id} AND hd.active = 1 GROUP BY hd.lot_id, hd.bill_days, hd.rate_per_day, hd.min_checked, hd.bill_from, hd.bill_to";
+
+			$data['hiring_detail'] = $wpdb->get_results($detail_query);
 			return $data;
 		}
 		return false;

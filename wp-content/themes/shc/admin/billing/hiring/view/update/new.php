@@ -27,7 +27,10 @@
 			$bill_to = (isset($_GET['bill_to']) && $_GET['bill_to'] != '') ? $_GET['bill_to'] : date('Y-m-d', strtotime('last day of this month'));
 			$hiring_items = getHiringItems($_GET['id'], $bill_from, $bill_to);
 			$existin_bill = getExistBillData($_GET['id'], $bill_from, $bill_to);
+
+			$current_bill_no = isset($existin_bill->bill_no) ? $existin_bill->bill_no : $site_detail->next_bill_no;
 		}
+
 	}
 ?>
 
@@ -83,10 +86,6 @@
 		}
 		?>
 
-
-
-
-
 		<div class="col-lg-9">
 			<div class="x_panel">
 				<div class="x_title">
@@ -115,7 +114,7 @@
 
 									echo '<div class="address-line">Bill No : ';
 									echo '	<span class="deposit-time">';
-									echo $site_detail->company_id."/HB <input type='text' style='border-color: rgba(118, 118, 118, 0);height: 34px;margin: 0;' value='".$site_detail->next_bill_no."' name='bill_no' class='bill bill_no'>";
+									echo $site_detail->company_id."/HB <input type='text' style='border-color: rgba(118, 118, 118, 0);height: 34px;margin: 0;' value='".$current_bill_no."' name='bill_no' class='bill bill_no'>";
 									echo '<img src="'.get_template_directory_uri() . '/admin/inc/images/5.gif" style="width: 20px;display:none;" class="loadin-billfrom">';
 									echo '<img src="'.get_template_directory_uri() . '/admin/inc/images/check.png" style="width: 20px;display:none;" class="loadin-check">';
 									echo '<img src="'.get_template_directory_uri() . '/admin/inc/images/cross.png" style="width: 20px;display:none;" class="loadin-cross">';
@@ -124,13 +123,14 @@
 									echo '</div>';
 								}
 							?>
+
 							<div class="customer-name">Customer Name : M/s 
 								<span class="customer-name"><?php echo ($customer_detail->name) ? $customer_detail->name : ''; ?></span>
 							</div>
 							<div class="address-line">Address : <span class="address-txt"><?php echo ($customer_detail->address) ? $customer_detail->address : ''; ?></span>
 							</div>
 							<div class="bill-date">
-								<div> 
+								<div>
 									<div style="float:left; width:60px;line-height: 35px;"> Bill From </div>
 									<div style="float:left;">: <input type="text" name="bill_from" value="<?php echo isset($_GET['bill_from']) ? $_GET['bill_from'] : $bill_from ?>" style="border-color: rgba(118, 118, 118, 0);height: 34px;margin: 0;width:90px;" class="datepicker bill_from"></div>
 								</div>
@@ -492,6 +492,7 @@
 	                          				echo "<input type='hidden' name='bill_id' value='".$existin_bill->id."'>";
 	                          				echo "<input type='hidden' name='action' class='action' value='update_billing'>";
 	                          				echo "<button type='submit' class='btn btn-success create_billing'>Update Bill</button>";
+	                          				echo "<input type='hidden' name='update_current_bill' value='".$current_bill_no."'>";
 	                          			} else {
 	                          				echo "<input type='hidden' name='action' class='action' value='create_billing'>";
 	                          				echo "<button type='submit' class='btn btn-success create_billing'>Generate Bill</button>";

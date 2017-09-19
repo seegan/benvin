@@ -85,8 +85,6 @@ function create_billing() {
 		'bill_time' => isset($params['master_id']) ? $params['billing_time'] : '00:00',
 	);
 
-
-
 	if($params['action'] == 'create_billing') {
 		
 		$bill_no_data = getCorrectBillNumber($params['bill_no'], $params['site_id'], 'shc_hiring', $params['billing_date']);
@@ -141,12 +139,12 @@ function create_billing() {
 	if($params['action'] == 'update_billing' && isset($params['bill_id'])) {
 
 		$hiring_bill_id = $params['bill_id'];
+		
+		$hiring_data['bill_no'] = $params['update_current_bill'];
 
 		$wpdb->update($hiring_table, $hiring_data, array('id' => $hiring_bill_id));
 		create_admin_history(array('updated_by' => $loggdin_user, 'update_in' => $hiring_bill_id, 'detail' => 'hiring_update' ));
-
 		$wpdb->update($hiring_detail_table, array('active' => 0), array('hiring_bill_id' => $hiring_bill_id) );
-
 
 		if($hiring_bill_id && $params['hiring_detail']) {
 			foreach ($params['hiring_detail'] as $h_value) {
@@ -198,6 +196,11 @@ add_action( 'wp_ajax_nopriv_create_billing', 'create_billing' );
 function getHiringBillData($master_id = 0, $bill_id = 0) {
 	$hiring_bill = new Hiring();
 	return $hiring_bill->get_BillHiringData($master_id, $bill_id);
+}
+
+function getHiringBillDataPrint( $bill_id = 0) {
+	$hiring_bill = new Hiring();
+	return $hiring_bill->get_BillHiringDataPrint($bill_id);
 }
 
 

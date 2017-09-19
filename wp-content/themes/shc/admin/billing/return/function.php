@@ -126,9 +126,6 @@ function create_return() {
 						$wpdb->insert($lost_detail_table, array('master_id' => $master_id, 'lost_id' => $lost_id, 'return_id' => $return_id, 'lot_id' => $l_value['lot_id'], 'lost_qty' => $l_value['lost_qty'] , 'lost_unit_price' => $l_value['lost_per_unit'], 'lost_total' => $l_value['lost_row_total'] ));
 					}
 				}
-
-
-
 			}
 
 			$data['success'] = 1;
@@ -147,7 +144,6 @@ function create_return() {
 
 		$wpdb->update($return_table, array('ref_number' => $params['ref_number'], 'financial_year' => $financial_year, 'return_date' => $return_date, 'is_return' => $is_return, 'vehicle_number' => $vehicle_number, 'driver_name' => $driver_name, 'driver_mobile' => $driver_mobile), array('id' => $return_id) );
 		$wpdb->update($damage_table, array('damage_total' => $damage), array('id' => $damage_id) );
-
 
 		create_admin_history(array('updated_by' => $loggdin_user, 'update_in' => $return_id, 'detail' => 'return_update' ));
 

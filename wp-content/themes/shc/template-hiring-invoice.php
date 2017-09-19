@@ -1,29 +1,33 @@
 <?php
 /**
- * Template Name: Deposit Invoice 
+ * Template Name: Hiring Invoice 
  *
  * @package WordPress
  * @subpackage SHC
  */
 ?>
+
 <!DOCTYPE html>
 <html>
 <head>
 	<title></title>
-	<link rel="stylesheet" href="<?php echo get_template_directory_uri() . '/admin/inc/css/ultra-colors.css';?>" type="text/css" media="all" />
-	<link rel="stylesheet" href="<?php echo get_template_directory_uri() . '/admin/inc/css/ultra-admin.css';?>" type="text/css" media="all" />
 	<link rel="stylesheet" href="<?php echo get_template_directory_uri() . '/admin/inc/css/bootstrap.min.css';?>" type="text/css" media="all" />
 	<link rel="stylesheet" href="<?php echo get_template_directory_uri() . '/admin/inc/css/custom.min.css';?>" type="text/css" media="all" />
-	<link rel="stylesheet" href="<?php echo get_template_directory_uri() . '/admin/inc/images/invoice/fonts/stylesheet.css';?>" type="text/css" media="all" />
 </head>
 <body class="page">
-
 <?php
-$security_data = false;
-$deposit_detail = false;
+$bill_from_comp = getHiringBillDataPrint($_GET['bill_no']);
+if(isset($bill_from_comp['hiring_data']) && isset($_GET['bill_no']) && $_GET['bill_no'] != '') {
+	$company_id = $bill_from_comp['hiring_data']->bill_from_comp;
+	$company_data = getCompaniesById($company_id);
+}
 
-if(isset($_GET['deposit_id'])) {
-	$security_data = getDepositDetail($_GET['deposit_id']);
+
+
+
+
+if(isset($_GET['bill_no'])) {
+	$security_data = getDepositDetail($_GET['bill_no']);
 	$invoice_data = $security_data['invoice_data'];
 	$deposit_detail = $security_data['deposit_detail'];
 
@@ -46,8 +50,8 @@ if(isset($_GET['deposit_id'])) {
 /*total width 794*/
 
 			.inner-container {
-				padding-left: 80px;
-				padding-right: 80px;
+				padding-left: 100px;
+				padding-right: 60px;
 				width: 794px;
 			}
 			.left-float {
@@ -75,6 +79,14 @@ if(isset($_GET['deposit_id'])) {
 
 			.customer-detail-left {
 				width: 400px;
+			}
+			.company-detail-left {
+				width: 444px;
+			}
+			.company-detail-left .company-name h3{
+			    font-family: serif;
+    			font-weight: bold;
+    			font-size: 24px;
 			}
 			.customer-detail-right {
 				width: 234px;
@@ -116,26 +128,16 @@ if(isset($_GET['deposit_id'])) {
 				border: 1px solid #67a3b7 !important;
 				-webkit-print-color-adjust: exact;
 			}
-/*.footer {
-  background: #ade6df;
-  color: #fff;
-  text-align: center;
-  font-family: 'Open Sans', sans-serif;
-  padding: 5px 0;
-  font-weight: 300;
-  position: fixed;
-  bottom: 0;
-  width: 715px;
-}*/
 
 		}
 
 
-
-
+			.body {
+				font-family: "Lucida Sans Unicode", "Lucida Grande", "sans-serif";
+			}
 			.inner-container {
-				padding-left: 80px;
-				padding-right: 80px;
+				padding-left: 100px;
+				padding-right: 60px;
 				width: 794px;
 			}
 			.left-float {
@@ -144,18 +146,19 @@ if(isset($_GET['deposit_id'])) {
 			.top-left {
 				width: 160px;
 			}
+			.top-center {
+				width: 284px;
+			}
+			.top-right {
+				width: 190px;
+			}
 			.left-logo img, .right-logo img {
 				width: 100%;
 			}
 			.comp-detail {
 				padding-left: 5px;
 			}
-			.top-center {
-				width: 240px;
-			}
-			.top-right {
-				width: 234px;
-			}
+
 			.comp-detail-in .detail-left {
 				width: 55px;
 			}
@@ -163,6 +166,20 @@ if(isset($_GET['deposit_id'])) {
 			.customer-detail-left {
 				width: 400px;
 			}
+			.company-detail-left {
+				width: 444px;
+			}
+			.company-detail-left .company-name h3 {
+			    font-family: serif;
+    			font-weight: bold;
+    			font-size: 24px;
+    			margin-bottom: 3px;
+			}
+			.company-detail-left .company-address {
+			    font-size: 14px;
+    			font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+			}
+
 			.customer-detail-right {
 				width: 234px;
 			}
@@ -174,6 +191,9 @@ if(isset($_GET['deposit_id'])) {
 		    .table td, .table th {
 		      background-color: transparent !important;
 		    }
+		    .bill-detail {
+		    	height: 650px;
+		    }
 			.bill-detail thead tr {
 			    background-color: #67a3b7 !important;
 			    -webkit-print-color-adjust: exact;
@@ -182,152 +202,104 @@ if(isset($_GET['deposit_id'])) {
 			    color: #fff !important;
 			    -webkit-print-color-adjust: exact;
 			}
+			.footer {
+				position: fixed;
+            	bottom: 0px;
+            	left: 0px;
+			}
+			.footer .foot {
+			    background-color: #67a3b7 !important;
+			    -webkit-print-color-adjust: exact;
+			}
 
-
-			.vehicle-detail{
-				width: 220px;
-			}
-			.hirer-detail{
-    			width: 214px;
-			}
-			.hirer-detail .bottom-detail-in{
-    			padding-left: 20px;
-			}			
-			.signature-detail{
-				width: 200px;
-			}
-			.signature-detail .bottom-detail-in{
-				padding-left: 20px;
-			}
-			.detail-in {
-				margin-top: 2px;
-			}
-			.vehicle-box {
-				height: 34px;
-				width: 180px;
-				border: 1px solid;
-			}
 			.table>tbody>tr>td {
 				padding:5px;
 				height: 29px;
 			}
 			.table-bordered>tbody>tr>td {
-				border: 1px solid #67a3b7;
+				border: 1px solid #67a3b7 !important;
+				-webkit-print-color-adjust: exact;
 			}
 
+			.billing-title {
+				text-align: center;
+				font-weight: bold;
+				font-size: 14px;
+    			text-decoration: underline;
+			}
 	</style>
 
 
 
 
-<table class=""> 
+<table class="" style="margin-top: 25px;"> 
 	<thead>
 		<tr>
 			<td>
-				
-				<div class="header-top inner-container">
-					<div class="left-float top-left">
-						<div class="left-logo">
-							<img src="<?php echo get_template_directory_uri() . '/admin/inc/images/invoice/left-logo-1.jpg'; ?>">
+				<div class="customer-detail inner-container" style="margin-top: 20px;">
+					<div class="left-float company-detail-left">
+						<div class="company-name">
+							<h3><?php echo $company_data->company_name; ?></h3>
 						</div>
-					</div>
-					<div class="left-float top-center">
-						<div class="comp-detail" style="margin-top:15px;">
-							<div class="comp-detail-in">
-								<div class="left-float">
-									sd
-								</div>
-								<div class="detail-right">
-									: 2278 0605, 2278 1866
-								</div>
-							</div>
-							<div class="comp-detail-in">
-								<div class="detail-left left-float">
-									Phone
-								</div>
-								<div class="detail-right">
-									: 2278 0605, 2278 1866
-								</div>
-							</div>
-							<div class="comp-detail-in">
-								<div class="detail-left left-float">
-									Mobile
-								</div>
-								<div class="detail-right">
-									: 94440 50664
-								</div>
-							</div>
-							<div class="comp-detail-in" style="margin-top: 10px;">
-								<div class="detail-left left-float">
-									TIN
-								</div>
-								<div class="detail-right">
-									: 33446373536
-								</div>
-							</div>
+						<div class="company-address">
+							<?php echo $company_data->address; ?>
+						</div>
+						<div class="company-address">
+							TEL: <?php echo $company_data->phone; ?>
+						</div>
+						<div class="company-address">
+							Mobile: <?php echo $company_data->mobile; ?>
+						</div>
+
+						<div class="company-address">
+						<?php
+							if(isset($_GET['tax_from']) && $_GET['tax_from'] == 'no_tax') {
+								echo "";
+							} else if(isset($_GET['tax_from']) && $_GET['tax_from'] == 'vat') {
+								echo "<b>TIN: ".$company_data->tin_number."</b>";
+							} else {
+								echo "<b>GSTIN: ".$company_data->gst_number."</b>";
+							}
+						?>
 						</div>
 					</div>
 					<div class="left-float top-right">
 						<div class="right-logo">
-							<img src="<?php echo get_template_directory_uri() . '/admin/inc/images/invoice/right-logo-1.jpg'; ?>">
-						</div>
-					</div>
-
-				</div>
-				<div class="header-top inner-container">
-					<div class="left-float top-left">
-						NO : <?php echo $invoice_data->company_id.'/SD '.$invoice_data->bill_no; ?>
-					</div>
-					<div class="left-float top-center">
-						<center><b>DELIVERY CHALLAN</b></center>
-					</div>
-					<div class="left-float top-right">
-						Date : <?php echo $date; ?>
-					</div>
-					<div class="clear"></div>
-				</div>	
-				<div class="customer-detail inner-container" style="margin-top: 20px;">
-					<div class="left-float customer-detail-left">
-						<div class="customer-name">
-							Customer Name : M/s <?php echo $invoice_data->name; ?>
-						</div>
-						<div class="customer-address">
-							Address : <?php echo $invoice_data->address; ?>
-						</div>			</div>
-					<div class="left-float customer-detail-right">
-						<div class="comp-detail-in">
-							<div class="detail-left left-float">
-								Time
-							</div>
-							<div class="detail-right">
-								: <?php echo $time; ?>
-							</div>
-						</div>
-						<div class="comp-detail-in">
-							<div class="detail-left left-float">
-								Site
-							</div>
-							<div class="detail-right">
-								: <?php echo $invoice_data->site_name; ?>
-							</div>
-						</div>
-						<div class="comp-detail-in">
-							<div class="detail-left left-float">
-								Phone
-							</div>
-							<div class="detail-right">
-								: <?php echo $invoice_data->phone_number; ?>
-							</div>
+							<img src="http://192.168.0.150/benvin/wp-content/themes/shc/admin/inc/images/invoice/right-logo-1.jpg">
 						</div>
 					</div>
 					<div class="clear"></div>
 				</div>
-
-
-
+				<div class="customer-detail inner-container" style="margin-top: 2px;margin-bottom:2px;">
+					<div class="billing-title">
+						HIRE BILL
+					</div>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<div class="customer-detail inner-container">
+					<table class="table table-bordered">
+						<tr>
+							<td>
+								
+									wsd
+								
+							</td>
+						</tr>
+					</table>
+				</div>
 			</td>
 		</tr>
 	</thead>
+</table>
+
+
+
+
+<table class="" style="margin-top: 25px;"> 
+
 	<tbody>
 
 		<tr>
@@ -363,6 +335,9 @@ if(isset($_GET['deposit_id'])) {
 				<td>
 					<div class="inner-container" style="margin-top: 20px;">
 						<div class="bill-detail">
+
+
+
 							<table class="table table-bordered">
 								<thead>
 									<tr>
@@ -416,6 +391,79 @@ if(isset($_GET['deposit_id'])) {
 											<div class="text-center"><?php echo $data_ninety['ps']; ?></div>
 										</td>
 									</tr>
+
+
+									<tr>
+										<td><?php echo $page_start ?></td>
+										<td>
+											<?php echo $value->product_name; ?>
+											<span style="width:110px;float: right;text-align: left;"><?php echo $value->product_type; ?></span>
+										</td>
+										<td>
+											<div class="text-center"><?php echo $value->qty; ?></div>
+										</td>
+										<td>
+											<div class="text-center" style="text-align: right;"><?php echo $data_thirty['rs']; ?></div>
+										</td>
+										<td>
+											<div class="text-center"><?php echo $data_thirty['ps']; ?></div>
+										</td>
+										<td>
+											<div class="text-center" style="text-align: right;"><?php echo $data_ninety['rs']; ?></div>
+										</td>
+										<td>
+											<div class="text-center"><?php echo $data_ninety['ps']; ?></div>
+										</td>
+									</tr>
+
+
+									<tr>
+										<td><?php echo $page_start ?></td>
+										<td>
+											<?php echo $value->product_name; ?>
+											<span style="width:110px;float: right;text-align: left;"><?php echo $value->product_type; ?></span>
+										</td>
+										<td>
+											<div class="text-center"><?php echo $value->qty; ?></div>
+										</td>
+										<td>
+											<div class="text-center" style="text-align: right;"><?php echo $data_thirty['rs']; ?></div>
+										</td>
+										<td>
+											<div class="text-center"><?php echo $data_thirty['ps']; ?></div>
+										</td>
+										<td>
+											<div class="text-center" style="text-align: right;"><?php echo $data_ninety['rs']; ?></div>
+										</td>
+										<td>
+											<div class="text-center"><?php echo $data_ninety['ps']; ?></div>
+										</td>
+									</tr>
+
+									<tr>
+										<td><?php echo $page_start ?></td>
+										<td>
+											<?php echo $value->product_name; ?>
+											<span style="width:110px;float: right;text-align: left;"><?php echo $value->product_type; ?></span>
+										</td>
+										<td>
+											<div class="text-center"><?php echo $value->qty; ?></div>
+										</td>
+										<td>
+											<div class="text-center" style="text-align: right;"><?php echo $data_thirty['rs']; ?></div>
+										</td>
+										<td>
+											<div class="text-center"><?php echo $data_thirty['ps']; ?></div>
+										</td>
+										<td>
+											<div class="text-center" style="text-align: right;"><?php echo $data_ninety['rs']; ?></div>
+										</td>
+										<td>
+											<div class="text-center"><?php echo $data_ninety['ps']; ?></div>
+										</td>
+									</tr>																		
+
+
 								<?php
 									if($tota_row == $page_start) {
 										$total_thirty_days = splitCurrency($invoice_data->total_thirty_days);
@@ -451,6 +499,11 @@ if(isset($_GET['deposit_id'])) {
 									$page_start++;
 								}
 								?>
+
+
+
+
+
 								
 							</table>
 						</div>
@@ -463,7 +516,7 @@ if(isset($_GET['deposit_id'])) {
 	</tbody>
 </table>
 
-<div class="footer">
+<div class="footer" style="margin-bottom:25px;">
 		<div class="inner-container">
 			<div  class="left-float" style="width: 434px">
 				<div style="width: 100%;">
@@ -526,9 +579,9 @@ if(isset($_GET['deposit_id'])) {
 			<div class="clear"></div>
 		</div>
 
-		<div class="inner-container foot" style="width: 810px;line-height: 25px;font-size: 14px;color: #fff !important;">
-			<div class="left-float" style="width:325px;font-size: 14px;color: #fff !important;text-align: center;">Email : infojbcaccesss@gmail.com</div>
-			<div class="left-float" style="width:325px;font-size: 14px;color: #fff !important;text-align: center;">Website : www.jcbascdfdsgdfg.in</div>
+		<div class="inner-container foot" style="width: 794px;line-height: 25px;font-size: 14px;color: #fff !important;">
+			<div class="left-float" style="width:317px;font-size: 14px;color: #fff !important;text-align: center;">Email : infojbcaccesss@gmail.com</div>
+			<div class="left-float" style="width:317px;font-size: 14px;color: #fff !important;text-align: center;">Website : www.jcbascdfdsgdfg.in</div>
 			<div class="clear"></div>
 		</div>
 </div>

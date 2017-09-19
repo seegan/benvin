@@ -18,7 +18,7 @@ function my_footer_shh() {
 	remove_menu_page( 'jetpack' );                    //Jetpack* 
 	remove_menu_page( 'edit.php' );                   //Posts
 	remove_menu_page( 'upload.php' );                 //Media
-	remove_menu_page( 'edit.php?post_type=page' );    //Pages
+	//remove_menu_page( 'edit.php?post_type=page' );    //Pages
 	remove_menu_page( 'edit-comments.php' );          //Comments
 	remove_menu_page( 'themes.php' );                 //Appearance
 	remove_menu_page( 'plugins.php' );                //Plugins
@@ -270,12 +270,20 @@ if ( is_admin() ){
 function create_initial_pages() {
 
     $pages = array( 
+        'Quotation' => array(
+            'Quotation'=>'template-quotation-invoice.php'),
         'Deposit' => array(
             'Deposit Invoice'=>'template-deposit-invoice.php'),
         'Delivery' => array(
             'Delivery Invoie'=>'template-delivery-invoice.php'),
         'Return' => array(
             'Return Invoice'=>'template-return-invoice.php'),
+        'Hiring Bill' => array(
+            'Hiring Bill'=>'template-hiring-invoice.php'),
+        'Receipt' => array(
+            'Receipt'=>'template-receipt-invoice.php'),
+        'Statement' => array(
+            'Statement'=>'template-statement-invoice.php'),
     );
 
     foreach( $pages as $page_url_title => $page_meta ) {
