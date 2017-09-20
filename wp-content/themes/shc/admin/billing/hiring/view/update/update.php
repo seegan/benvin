@@ -111,13 +111,11 @@
 									</thead>
 									<tbody>
 									<?php
-
-
 										if($bill_data && isset($bill_data['hiring_detail']) && count($bill_data['hiring_detail']) > 0) {
 											$i = 1;
 											foreach ($bill_data['hiring_detail'] as $h_value) {
 									?>
-										<tr class="div-table-row" class="div-table-row" >
+										<tr class="div-table-row" class="div-table-row">
 											<td>
 												<div class="rowno align-txt">
 													<?php echo $i; ?>

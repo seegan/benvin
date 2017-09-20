@@ -16,25 +16,32 @@
 </head>
 <body class="page">
 <?php
-$bill_from_comp = getHiringBillDataPrint($_GET['bill_no']);
-if(isset($bill_from_comp['hiring_data']) && isset($_GET['bill_no']) && $_GET['bill_no'] != '') {
-	$company_id = $bill_from_comp['hiring_data']->bill_from_comp;
+$hiring_data = false;
+$bill_data = getHiringBillDataPrint($_GET['bill_no']);
+if(isset($bill_data['hiring_data']) && isset($_GET['bill_no']) && $_GET['bill_no'] != '') {
+	$hiring_data = $bill_data['hiring_data'];
+
+	$company_id = $hiring_data->bill_from_comp;
 	$company_data = getCompaniesById($company_id);
+
+	$master_data = getMasterDetail($hiring_data->master_id);
+	$master_data = ($master_data) ? $master_data : false;
+
+	$customer_id = $master_data['master_data']->customer_id;
+	$site_id = $master_data['master_data']->site_id;
+
+	$customer_detail = getCustomerData($customer_id);
+	$site_detail = getSiteData($site_id);
+
+	$bill_number = billNumberText($company_id, $bill_data['hiring_data']->bill_no, 'HB');
+
+	$tax_for = $hiring_data->tax_from;
 }
 
-
-
-
-
-if(isset($_GET['bill_no'])) {
-	$security_data = getDepositDetail($_GET['bill_no']);
-	$invoice_data = $security_data['invoice_data'];
-	$deposit_detail = $security_data['deposit_detail'];
-
-	$dt = new DateTime($security_data['deposit_data']->deposit_date);
-	$date = $dt->format('d-m-Y');
-	$time = $dt->format('h:i A');
-}
+/*echo "<pre>";
+var_dump($hiring_data);
+echo "</pre>";
+*/
 ?>
 	<style type="text/css">
 
@@ -49,6 +56,9 @@ if(isset($_GET['bill_no'])) {
 
 /*total width 794*/
 
+			.body {
+				font-family: "Lucida Sans Unicode", "Lucida Grande", "sans-serif";
+			}
 			.inner-container {
 				padding-left: 100px;
 				padding-right: 60px;
@@ -83,11 +93,17 @@ if(isset($_GET['bill_no'])) {
 			.company-detail-left {
 				width: 444px;
 			}
-			.company-detail-left .company-name h3{
+			.company-detail-left .company-name h3 {
 			    font-family: serif;
     			font-weight: bold;
     			font-size: 24px;
+    			margin-bottom: 3px;
 			}
+			.company-detail-left .company-address {
+			    font-size: 13px;
+    			font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+			}
+
 			.customer-detail-right {
 				width: 234px;
 			}
@@ -95,21 +111,16 @@ if(isset($_GET['bill_no'])) {
 			.text-center {
 				text-align: center;
 			}
-
+			.text-rigth {
+				text-align: right;
+			}
 		    .table td, .table th {
 		      background-color: transparent !important;
 		    }
 		    .bill-detail {
 		    	height: 650px;
 		    }
-			.bill-detail thead tr {
-			    background-color: #67a3b7 !important;
-			    -webkit-print-color-adjust: exact;
-			}
-			.bill-detail thead tr th div{
-			    color: #fff !important;
-			    -webkit-print-color-adjust: exact;
-			}
+
 			.footer {
 				position: fixed;
             	bottom: 0px;
@@ -121,12 +132,19 @@ if(isset($_GET['bill_no'])) {
 			}
 
 			.table>tbody>tr>td {
-				padding:5px;
-				height: 29px;
+				padding: 0 3px;
+				height: 20px;
 			}
-			.table-bordered>tbody>tr>td {
-				border: 1px solid #67a3b7 !important;
+			.table-bordered>tbody>tr>td, .table-bordered>thead>tr>th {
+				border: 1px solid #000 !important;
 				-webkit-print-color-adjust: exact;
+			}
+
+			.billing-title {
+				text-align: center;
+				font-weight: bold;
+				font-size: 14px;
+    			text-decoration: underline;
 			}
 
 		}
@@ -176,7 +194,7 @@ if(isset($_GET['bill_no'])) {
     			margin-bottom: 3px;
 			}
 			.company-detail-left .company-address {
-			    font-size: 14px;
+			    font-size: 13px;
     			font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 			}
 
@@ -187,21 +205,16 @@ if(isset($_GET['bill_no'])) {
 			.text-center {
 				text-align: center;
 			}
-
+			.text-rigth {
+				text-align: right;
+			}
 		    .table td, .table th {
 		      background-color: transparent !important;
 		    }
 		    .bill-detail {
 		    	height: 650px;
 		    }
-			.bill-detail thead tr {
-			    background-color: #67a3b7 !important;
-			    -webkit-print-color-adjust: exact;
-			}
-			.bill-detail thead tr th div{
-			    color: #fff !important;
-			    -webkit-print-color-adjust: exact;
-			}
+
 			.footer {
 				position: fixed;
             	bottom: 0px;
@@ -213,11 +226,11 @@ if(isset($_GET['bill_no'])) {
 			}
 
 			.table>tbody>tr>td {
-				padding:5px;
-				height: 29px;
+				padding: 0 3px;px;
+				height: 20px;
 			}
-			.table-bordered>tbody>tr>td {
-				border: 1px solid #67a3b7 !important;
+			.table-bordered>tbody>tr>td, .table-bordered>thead>tr>th {
+				border: 1px solid #000 !important;
 				-webkit-print-color-adjust: exact;
 			}
 
@@ -232,7 +245,7 @@ if(isset($_GET['bill_no'])) {
 
 
 
-<table class="" style="margin-top: 25px;"> 
+<table class="" > 
 	<thead>
 		<tr>
 			<td>
@@ -253,9 +266,9 @@ if(isset($_GET['bill_no'])) {
 
 						<div class="company-address">
 						<?php
-							if(isset($_GET['tax_from']) && $_GET['tax_from'] == 'no_tax') {
+							if(isset($tax_for) && $tax_for == 'no_tax') {
 								echo "";
-							} else if(isset($_GET['tax_from']) && $_GET['tax_from'] == 'vat') {
+							} else if(isset($tax_for) && $tax_for == 'vat') {
 								echo "<b>TIN: ".$company_data->tin_number."</b>";
 							} else {
 								echo "<b>GSTIN: ".$company_data->gst_number."</b>";
@@ -277,63 +290,50 @@ if(isset($_GET['bill_no'])) {
 				</div>
 			</td>
 		</tr>
+	</thead>
+	<tbody>
 		<tr>
 			<td>
-				<div class="customer-detail inner-container">
-					<table class="table table-bordered">
-						<tr>
-							<td>
-								
-									wsd
-								
-							</td>
-						</tr>
-					</table>
-				</div>
-			</td>
-		</tr>
-	</thead>
-</table>
 
 
 
 
-<table class="" style="margin-top: 25px;"> 
+
+
+
+
+<table class=""> 
 
 	<tbody>
-
-		<tr>
-			<td>
-
-
-			</td>
-		</tr>
 
 
 		<?php
 			$pages = false;
-			$per_page = 17;
+			$per_page = 16;
 			$pieces = false;
 			$tota_row = 0;
 
-			if($deposit_detail) {
-				$pages = ceil(count($deposit_detail)/$per_page);
-				$pieces = array_chunk($deposit_detail, $per_page);
-
-				$tota_row = count($deposit_detail);
+			if($hiring_data) {
+				$pages = ceil(count($bill_data['hiring_detail'])/$per_page);
+				$pieces = array_chunk($bill_data['hiring_detail'], $per_page);
+				$tota_row = count($bill_data['hiring_detail']);
+				$reminder = ($tota_row % $per_page);
+/*				$page_short = false;
+				if($reminder > 12) {
+					$pages = $pages + 1;
+					$page_short = true;
+				}*/
 			}
 
 
-
-			for ($i=0; $i < $pages; $i++) { 
+			for ($i = 0; $i < $pages; $i++) { 
 				$page_start = ( $i * $per_page ) + 1;
 
 				$current_page = ($i + 1);
-
 		?>
 			<tr>
 				<td>
-					<div class="inner-container" style="margin-top: 20px;">
+					<div class="inner-container" style="margin-top: 1px;">
 						<div class="bill-detail">
 
 
@@ -341,168 +341,394 @@ if(isset($_GET['bill_no'])) {
 							<table class="table table-bordered">
 								<thead>
 									<tr>
-										<th style="width:50px;" class="center-th" rowspan="2">
+										<th colspan="4">
+											<div style="min-height: 100px;padding:10px;">
+												<div style="line-height:10px;">
+													To: 
+												</div>
+												<div style="margin-left:30px;line-height:10px;">
+													<?php
+														echo $customer_detail->name;
+													?>
+												</div>
+												<div style="margin-left:30px;margin-top:5px;">
+													<?php
+														echo $customer_detail->address;
+													?>
+												</div>
+											</div>
+										</th>
+										<th colspan="4">
+											<div style="min-height: 100px;padding:10px;">
+												<div>
+													<div style="line-height: 20px;height: 25px;">
+														<div style="float:left;width: 60px">BILL NO</div>
+														<div style="float:left;">
+															: <?php echo $bill_number['bill_no']; ?>
+														</div>
+														<div class="clear"></div>
+													</div>
+													<div style="line-height: 20px;height: 25px;">
+														<div style="float:left;width: 60px">DATE</div>
+														<div style="float:left;">
+															: <?php echo date('d-m-Y', strtotime($hiring_data->bill_date)); ?>
+														</div>
+														<div class="clear"></div>
+													</div>
+													<div style="line-height: 20px;height: 25px;">
+														<div style="float:left;width: 60px">SITE</div>
+														<div style="float:left;">
+															: <?php echo $site_detail->site_name; ?>
+														</div>
+														<div class="clear"></div>
+													</div>
+													<div class="clear"></div>
+												</div>
+											</div>
+										</th>
+									</tr>
+									<tr>
+										<th style="width:35px;padding:0" class="center-th" rowspan="2">
 											<div class="text-center">S.No</div>
 										</th>
 										<th class="center-th" style="" rowspan="2">
 											<div class="text-center">Description</div>
 										</th>
-										<th class="center-th" style="width:70px;" rowspan="2">
+										<th class="center-th" style="width:35px;padding:0;" rowspan="2">
 											<div class="text-center">Qty</div>
 										</th>
-										<th class="center-th" style="padding: 0;" colspan="2">
-											<div class="text-center">Rate/30 Days</div>
+										<th class="center-th" style="padding: 0;" colspan="3">
+											<div class="text-center">Peroid</div>
 										</th>
-										<th class="center-th" style="padding: 0;" colspan="2">
-											<div class="text-center">Amount@<?php echo $invoice_data->amt_times; ?> Times</div>
+										<th class="center-th" style="padding: 0;">
+											<div class="text-center">Rate/Day</div>
+										</th>
+										<th class="center-th" style="padding: 0;width: 80px;">
+											<div class="text-center">Amount</div>
 										</th>
 									</tr>
 									<tr>
-										<th style="padding: 0;width: 70px;"><div class="text-center">Rs</div></th>
-										<th style="padding: 0;width: 35px;"><div class="text-center">Ps</div></th>
-										<th style="padding: 0;width: 80px;"><div class="text-center">Rs</div></th>
-										<th style="padding: 0;width: 35px;"><div class="text-center">Ps</div></th>
+										<th style="padding: 0;width: 70px;"><div class="text-center">From</div></th>
+										<th style="padding: 0;width: 70px;"><div class="text-center">To</div></th>
+										<th style="padding: 0;width: 35px;"><div class="text-center">No of Days</div></th>
+										<th style="padding: 0;width: 65px;"><div class="text-right">Rs Ps</div></th>
+										<th style="padding: 0;width: 35px;"><div class="text-right">Rs Ps</div></th>
 									</tr>
 								</thead>
-								<?php 
-								foreach ($pieces[$i] as $key => $value) {
-									$data_thirty = splitCurrency($value->rate_thirty);
-									$data_ninety = splitCurrency($value->rate_ninety);
-								?>
-									<tr>
-										<td><?php echo $page_start ?></td>
-										<td>
-											<?php echo $value->product_name; ?>
-											<span style="width:110px;float: right;text-align: left;"><?php echo $value->product_type; ?></span>
-										</td>
-										<td>
-											<div class="text-center"><?php echo $value->qty; ?></div>
-										</td>
-										<td>
-											<div class="text-center" style="text-align: right;"><?php echo $data_thirty['rs']; ?></div>
-										</td>
-										<td>
-											<div class="text-center"><?php echo $data_thirty['ps']; ?></div>
-										</td>
-										<td>
-											<div class="text-center" style="text-align: right;"><?php echo $data_ninety['rs']; ?></div>
-										</td>
-										<td>
-											<div class="text-center"><?php echo $data_ninety['ps']; ?></div>
-										</td>
-									</tr>
-
-
-									<tr>
-										<td><?php echo $page_start ?></td>
-										<td>
-											<?php echo $value->product_name; ?>
-											<span style="width:110px;float: right;text-align: left;"><?php echo $value->product_type; ?></span>
-										</td>
-										<td>
-											<div class="text-center"><?php echo $value->qty; ?></div>
-										</td>
-										<td>
-											<div class="text-center" style="text-align: right;"><?php echo $data_thirty['rs']; ?></div>
-										</td>
-										<td>
-											<div class="text-center"><?php echo $data_thirty['ps']; ?></div>
-										</td>
-										<td>
-											<div class="text-center" style="text-align: right;"><?php echo $data_ninety['rs']; ?></div>
-										</td>
-										<td>
-											<div class="text-center"><?php echo $data_ninety['ps']; ?></div>
-										</td>
-									</tr>
-
-
-									<tr>
-										<td><?php echo $page_start ?></td>
-										<td>
-											<?php echo $value->product_name; ?>
-											<span style="width:110px;float: right;text-align: left;"><?php echo $value->product_type; ?></span>
-										</td>
-										<td>
-											<div class="text-center"><?php echo $value->qty; ?></div>
-										</td>
-										<td>
-											<div class="text-center" style="text-align: right;"><?php echo $data_thirty['rs']; ?></div>
-										</td>
-										<td>
-											<div class="text-center"><?php echo $data_thirty['ps']; ?></div>
-										</td>
-										<td>
-											<div class="text-center" style="text-align: right;"><?php echo $data_ninety['rs']; ?></div>
-										</td>
-										<td>
-											<div class="text-center"><?php echo $data_ninety['ps']; ?></div>
-										</td>
-									</tr>
-
-									<tr>
-										<td><?php echo $page_start ?></td>
-										<td>
-											<?php echo $value->product_name; ?>
-											<span style="width:110px;float: right;text-align: left;"><?php echo $value->product_type; ?></span>
-										</td>
-										<td>
-											<div class="text-center"><?php echo $value->qty; ?></div>
-										</td>
-										<td>
-											<div class="text-center" style="text-align: right;"><?php echo $data_thirty['rs']; ?></div>
-										</td>
-										<td>
-											<div class="text-center"><?php echo $data_thirty['ps']; ?></div>
-										</td>
-										<td>
-											<div class="text-center" style="text-align: right;"><?php echo $data_ninety['rs']; ?></div>
-										</td>
-										<td>
-											<div class="text-center"><?php echo $data_ninety['ps']; ?></div>
-										</td>
-									</tr>																		
 
 
 								<?php
-									if($tota_row == $page_start) {
-										$total_thirty_days = splitCurrency($invoice_data->total_thirty_days);
-										$total_ninety_days = splitCurrency($invoice_data->total_ninety_days);
+									if($current_page > 1) {
 								?>
 										<tr>
 											<td></td>
+											<td>
+												<div class="text-center">BF / TOTAL</div>
+											</td>
+											<td><div class="text-center">-</div></td>
+											<td><div class="text-center">-</div></td>
+											<td><div class="text-center">-</div></td>
+											<td><div class="text-center">-</div></td>
+											<td><div class="text-right">-</div></td>
 											<td></td>
-											<td></td>
-											<td></td>
-											<td></td>
-											<td></td>
-											<td></td>
-										</tr>
-										<tr>
-											<td></td>
-											<td></td>
-											<td></td>
-											<td></td>
-											<td></td>
-											<td></td>
-											<td></td>
-										</tr>
-										<tr>
-											<td colspan="3"><div class="text-center">Total</div></td>
-											<td><div class="text-center" style="text-align: right;"><?php echo $total_thirty_days['rs'] ?></div></td>
-											<td><div class="text-center"><?php echo $total_thirty_days['ps'] ?></div></td>
-											<td style="text-align: right;"><div class="text-center" style="text-align: right;"><?php echo $total_ninety_days['rs'] ?></div></td>
-											<td><div class="text-center"><?php echo $total_ninety_days['ps'] ?></div></td>
 										</tr>
 								<?php
 									}
+								foreach ($pieces[$i] as $key => $value) {
+								?>
+									<tr>
+										<td>
+											<div class="text-center">
+												<?php echo $page_start ?>
+											</div>
+										</td>
+										<td>
+											<?php echo $value->product_name; ?>
+											<span style="text-align: left;"><?php echo $value->product_type; ?></span>
+										</td>
+										<td>
+											<div class="text-center">
+												<?php echo $value->qty; ?>
+											</div>
+										</td>
+										<td>
+											<div class="text-center" style="text-align: right;">
+												<?php echo date('d.m.Y', strtotime($value->bill_from));?>
+											</div>
+										</td>
+										<td>
+											<div class="text-center">
+												<?php echo date('d.m.Y', strtotime($value->bill_to));?>
+											</div>
+										</td>
+										<td>
+											<div class="text-center">
+												<?php echo $value->bill_days; ?>
+											</div>
+										</td>
+										<td>
+											<div class="text-rigth">
+												<?php echo $value->rate_per_day; ?>
+											</div>
+										</td>
+										<td>
+											<div class="text-rigth">
+												<?php echo $value->amount; ?>
+											</div>
+										</td>
+									</tr>
+
+
+								<?php
 									$page_start++;
 								}
+
+
+									if($pages == $current_page) {
 								?>
+										<tr>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+										</tr>
+										<tr>
+											<td colspan="7">MRR Transport & Unloading </td>
+											<td>
+												<div class="text-rigth">
+													<?php echo $hiring_data->transportation_charge; ?>
+												</div>
+											</td>
+										</tr>
+										<?php
+											if($hiring_data->discount_avail != 'no') {
+										?>
+										<tr>
+											<td colspan="7"><div class="text-center">Discount</div></td>
+											<td>
+												<div class="text-right">
+													<?php echo $hiring_data->discount_amount; ?>
+												</div>
+											</td>
+										</tr>
+										<?php
+											}
+										?>
+
+										<tr>
+											<td colspan="7"><div class="text-center">Taxable Amount</div></td>
+											<td>
+												<div class="text-right"><?php echo $hiring_data->total_after_discount; ?></div>
+											</td>
+										</tr>
+										<tr>
+											<td colspan="7"><div class="text-center"><b>CGST - 9%</b></div></td>
+											<td>
+												<div class="text-rigth">
+													<?php echo $hiring_data->cgst_amt; ?>
+												</div>
+											</td>
+										</tr>
+										<tr>
+											<td colspan="7"><div class="text-center"><b>SGST - 9%</b></div></td>
+											<td>
+												<div class="text-rigth">
+													<?php echo $hiring_data->sgst_amt; ?>
+												</div>
+											</td>
+										</tr>
+										<tr>
+											<td colspan="7"><div class="text-center">Total Including Tax</div></td>
+											<td>
+												<div class="text-right">
+													<?php echo $hiring_data->tax_include_tot; ?>
+												</div>
+											</td>
+										</tr>
+										<tr>
+											<td colspan="7"><div class="text-center">Round off</div></td>
+											<td>
+												<div class="text-right">
+													<?php echo $hiring_data->round_off; ?>
+												</div>
+											</td>
+										</tr>
+										<tr>
+											<td colspan="7"><div class="text-center"><b>Total</b></div></td>
+											<td>
+												<div class="text-right">
+													<?php echo $hiring_data->hiring_total; ?>
+												</div>
+											</td>
+										</tr>
 
 
+										<table class="table table-bordered">
+											<thead>
+												<tr>
+													<th class="center-th" style="" rowspan="2">
+														<div class="text-center">HSN</div>
+													</th>
+													<th class="center-th" style="width:90px;padding:0;" rowspan="2">
+														<div class="text-center">Taxable Value</div>
+													</th>
+													<?php 
+														if($hiring_data->gst_for == 'cgst') {
+													?>
+															<th class="center-th" style="padding: 0;" colspan="2">
+																<div class="text-center">CGST</div>
+															</th>
+															<th class="center-th" style="padding: 0;" colspan="2">
+																<div class="text-center">SGST</div>
+															</th>
+													<?php
+														}
+														if($hiring_data->gst_for == 'igst') {
+													?>
+															<th class="center-th" style="padding: 0;" colspan="2">
+																<div class="text-center">IGST</div>
+															</th>
+													<?php
+														}
+													?>
 
+												</tr>
+												<tr>
+													<?php 
+														if($hiring_data->gst_for == 'cgst') {
+													?>
+															<th style="padding: 0;width: 70px;"><div class="text-center">Rate</div></th>
+															<th style="padding: 0;width: 70px;"><div class="text-center">Amount</div></th>
+															<th style="padding: 0;width: 70px;"><div class="text-center">Rate</div></th>
+															<th style="padding: 0;width: 70px;"><div class="text-center">Amount</div></th>
+													<?php
+														}
+														if($hiring_data->gst_for == 'igst') {
+													?>
+															<th style="padding: 0;width: 70px;"><div class="text-center">Rate</div></th>
+															<th style="padding: 0;width: 70px;"><div class="text-center">Amount</div></th>
+													<?php 
+														}
+													?>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td>
+														<div class="text-center">
+															4545
+														</div>
+													</td>
+													<td>
+														<div class="text-right">
+															<?php echo $hiring_data->total_after_discount; ?>
+														</div>
+													</td>
+													<?php 
+														if($hiring_data->gst_for == 'cgst') {
+													?>
+															<td>
+																<div class="text-right">
+																	9%
+																</div>
+															</td>
+															<td>
+																<div class="text-right">
+																	<?php echo $hiring_data->cgst_amt; ?>
+																</div>
+															</td>
+															<td>
+																<div class="text-right">
+																	9%
+																</div>
+															</td>
+															<td>
+																<div class="text-right">
+																	<?php echo $hiring_data->sgst_amt; ?>
+																</div>
+															</td>
+													<?php
+														}
+														if($hiring_data->gst_for == 'igst') {
+													?>
+															<td>
+																<div class="text-right">
+																	18%
+																</div>
+															</td>
+															<td>
+																<div class="text-right">
+																	<?php echo $hiring_data->igst_amt; ?>
+																</div>
+															</td>
+													<?php
+														}
+													?>
+												</tr>
+												<tr>
+													<td>
+														<div class="text-right">
+															<b>Total</b>
+														</div>
+													</td>
+													<td>
+														<div class="text-right">
+															<?php echo $hiring_data->total_after_discount; ?>
+														</div>
+													</td>
+													<td>
+														<div class="text-right">
+														
+														</div>
+													</td>
+													<?php 
+														if($hiring_data->gst_for == 'cgst') {
+													?>
+														<td>
+															<div class="text-right">
+																<?php echo $hiring_data->cgst_amt; ?>
+															</div>
+														</td>
+														<td></td>
+														<td>
+															<div class="text-right">
+																<?php echo $hiring_data->sgst_amt; ?>
+															</div>														
+														</td>
+													<?php 
+														}
+														if($hiring_data->gst_for == 'igst') {
+													?>
+														<td></td>
+														<td>
+															<div class="text-right">
+																<?php echo $hiring_data->igst_amt; ?>
+															</div>	
+														</td>
+													<?php
+													}
+													?>
+												</tr>
+											</tbody>
 
+										</table>
+								<?php
+									} else {
+								?>
+										<tr>
+											<td colspan="7">
+												<div class="text-center">CF / TOTAL</div>
+											</td>
+											<td></td>
+										</tr>
+								<?php
+									}
+
+								?>
 
 								
 							</table>
@@ -515,6 +741,21 @@ if(isset($_GET['bill_no'])) {
 		?>
 	</tbody>
 </table>
+
+
+
+
+
+
+
+
+
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+
 
 <div class="footer" style="margin-bottom:25px;">
 		<div class="inner-container">
