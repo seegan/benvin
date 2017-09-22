@@ -1,4 +1,6 @@
-jQuery(document).ready(function () { 
+jQuery(document).ready(function () {
+  jQuery(".txtEditor1").richText();
+
 	populate_site_select_search('old', 'quotation');
 
 
@@ -92,6 +94,9 @@ function processDepositFull() {
   total_after_discount = total_after_discount.toFixed(2);
   jQuery('.after_discount_amt').val(total_after_discount);
 
+  var security_amt = (total_after_discount*3 ).toFixed(2)
+  jQuery('.security_amt').text(security_amt);
+
   var total_after_discount_sp = splitRupee(total_after_discount);
   jQuery('.after_discount_txt').text(total_after_discount_sp[0]);
   jQuery('.after_discount_txt_p').text(total_after_discount_sp[1]);
@@ -118,6 +123,8 @@ function processDepositFull() {
   final_total = Math.round10(final_total.toFixed(3), -2);
   final_total = final_total.toFixed(2);
   jQuery('.hiring_tot_val').val(final_total);
+
+  jQuery('.pdc_amt').text(final_total);
 
   var final_total_sp = splitRupee(final_total);
   jQuery('.hiring_tot_txt').text(final_total_sp[0]);

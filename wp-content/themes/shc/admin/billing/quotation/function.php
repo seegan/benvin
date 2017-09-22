@@ -5,7 +5,10 @@ function load_quotation_scripts() {
 	wp_enqueue_script( 'quotation-script', get_template_directory_uri() . '/admin/billing/inc/js/quotation.js', array('jquery'), false, false );
 
 	if( (is_admin() ) && (isset($_GET['page'])) && ( $_GET['page'] == 'new_quotation' ) ) {
+		wp_enqueue_style( 'richtext-editor', get_template_directory_uri() . '/admin/billing/inc/css/richtext.min.css' );
+
 		wp_enqueue_script( 'quotation-script-dub', get_template_directory_uri() . '/admin/billing/inc/js/quotation-dub.js', array('jquery'), false, false );
+		wp_enqueue_script( 'richtext-editor', get_template_directory_uri() . '/admin/billing/inc/js/jquery.richtext.js', array('jquery'), false, false );
 	}
 }
 add_action( 'admin_enqueue_scripts', 'load_quotation_scripts' );
@@ -27,6 +30,12 @@ function create_quotation() {
 
 	$quotation_date = $params['date'].' '.$params['time'].':00';
 	$financial_year = getFinancialYear( $params['date'] );
+
+
+
+echo "<pre>";
+var_dump($params);
+die();
 
 	//$bill_detail = getBillDetail( $params['customer_id'], 'quotation');
 
@@ -58,7 +67,6 @@ function create_quotation() {
 
 
 	if(isset($params['action']) && $params['action'] == 'create_quotation') {
-
 
 		$bill_no_data = getCorrectBillNumber($params['bill_no'], $params['site_id'], 'shc_quotatio', $params['date']);
 

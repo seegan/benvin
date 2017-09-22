@@ -61,7 +61,7 @@
 
 									echo '<div class="address-line">Bill No : ';
 									echo '	<span class="deposit-time">';
-									echo $site_detail->company_id."Quotation No. <input type='text' style='border-color: rgba(118, 118, 118, 0);height: 34px;margin: 0;' value='".$site_detail->next_bill_no."' name='bill_no' class='bill bill_no'>";
+									echo $site_detail->company_id." / Quotation No. <input type='text' style='border-color: rgba(118, 118, 118, 0);height: 34px;margin: 0;' value='".$site_detail->next_bill_no."' name='bill_no' class='bill bill_no'>";
 									echo '<img src="'.get_template_directory_uri() . '/admin/inc/images/5.gif" style="width: 20px;display:none;" class="loadin-billfrom">';
 									echo '<img src="'.get_template_directory_uri() . '/admin/inc/images/check.png" style="width: 20px;display:none;" class="loadin-check">';
 									echo '<img src="'.get_template_directory_uri() . '/admin/inc/images/cross.png" style="width: 20px;display:none;" class="loadin-cross">';
@@ -374,6 +374,21 @@
 							</div>
 
 
+
+							<div class="row">
+								<div class="col-lg-12">
+									<h2><u>Requirements</u></h2>
+
+									<ul>
+										<li>
+											<textarea class="txtEditor1" name="quotation_txt"><div>1. Security Deposit - Advance For Rs. <span class="security_amt">0.00</span></div><div></br></div><div>2. Confermation Throw your Work Order</div><div></br></div><div>3. 6 nos PDC Cheques of Rs. <span class="pdc_amt">0.00</span> payable towards hire charges + GST</div><div>( If PDCs given and Honoured on respective dates aditional Discount of 5% is Eligible )</div><div></br></div><div>4. Agreement and Indemnity Bond to be executed before delivery of materials</div><div></br></div><div>5. Loading Charges at warehouse Rs. 10000.00</div><div></br></div><div>6. Unloading and Loading at Site - Your Scope</div><div></br></div><div>7. Transportation charges up from warehouseat Ponmar to site - Your Scope </div><div>( app Weight <span class="mt_weight">0</span> MT )</div><div></br></div><div>8. Return Transportation charges from Site to our warehouse at Ponmar (Your Scope)</div></textarea> 
+										</li>
+									</ul>
+									<div>
+										Amount Payable : <input type="text" name="amount_payable" value="0.00">
+									</div>
+								</div>
+							</div>
 
 
 							<div class="row">

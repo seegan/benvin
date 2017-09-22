@@ -85,4 +85,8 @@ function delete_record()
 }
 add_action( 'wp_ajax_delete_record', 'delete_record' );
 add_action( 'wp_ajax_nopriv_delete_record', 'delete_record' );
+
+
+
+
 ?>
