@@ -70,7 +70,7 @@ if(isset($bill_data['quotation_data']) && isset($_GET['quotation_no']) && $_GET[
 	for ($i = 0; $i < $pages; $i++) { 
 		$tot_tmp = 0;
 		foreach ($pieces[$i] as $key => $h_value) {
-			$tot_tmp = $tot_tmp + $h_value->hiring_amt;
+			$tot_tmp = $tot_tmp + $h_value->rate_ninety;
 		}
 		$page_total[$i] = $page_total[$i-1] + $tot_tmp;
 	}
@@ -338,7 +338,7 @@ if(isset($bill_data['quotation_data']) && isset($_GET['quotation_no']) && $_GET[
 				</div>
 				<div class="customer-detail inner-container" style="margin-top: 2px;margin-bottom:2px;">
 					<div class="billing-title">
-						HIRE BILL
+						QUOTATION
 					</div>
 				</div>
 			</td>
@@ -381,7 +381,7 @@ if(isset($bill_data['quotation_data']) && isset($_GET['quotation_no']) && $_GET[
 											<div style="min-height: 100px;padding:5px;">
 												<div>
 													<div style="line-height: 20px;height: 25px;">
-														<div style="float:left;width: 60px">BILL NO</div>
+														<div style="float:left;width: 60px">NO</div>
 														<div style="float:left;">
 															: <?php echo $bill_number['bill_no']; ?>
 														</div>
@@ -534,7 +534,7 @@ if(isset($bill_data['quotation_data']) && isset($_GET['quotation_no']) && $_GET[
 										</tr>
 										<?php
 
-										if($quotation_data->tax_from != 'tax_from') {
+										if($quotation_data->tax_from != 'no_tax') {
 
 											if($quotation_data->tax_from == 'gst') {
 
@@ -624,170 +624,31 @@ if(isset($bill_data['quotation_data']) && isset($_GET['quotation_no']) && $_GET[
 											</tr>
 										</table>
 
-							<?php
-								if($quotation_data->tax_from != 'tax_from') {
-							?>
-										<table class="table table-bordered" style="margin-top:10px;margin-bottom: 5px;">
-											<thead>
-												<tr>
-													<th class="center-th" style="" rowspan="2">
-														<div class="text-center">HSN</div>
-													</th>
-													<th class="center-th" style="width:90px;padding:0;" rowspan="2">
-														<div class="text-center">Taxable Value</div>
-													</th>
-													<?php 
-														if($quotation_data->gst_for == 'cgst') {
-													?>
-															<th class="center-th" style="padding: 0;" colspan="2">
-																<div class="text-center">CGST</div>
-															</th>
-															<th class="center-th" style="padding: 0;" colspan="2">
-																<div class="text-center">SGST</div>
-															</th>
-													<?php
-														}
-														if($quotation_data->gst_for == 'igst') {
-													?>
-															<th class="center-th" style="padding: 0;" colspan="2">
-																<div class="text-center">IGST</div>
-															</th>
-													<?php
-														}
-													?>
+										<div style="font-size: 16px;font-weight: bold;margin: 10px 0;">	<u>Requirements</u>
+										</div>
+										<?php
+											echo $quotation_data->requirements;
+										?>
 
-												</tr>
-												<tr>
-													<?php 
-														if($quotation_data->gst_for == 'cgst') {
-													?>
-															<th style="padding: 0;width: 70px;"><div class="text-center">Rate</div></th>
-															<th style="padding: 0;width: 70px;"><div class="text-center">Amount</div></th>
-															<th style="padding: 0;width: 70px;"><div class="text-center">Rate</div></th>
-															<th style="padding: 0;width: 70px;"><div class="text-center">Amount</div></th>
-													<?php
-														}
-														if($quotation_data->gst_for == 'igst') {
-													?>
-															<th style="padding: 0;width: 70px;"><div class="text-center">Rate</div></th>
-															<th style="padding: 0;width: 70px;"><div class="text-center">Amount</div></th>
-													<?php 
-														}
-													?>
-												</tr>
-											</thead>
-											<tbody>
-												<tr>
-													<td>
-														<div class="text-center">
-															4545
-														</div>
-													</td>
-													<td>
-														<div class="text-right">
-															<?php echo moneyFormatIndia($quotation_data->total_after_discount); ?>
-														</div>
-													</td>
-													<?php 
-														if($quotation_data->gst_for == 'cgst') {
-													?>
-															<td>
-																<div class="text-right">
-																	9%
-																</div>
-															</td>
-															<td>
-																<div class="text-right">
-																	<?php echo moneyFormatIndia($quotation_data->cgst_amt); ?>
-																</div>
-															</td>
-															<td>
-																<div class="text-right">
-																	9%
-																</div>
-															</td>
-															<td>
-																<div class="text-right">
-																	<?php echo moneyFormatIndia($quotation_data->sgst_amt); ?>
-																</div>
-															</td>
-													<?php
-														}
-														if($quotation_data->gst_for == 'igst') {
-													?>
-															<td>
-																<div class="text-right">
-																	18%
-																</div>
-															</td>
-															<td>
-																<div class="text-right">
-																	<?php echo moneyFormatIndia($quotation_data->igst_amt); ?>
-																</div>
-															</td>
-													<?php
-														}
-													?>
-												</tr>
-												<tr>
-													<td>
-														<div class="text-right">
-															<b>Total</b>
-														</div>
-													</td>
-													<td>
-														<div class="text-right">
-															<?php echo moneyFormatIndia($quotation_data->total_after_discount); ?>
-														</div>
-													</td>
-													<td>
-														<div class="text-right">
-														
-														</div>
-													</td>
-													<?php 
-														if($quotation_data->gst_for == 'cgst') {
-													?>
-														<td>
-															<div class="text-right">
-																<?php echo moneyFormatIndia($quotation_data->cgst_amt); ?>
-															</div>
-														</td>
-														<td></td>
-														<td>
-															<div class="text-right">
-																<?php echo moneyFormatIndia($quotation_data->sgst_amt); ?>
-															</div>														
-														</td>
-													<?php 
-														}
-														if($quotation_data->gst_for == 'igst') {
-													?>
-														<td>
-															<div class="text-right">
-																<?php echo moneyFormatIndia($quotation_data->igst_amt); ?>
-															</div>	
-														</td>
-													<?php
-													}
-													?>
-												</tr>
-											</tbody>
-										</table>
-										<table>
-											<tr>
-												<td>Tax Amount (in words)</td>
-											</tr>
-											<tr>
-												<td><b>INR <?php echo ucwords(convert_number_to_words_full($gst_total)); ?></b></td>
-											</tr>
-										</table>
+										<div>
+											<div class="left-float" style="width:40px;">***</div>
+											<div class="left-float" style="width:100%;">
+												
+												<table class="table table-bordered">
+													<tr>
+														<td><div style="text-align: center;width: 200px;">Other Requirements</div></td>
+														<td><div style="text-align: center;">Passport size Photo, ID Proof, Address Proof (Company details, Site details and Contact details) </div></td>
+													</tr>
+												</table>
+											</div>
+											<div class="clear"></div>
+										</div>
+
 								<?php
-								}
 									} else {
 								?>
 										<tr>
-											<td colspan="7">
+											<td colspan="5">
 												<div class="text-center">CF / TOTAL</div>
 											</td>
 											<td>

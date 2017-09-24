@@ -31,27 +31,7 @@ class Statement {
 		$return_table = $wpdb->prefix.'shc_return';
 
 
-/*		var_dump("SELECT loading.* FROM
-			(
-				SELECT d.bill_from_comp, l.deposit_date as r_date, date(l.deposit_date) as bill_date, 'To Loading Charge' as description, CONCAT('SD ', d.bill_no) as bill_ref, '' as credit,  l.loading_charge as debit  FROM ${loading_table} as l JOIN ${deposit_table} as d ON d.id = l.deposit_id WHERE l.active = 1 AND d.active = 1 AND l.master_id = ${master_id} AND date(l.deposit_date) <= date('${date_to}')
-			) as loading");*/
-
-/*shc_deposit*/
-
-
-/*var_dump("			SELECT hiring.* FROM
-			(
-				SELECT 1 as priority, h.bill_from_comp, h.bill_date as r_date, date(h.bill_date) as bill_date, CONCAT('To Hire Bill (', h.bill_from ,' - ', h.bill_to ,')') as description, CONCAT('HB ', h.bill_no) as bill_ref, '' as credit, h.hiring_total as debit FROM ${hiring_table} as h WHERE h.active = 1 AND h.master_id = ${master_id} AND date(h.bill_date) <= date('${date_to}')    
-			) as hiring");*/
-
-
-/*			SELECT loading.* FROM
-			(
-				SELECT 2 as priority, d.bill_from_comp, l.deposit_date as r_date, date(l.deposit_date) as bill_date, 'To Loading Charge' as description, CONCAT('SD ', d.bill_no) as bill_ref, '' as credit,  l.loading_charge as debit  FROM ${loading_table} as l JOIN ${deposit_table} as d ON d.id = l.deposit_id WHERE l.active = 1 AND d.active = 1 AND l.master_id = ${master_id} AND date(l.deposit_date) <= date('${date_to}')
-			) as loading*/
-
-
-		$query = "SELECT * FROM (
+/*		$query = "SELECT * FROM (
 
 
 			SELECT deposit.* FROM 
@@ -90,6 +70,51 @@ class Statement {
 			SELECT lost.* FROM
 			(
 				SELECT 1 as priority, sr.bill_from_comp, NOW() as r_date, '' as bill_date, 'Missing Cost' as description, '' as bill_ref, '' as credit, SUM(lst.lost_total) as debit FROM ${lost_table} as lst JOIN ${return_table} as sr ON lst.return_id = sr.id WHERE lst.master_id = ${master_id} AND date(sr.return_date) <= date('${date_to}') AND lst.active = 1 AND sr.active = 1
+			) as lost
+
+		    
+		) as full ORDER BY full.r_date ASC, full.priority ASC";*/
+
+
+		$query = "SELECT * FROM (
+
+
+			SELECT deposit.* FROM 
+			(
+				SELECT 1 as priority, sd.bill_from_comp, sd.deposit_date as r_date, date(sd.deposit_date) as bill_date, 'To Security Deposit' as description, CONCAT('SD ', sd.bill_no) as bill_ref, '' as credit,  sd.total as debit FROM wp_shc_deposit as sd WHERE sd.active = 1 AND sd.master_id IN (${master_id}) AND date(sd.deposit_date) <= date('${date_to}')
+			) as deposit
+
+			UNION ALL
+
+			SELECT loading.* FROM
+			(
+				SELECT 
+				( CASE 
+				  WHEN ld.charge_for = 'loading' THEN 2
+				  WHEN ld.charge_for = 'transportation' THEN 3
+				END ) as priority,
+				dp.bill_from_comp, dp.r_date, dp.bill_date, CONCAT('To ', ld.charge_for) as description, dp.bill_ref, '' as credit, ld.charge_amt as debit FROM ( SELECT sd.bill_from_comp, sd.deposit_date as r_date, date(sd.deposit_date) as bill_date, CONCAT('SD ', sd.bill_no) as bill_ref, l.id as loading_id  FROM wp_shc_deposit as sd JOIN wp_shc_loading l ON sd.id = l.deposit_id WHERE sd.active = 1 AND sd.master_id IN (${master_id}) AND date(sd.deposit_date) <= date('${date_to}') AND l.active = 1 )  as dp JOIN wp_shc_loading_detail as ld ON dp.loading_id = ld.loading_id WHERE ld.charge_amt != 0.00
+			) as loading
+
+			UNION ALL
+
+			SELECT hiring.* FROM
+			(
+				SELECT 1 as priority, h.bill_from_comp, h.bill_date as r_date, date(h.bill_date) as bill_date, CONCAT('To Hire Bill (', h.bill_from ,' - ', h.bill_to ,')') as description, CONCAT('HB ', h.bill_no) as bill_ref, '' as credit, h.hiring_total as debit FROM ${hiring_table} as h WHERE h.active = 1 AND h.master_id IN (${master_id}) AND date(h.bill_date) <= date('${date_to}')    
+			) as hiring
+
+			UNION ALL
+
+			SELECT cheque.* FROM
+			(
+				SELECT 1 as priority, c.bill_from_comp as bill_from_comp, c.obc_date as r_date, date(c.obc_date) as bill_date, CONCAT('By ',c.cheque_no, ' Dt. ', date(c.cheque_date)) as description, c.notes as bill_ref,  c.cheque_amount as credit, '' as debit FROM ${obc_cheque_table} as c WHERE c.master_id IN (${master_id}) AND date(c.obc_date) <= date('${date_to}') AND c.active = 1  
+			) as cheque
+
+			UNION ALL
+
+			SELECT lost.* FROM
+			(
+				SELECT 1 as priority, sr.bill_from_comp, NOW() as r_date, '' as bill_date, 'Missing Cost' as description, '' as bill_ref, '' as credit, SUM(lst.lost_total) as debit FROM ${lost_table} as lst JOIN ${return_table} as sr ON lst.return_id = sr.id WHERE lst.master_id IN (${master_id}) AND date(sr.return_date) <= date('${date_to}') AND lst.active = 1 AND sr.active = 1
 			) as lost
 
 		    

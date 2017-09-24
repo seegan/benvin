@@ -546,7 +546,7 @@ if(isset($bill_data['hiring_data']) && isset($_GET['bill_no']) && $_GET['bill_no
 										</tr>
 										<?php
 
-										if($hiring_data->tax_from != 'tax_from') {
+										if($hiring_data->tax_from != 'no_tax') {
 
 											if($hiring_data->tax_from == 'gst') {
 
@@ -637,7 +637,7 @@ if(isset($bill_data['hiring_data']) && isset($_GET['bill_no']) && $_GET['bill_no
 										</table>
 
 							<?php
-								if($hiring_data->tax_from != 'tax_from') {
+								if($hiring_data->tax_from != 'no_tax') {
 							?>
 										<table class="table table-bordered" style="margin-top:10px;margin-bottom: 5px;">
 											<thead>

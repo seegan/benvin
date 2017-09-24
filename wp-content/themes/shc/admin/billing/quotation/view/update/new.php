@@ -379,12 +379,17 @@
 								<div class="col-lg-12">
 									<h2><u>Requirements</u></h2>
 
-									<ul>
+									<!-- <ul>
 										<li>
 											<textarea class="txtEditor1" name="quotation_txt"><div>1. Security Deposit - Advance For Rs. <span class="security_amt">0.00</span></div><div></br></div><div>2. Confermation Throw your Work Order</div><div></br></div><div>3. 6 nos PDC Cheques of Rs. <span class="pdc_amt">0.00</span> payable towards hire charges + GST</div><div>( If PDCs given and Honoured on respective dates aditional Discount of 5% is Eligible )</div><div></br></div><div>4. Agreement and Indemnity Bond to be executed before delivery of materials</div><div></br></div><div>5. Loading Charges at warehouse Rs. 1000.00</div><div></br></div><div>6. Unloading and Loading at Site - Your Scope</div><div></br></div><div>7. Transportation charges up from warehouseat Ponmar to site - Your Scope </div><div>( app Weight <span class="mt_weight">0</span> MT )</div><div></br></div><div>8. Return Transportation charges from Site to our warehouse at Ponmar (Your Scope)</div></textarea> 
 										</li>
+									</ul> -->
+
+									<ul>
+										<li>
+											<textarea class="txtEditor1" name="quotation_txt"><ol><li>Security Deposit - Advance For Rs. <span class="security_amt">0.00</span></li><li>Confermation Throw your Work Order</li><li>6 nos PDC Cheques of Rs. <span class="pdc_amt">0.00</span> payable towards hire charges + GST ( If PDCs given and Honoured on respective dates aditional Discount of 5% is Eligible )</li><li>Agreement and Indemnity Bond to be executed before delivery of materials</li><li>Loading Charges at warehouse Rs. 1000.00</li><li>Unloading and Loading at Site - Your Scope</li><li>Transportation charges up from warehouseat Ponmar to site - Your Scope ( app Weight <span class="mt_weight">0</span> MT )</li><li>Return Transportation charges from Site to our warehouse at Ponmar (Your Scope)</li></ol></textarea> 
+										</li>
 									</ul>
-									<div>
 										Amount Payable : <input type="text" name="amount_payable" value="0.00">
 									</div>
 								</div>

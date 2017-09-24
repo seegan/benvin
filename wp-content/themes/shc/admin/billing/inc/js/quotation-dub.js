@@ -95,7 +95,7 @@ function processDepositFull() {
   jQuery('.after_discount_amt').val(total_after_discount);
 
   var security_amt = (total_after_discount*3 ).toFixed(2)
-  jQuery('.security_amt').text(security_amt);
+  jQuery('li .security_amt').text(security_amt).change();;
 
   var total_after_discount_sp = splitRupee(total_after_discount);
   jQuery('.after_discount_txt').text(total_after_discount_sp[0]);
@@ -124,7 +124,7 @@ function processDepositFull() {
   final_total = final_total.toFixed(2);
   jQuery('.hiring_tot_val').val(final_total);
 
-  jQuery('.pdc_amt').text(final_total);
+  jQuery('li .pdc_amt').text(final_total).change();
 
   var final_total_sp = splitRupee(final_total);
   jQuery('.hiring_tot_txt').text(final_total_sp[0]);
