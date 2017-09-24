@@ -436,6 +436,20 @@
 							</div>
 
 
+							<div class="row">
+								<div class="col-lg-12">
+									<h2><u>Requirements</u></h2>
+
+									<ul>
+										<li>
+											<textarea class="txtEditor1" name="quotation_txt"><?php echo $quotation_detail->requirements ?></textarea> 
+										</li>
+									</ul>
+									<div>
+										Amount Payable : <input type="text" name="amount_payable" value="<?php echo $quotation_detail->amount_payable ?>">
+									</div>
+								</div>
+							</div>
 
 
 							<div class="row">

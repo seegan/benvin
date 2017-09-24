@@ -2,3 +2,6 @@ New table wp_shc_return_damage
 New Table wp_shc_return_damage_detail
 
 wp_shc_obc_cheque table add extra_notes, received_by column
+
+
+wp_shc_quotation table add requirements, amount_payable

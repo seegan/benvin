@@ -32,11 +32,6 @@ function create_quotation() {
 	$financial_year = getFinancialYear( $params['date'] );
 
 
-
-echo "<pre>";
-var_dump($params);
-die();
-
 	//$bill_detail = getBillDetail( $params['customer_id'], 'quotation');
 
 
@@ -62,6 +57,8 @@ die();
 		'round_off' => $params['round_off'],
 		'hiring_total' => (isset($params['hiring_discount_avail']) && $params['hiring_discount_avail'] == 'yes') ? $params['after_discount_amt'] : $params['sub_total'],
 		'for_thirty_days' => isset($params['hiring_tot']) ? $params['hiring_tot'] : 0.00,
+		'requirements' => isset($params['quotation_txt']) ? $params['quotation_txt'] : 0.00,
+		'amount_payable' => isset($params['amount_payable']) ? $params['amount_payable'] : 0.00,
 	);
 
 
@@ -143,5 +140,7 @@ function getQutationDetail($quotation_id = '') {
 
 	return $data;
 }
+
+
 
 ?>
