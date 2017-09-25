@@ -70,6 +70,7 @@ function load_custom_wp_admin_style() {
 	wp_localize_script( 'custom_script', 'frontendajax', array( 'ajaxurl' => admin_url( 'admin-ajax.php' )));
 	wp_localize_script( 'custom_script', 'home_page', array( 'url' => home_url( '/' ) ));
 	wp_localize_script( 'custom_script', 'admin_page', array( 'quotation' => admin_url('admin.php?page=new_quotation'), 'deposit' => admin_url('admin.php?page=deposit'), 'delivery' => admin_url('admin.php?page=new_delivery'), 'return' => admin_url('admin.php?page=new_return'), 'hiring' => admin_url('admin.php?page=new_hiring'), 'obc' => admin_url('admin.php?page=new_obc'), 'statement' => admin_url('admin.php?page=new_statement')  ));
+	wp_localize_script( 'custom_script', 'print_page', array( 'quotation' => site_url('quotation'), 'hiring' => site_url('hiring-bill') ));
 
 }
 add_action( 'admin_enqueue_scripts', 'load_custom_wp_admin_style' );
@@ -396,6 +397,7 @@ return "$thecash.$des"; // writes the final format where $currency is the curren
 // Admin footer modification
 function remove_footer_admin() {
 	echo '<div class="delete-box" style="display:none;"><div class="action-block"></div></div>';
+	echo '<div class="print-box" style="display:none;"><div class="action-block"></div></div>';
 }
 add_filter('admin_footer_text', 'remove_footer_admin');
 

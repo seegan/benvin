@@ -59,9 +59,6 @@
 		include( get_template_directory().'/admin/side-menu.php' );
 	?>
 
-
-
-
 		<div class="col-lg-9">
 			<div class="x_panel">
 				<div class="x_title">

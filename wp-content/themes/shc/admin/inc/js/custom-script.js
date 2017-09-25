@@ -36,8 +36,8 @@ jQuery(document).ready(function(){
 
   })
 
-  jQuery('.delete_record').live('click', function(){
 
+  jQuery('.delete_record').live('click', function(){
       var action = jQuery(this).attr('data-action');
       var bill_id = jQuery(this).attr('data-delete-id');
       var action_from = jQuery(this).attr('data-action-from');
@@ -67,6 +67,49 @@ jQuery(document).ready(function(){
       jQuery( ".delete-box .action-block" ).html(bill_txt);
   });
 
+
+  jQuery('.print_record').live('click', function(){
+      var action = jQuery(this).attr('data-action');
+      var bill_id = jQuery(this).attr('data-print-id');
+      var action_from = jQuery(this).attr('data-action-from');
+
+      if(action_from == 'list') {
+        var bill_txt = "Print "+ jQuery(this).closest('tr').find('.bill_txt').text().trim()+" With Headers?";
+        bill_txt += "<div style='text-align:center;'><input type='radio' name='headers_avail' value='yes' checked style='margin-top: -2px;'>Yes <input type='radio' name='headers_avail' value='no' style='margin-top: -2px;'>No</div>";
+      } else {
+        var bill_txt = "Are you Sure to delete this data?";
+      }
+
+      jQuery( ".print-box" ).dialog({
+          resizable: false,
+          height: "auto",
+          width: 400,
+          modal: true,
+          title: "Delete",
+          buttons: {
+              Print: function() {
+
+                var headers = jQuery('input[name=headers_avail]:checked').val();
+
+                if(action == 'print_quotation') {
+                  var print_url = print_page.quotation+'?quotation_no='+bill_id+'&headers='+headers;
+                  var title = 'Quotation';
+                }
+                if(action == 'print_hiring') {
+                  var print_url = print_page.hiring+'?bill_no='+bill_id+'&headers='+headers;
+                  var title = 'Hiring Bill';
+                }
+
+                PrintInv(print_url, title);
+                jQuery( this ).dialog( "close" );
+              },
+              Cancel: function() {
+                jQuery( this ).dialog( "close" );
+              }
+          }
+      });
+      jQuery( ".print-box .action-block" ).html(bill_txt);
+  });
 
 
 
@@ -102,6 +145,38 @@ jQuery(document).ready(function(){
 
 
 });
+
+
+
+  function PrintInv(url, title) {
+    var thePopup = window.open( url, "Customer Listing","scrollbars=yes,menubar=0,location=0" );
+    thePopup.print(); 
+
+
+/*      var mywindow = window.open(url,title,"scrollbars=yes,menubar=0,location=0,top=50,left=300,height=500,width=750");
+      var is_chrome = Boolean(mywindow.chrome);
+
+
+
+
+
+     if (is_chrome) {
+       setTimeout(function() { // wait until all resources loaded 
+          mywindow.document.close(); // necessary for IE >= 10
+          mywindow.focus(); // necessary for IE >= 10
+          mywindow.print(); // change window to winPrint
+          mywindow.close(); // change window to winPrint
+       }, 250);
+     } else {
+          mywindow.document.close(); // necessary for IE >= 10
+          mywindow.focus(); // necessary for IE >= 10
+
+          mywindow.print();
+          mywindow.close();
+     }
+
+      return true;*/
+  }
 
 
   function recordDeleteAjax(bill_id = '', action = '', action_from = 'list') {

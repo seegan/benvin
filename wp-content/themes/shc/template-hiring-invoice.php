@@ -328,7 +328,7 @@ if(isset($bill_data['hiring_data']) && isset($_GET['bill_no']) && $_GET['bill_no
 					</div>
 					<div class="left-float top-right">
 						<div class="right-logo">
-							<img src="http://192.168.0.150/benvin/wp-content/themes/shc/admin/inc/images/invoice/right-logo-1.jpg">
+							<img src="<?php echo get_template_directory_uri(); ?>/admin/inc/images/invoice/right-logo-1.jpg">
 						</div>
 					</div>
 					<div class="clear"></div>

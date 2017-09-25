@@ -228,7 +228,7 @@ if(isset($_GET['deposit_id'])) {
 				<div class="header-top inner-container">
 					<div class="left-float top-left">
 						<div class="left-logo">
-							<img src="<?php echo get_template_directory_uri() . '/admin/inc/images/invoice/left-logo-1.jpg'; ?>">
+							<img src="<?php echo get_template_directory_uri(); ?>/admin/inc/images/invoice/right-logo-1.jpg">
 						</div>
 					</div>
 					<div class="left-float top-center">
