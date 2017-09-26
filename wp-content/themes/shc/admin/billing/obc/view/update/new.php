@@ -33,7 +33,7 @@
 		<div class="col-lg-9">
 			<div class="x_panel">
 				<div class="x_title">
-					<h2>New OBC</h2>
+					<h2>New Receipt</h2>
 					<div class="clearfix"></div>
 				</div>
 				<div class="x_content">

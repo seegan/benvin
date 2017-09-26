@@ -27,14 +27,59 @@ class Hiring {
 		$return_table = $wpdb->prefix.'shc_return';
 		$return_detail = $wpdb->prefix.'shc_return_detail';
 
-		$return_query = "SELECT id FROM wp_shc_return WHERE CAST(return_date AS date) BETWEEN '${bill_from}' and '${bill_to}' AND master_id = ${master_id} AND active = 1";
-        $unloading_charge_query = "SELECT SUM(u.unloading_charge) as unloading_charge FROM ( ${return_query} ) as t1 JOIN wp_shc_unloading as u ON t1.id = u.return_id WHERE u.active = 1";
+
+
+		$return_query = "SELECT r.id FROM wp_shc_return as r WHERE ( CAST(r.return_date AS date) BETWEEN '${bill_from}' and '${bill_to}')  AND r.master_id = ${master_id} AND r.active = 1";
+
+		$deposit_query = "SELECT d.id FROM wp_shc_deposit as d WHERE ( CAST(d.deposit_date AS date) BETWEEN '${bill_from}' and '${bill_to}') AND d.master_id = ${master_id} AND d.active = 1"; 
+
+
+		$loading_charge_query = "SELECT ( CASE WHEN SUM(l.loading_charge) is null THEN 0 ELSE SUM(l.loading_charge) END ) as loading_charge FROM ( ${deposit_query} ) as t2 JOIN wp_shc_loading as l ON t2.id = l.deposit_id WHERE l.active = 1";
+
+
+        $unloading_charge_query = "SELECT SUM(ud.charge_amt) as unloading FROM ( SELECT u.id FROM ( ${return_query} ) as t1 JOIN wp_shc_unloading as u ON t1.id = u.return_id WHERE u.active = 1 ) f JOIN wp_shc_unloading_detail as ud ON f.id = ud.unloading_id WHERE ud.active = 1 AND ud.charge_for = 'unloading'";
+        $transportation_charge_query = "SELECT SUM(ud.charge_amt) as transportation FROM ( SELECT u.id FROM ( ${return_query} ) as t1 JOIN wp_shc_unloading as u ON t1.id = u.return_id WHERE u.active = 1 ) f JOIN wp_shc_unloading_detail as ud ON f.id = ud.unloading_id WHERE ud.active = 1 AND ud.charge_for = 'transportation'";
+        $damage_charge_query = "SELECT SUM(ud.charge_amt) as damage FROM ( SELECT u.id FROM ( ${return_query} ) as t1 JOIN wp_shc_unloading as u ON t1.id = u.return_id WHERE u.active = 1 ) f JOIN wp_shc_unloading_detail as ud ON f.id = ud.unloading_id WHERE ud.active = 1 AND ud.charge_for = 'damage'";
+
+
+        $lost_charge_query = "SELECT SUM(l.lost_total) as lost FROM  ( ${return_query} ) as t1 JOIN wp_shc_lost as l ON t1.id = l.return_id WHERE l.active = 1 ";
+
+
+        $data['unloading_charges'] = 0.00;
+        $unloading_charge = $wpdb->get_row($unloading_charge_query);
+        if( $unloading_charge && $unloading_charge->unloading ) {
+            $data['unloading_charges'] = $unloading_charge->unloading;
+        }
+
+        $data['transportation_charges'] = 0.00;
+        $transportation_charge = $wpdb->get_row($transportation_charge_query);
+        if( $transportation_charge && $transportation_charge->transportation ) {
+            $data['transportation_charges'] = $transportation_charge->transportation;
+        }
+
+        $data['damage_charges'] = 0.00;
+        $damage_charge = $wpdb->get_row($damage_charge_query);
+        if( $damage_charge && $damage_charge->damage ) {
+            $data['damage_charges'] = $damage_charge->damage;
+        }
 
         $data['loading_charges'] = 0.00;
-        $unloading_charge = $wpdb->get_row($unloading_charge_query);
-        if( $unloading_charge && $unloading_charge->unloading_charge ) {
-            $data['loading_charges'] = $unloading_charge->unloading_charge;
+        $loading_charge = $wpdb->get_row($loading_charge_query);
+        if( $loading_charge && $loading_charge->loading_charge ) {
+            $data['loading_charges'] = $loading_charge->loading_charge;
         }
+
+        $data['lost_charges'] = 0.00;
+        $lost_charge = $wpdb->get_row($lost_charge_query);
+        if( $lost_charge && $lost_charge->lost ) {
+            $data['lost_charges'] = $lost_charge->lost;
+        }
+
+        $data['delivery_charges'] = ($data['unloading_charges'] + $data['loading_charges'] + $data['transportation_charges']);
+
+
+
+
 
         $data['return_ids'] = false;
         $return_ids = $wpdb->get_results($return_query, ARRAY_A);

@@ -318,19 +318,22 @@
 												$i++;
 											}
 									?>
-										<tr>
+										<!-- <tr>
 											<td colspan="7" style="font-size: 13px;font-weight: bold;">MRRs <?php echo $hiring_items['return_ids'] ?> Transport & Unloading.
 											<input type="hidden" name="transport_return_id" value="<?php echo $hiring_items['return_ids'] ?>">
 											</td>
 											<td>
-												<div class="right-align-txt"><?php echo $hiring_items['loading_charges']; ?></div>
+												<div class="right-align-txt"></div>
 												<input type="hidden" class="row_hiring_amt" name="unloading_total" value="<?php echo $hiring_items['loading_charges']; ?>">
 											</td>
 											<td></td>
-										</tr>
+										</tr> -->
+
+
+
 										<tr>
 											<td colspan="7" style="text-align: right;">
-												<div class="align-txt">Sub Total</div>
+												<div class="align-txt"><b>Total (Hire Charges) : </b></div>
 											</td>
 											<td>
 												<div class="align-txt right-align-txt">
@@ -340,10 +343,11 @@
 											</td>
 											<td></td>
 										</tr>
+
 										<tr class="discount_tr">
 											<td colspan="7" style="text-align: right;">
 												<div class="align-txt">
-													<b>Discount % </b>
+													Discount % 
 													<input type="text" name="discount_percentage" class="discount_percentage" value="0.00" style="width:45px;height: 30px;" readonly="readonly">
 												</div>
 											</td>
@@ -358,7 +362,7 @@
 										<tr class="discount_tr">
 											<td colspan="7" style="text-align: right;">
 												<div class="align-txt">
-													Total After Discount : 
+													<b>Total (Hire Charges) : </b>
 												</div>
 											</td>
 											<td>
@@ -370,6 +374,59 @@
 											<td></td>
 										</tr>
 
+
+										<tr>
+											<td colspan="7" style="text-align: right;">
+												<div class="align-txt">Delivery Charges</div>
+											</td>
+											<td>
+												<div class="align-txt right-align-txt">
+													<span class="del_tot_txt"><?php echo moneyFormatIndia(number_format($hiring_items['delivery_charges'],2)); ?></span>
+													<input type="hidden" class="del_chrg_val" name="del_chrg" value="<?php echo $hiring_items['delivery_charges']; ?>">
+												</div>
+											</td>
+											<td></td>
+										</tr>
+
+										<tr>
+											<td colspan="7" style="text-align: right;">
+												<div class="align-txt">Cleaning and Maintanance Charges</div>
+											</td>
+											<td>
+												<div class="align-txt right-align-txt">
+													<span class="dmg_tot_txt"><?php echo moneyFormatIndia(number_format($hiring_items['damage_charges'],2)); ?></span>
+													<input type="hidden" class="dmg_chrg_val" name="dmg_chrg" value="<?php echo $hiring_items['damage_charges']; ?>">
+												</div>
+											</td>
+											<td></td>
+										</tr>
+										<tr>
+											<td colspan="7" style="text-align: right;">
+												<div class="align-txt">Material Lost Charges</div>
+											</td>
+											<td>
+												<div class="align-txt right-align-txt">
+													<span class="lost_tot_txt"><?php echo moneyFormatIndia(number_format($hiring_items['lost_charges'],2)); ?></span>
+													<input type="hidden" class="lost_chrg_val" name="lost_chrg" value="<?php echo $hiring_items['damage_charges']; ?>">
+												</div>
+											</td>
+											<td></td>
+										</tr>
+
+
+										<tr class="">
+											<td colspan="7" style="text-align: right;">
+												<div class="align-txt">Total</div>
+											</td>
+											<td>
+												<div class="align-txt right-align-txt">
+													<span class="total_before_tax_txt">0.00</span>
+													<input type="hidden" class="total_before_tax_amt" name="total_before_tax_amt" value="0.00">
+													<!-- gst_include_total -->
+												</div>
+											</td>
+											<td></td>
+										</tr>
 
 
 									<?php if(isset($site_detail->gst_for) && $site_detail->gst_for == 'igst') { ?>
