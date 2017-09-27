@@ -49,6 +49,7 @@ function create_billing() {
 	$hiring_detail_table = $wpdb->prefix.'shc_hiring_detail';
 	parse_str($_POST['data'], $params);
 
+
 	//unset($params['action']);
 	$master_id = isset($params['master_id']) ? $params['master_id'] : 0;
 
@@ -63,13 +64,16 @@ function create_billing() {
 		/*$params['transport_return_id']*/
 		'return_ids' => isset($params['master_id']) ? '' : '',
 		'transportation_charge' => isset($params['master_id']) ? $params['del_chrg'] : 0.00,
+		'damage_charge' => isset($params['master_id']) ? $params['dmg_chrg'] : 0.00,
+		'lost_charge' => isset($params['master_id']) ? $params['lost_chrg'] : 0.00,
 		'sub_tot' => isset($params['sub_tot']) ? $params['sub_tot'] : 0.00,
-
 
 		'discount_avail' => isset($params['hiring_discount_avail']) ? $params['hiring_discount_avail'] : 'no',
 		'discount_percentage' => isset($params['discount_percentage']) ? $params['discount_percentage'] : 0.00,
 		'discount_amount' => isset($params['discount_amt']) ? $params['discount_amt'] : 0.00,
 		'total_after_discount' =>  isset($params['after_discount_amt']) ? $params['after_discount_amt'] : $params['sub_tot'],
+
+		'total_before_tax' => isset($params['after_discount_amt']) ? $params['total_before_tax_amt'] : 0.00,
 
 		'tax_from' 	=> isset($params['tax_from']) ? $params['tax_from'] : 'no_tax',
 		'gst_for' 	=> isset($params['gst_for']) ? $params['gst_for'] : '',

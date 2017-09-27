@@ -405,12 +405,12 @@
 										</tr>
 										<tr class="lost-tr">
 											<td colspan="7" style="text-align: right;">
-												<div class="align-txt">Material Lost Charges</div>
+												<div class="align-txt">Material Lost Charges </div>
 											</td>
 											<td>
 												<div class="align-txt right-align-txt">
 													<span class="lost_tot_txt"><?php echo moneyFormatIndia(number_format($hiring_items['lost_charges'],2)); ?></span>
-													<input type="hidden" class="lost_chrg_val" name="lost_chrg" value="<?php echo $hiring_items['damage_charges']; ?>">
+													<input type="hidden" class="lost_chrg_val" name="lost_chrg" value="<?php echo $hiring_items['lost_charges']; ?>">
 													<input type="hidden" class="lost_charge_cgst" name="lost_charge_cgst" value="0.00">
 													<input type="hidden" class="lost_charge_sgst" name="lost_charge_sgst" value="0.00">
 													<input type="hidden" class="lost_charge_igst" name="lost_charge_igst" value="0.00">													

@@ -91,10 +91,13 @@ function create_return() {
 		if($return_id) {
 
 
+
 			if(isset($params['return_detail'])) {
 				foreach ($params['return_detail'] as $n_value) {
 					if($n_value['delivery_detail_id'] != 0 && $n_value['delivery_detail_id'] != '' && $n_value['qty'] != 0 && $n_value['qty'] != '') {
+
 						$wpdb->insert($return_detail_table, array('return_id' => $return_id, 'master_id' => $master_id, 'lot_id' => $n_value['lot_id'], 'delivery_detail_id' => $n_value['delivery_detail_id'] , 'qty' => $n_value['qty'], 'return_date' => $return_date ));
+
 					}
 				}
 			}
@@ -120,7 +123,7 @@ function create_return() {
 				$lost_id = $wpdb->insert_id;
 				create_admin_history(array('updated_by' => $loggdin_user, 'update_in' => $lost_id, 'detail' => 'lost_create' ));
 
-				foreach ($params['return_detail_group'] as $l_value) {
+				foreach ($params['return_detail'] as $l_value) {
 
 					if($l_value['lost_qty'] != '' && $l_value['lost_qty'] > 0 ) {
 						$wpdb->insert($lost_detail_table, array('master_id' => $master_id, 'lost_id' => $lost_id, 'return_id' => $return_id, 'lot_id' => $l_value['lot_id'], 'lost_qty' => $l_value['lost_qty'] , 'lost_unit_price' => $l_value['lost_per_unit'], 'lost_total' => $l_value['lost_row_total'] ));

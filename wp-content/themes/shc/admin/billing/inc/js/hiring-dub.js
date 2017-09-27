@@ -96,38 +96,36 @@ function calculateHiringTotal() {
 	jQuery('.after_discount_txt').text(moneyFormatIndia(total_after_discount));
 	jQuery('.after_discount_amt').val(total_after_discount);
 
-
-
 	if(tax_from == 'gst') {
 		var delivery_chrg = jQuery('.gst_transport_charges').val();
 	} else {
 		var delivery_chrg = jQuery('.vat_transport_charges').val();
 	}
+	delivery_chrg = parseFloat(delivery_chrg);
+	delivery_chrg = delivery_chrg.toFixed(2);
 
 	jQuery('.del_tot_txt').text(moneyFormatIndia(delivery_chrg));
 	jQuery('.del_chrg_val').val(delivery_chrg);
 
-	if( delivery_chrg == 0) {
+	if( parseFloat(delivery_chrg) == 0 ) {
 		jQuery('.delivery-tr').css('display', 'none');
 	} else {
 		jQuery('.delivery-tr').css('display', 'table-row');
 	}
 
 	var damage_chrg = jQuery('.dmg_chrg_val').val();
-	if( damage_chrg == 0) {
+	if( parseFloat(damage_chrg) == 0) {
 		jQuery('.damage-tr').css('display', 'none');
 	}
 
 	var lost_chrg = jQuery('.lost_chrg_val').val();
-	if( damage_chrg == 0) {
+	if( parseFloat(lost_chrg) == 0 ) {
 		jQuery('.lost-tr').css('display', 'none');
 	}
 
-
-	if(delivery_chrg == 0 && damage_chrg == 0 && lost_chrg == 0) {
+	if(parseFloat(delivery_chrg) == 0 && parseFloat(damage_chrg) == 0 && parseFloat(lost_chrg) == 0) {
 		jQuery('.before-tax-tr').css('display','none');
 	}
-
 
 	
 	var tax = getTaxPrice(total_after_discount, delivery_chrg, damage_chrg, lost_chrg);
