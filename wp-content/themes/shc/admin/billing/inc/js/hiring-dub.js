@@ -71,6 +71,8 @@ jQuery(document).ready(function () {
 
 function calculateHiringTotal() {
 	var sub_tot = 0.00, ur_tot;
+	var tax_from = jQuery('.tax_from:checked').val();
+
 	jQuery('.row_hiring_amt').each(function(){
 	    var ur_tot = parseFloat(jQuery(this).val())
 	    ur_tot = (isNaN(ur_tot)) ? 0.00 : ur_tot;
@@ -95,9 +97,37 @@ function calculateHiringTotal() {
 	jQuery('.after_discount_amt').val(total_after_discount);
 
 
-	var delivery_chrg = parseFloat(jQuery('.del_chrg_val').val());
-	var damage_chrg = parseFloat(jQuery('.dmg_chrg_val').val());
-	var lost_chrg = parseFloat(jQuery('.lost_chrg_val').val());
+
+	if(tax_from == 'gst') {
+		var delivery_chrg = jQuery('.gst_transport_charges').val();
+	} else {
+		var delivery_chrg = jQuery('.vat_transport_charges').val();
+	}
+
+	jQuery('.del_tot_txt').text(moneyFormatIndia(delivery_chrg));
+	jQuery('.del_chrg_val').val(delivery_chrg);
+
+	if( delivery_chrg == 0) {
+		jQuery('.delivery-tr').css('display', 'none');
+	} else {
+		jQuery('.delivery-tr').css('display', 'table-row');
+	}
+
+	var damage_chrg = jQuery('.dmg_chrg_val').val();
+	if( damage_chrg == 0) {
+		jQuery('.damage-tr').css('display', 'none');
+	}
+
+	var lost_chrg = jQuery('.lost_chrg_val').val();
+	if( damage_chrg == 0) {
+		jQuery('.lost-tr').css('display', 'none');
+	}
+
+
+	if(delivery_chrg == 0 && damage_chrg == 0 && lost_chrg == 0) {
+		jQuery('.before-tax-tr').css('display','none');
+	}
+
 
 	
 	var tax = getTaxPrice(total_after_discount, delivery_chrg, damage_chrg, lost_chrg);
@@ -140,6 +170,22 @@ function getTaxPrice(sub_tot = 0, delivery_chrg=0, damage_chrg = 0, lost_chrg = 
 	jQuery('.gst_sgst').val(tax_total);
 	jQuery('.gst_igst_txt').text(moneyFormatIndia(tax_total));
 	jQuery('.gst_igst').val(tax_total);
+
+	jQuery('.hire_charge_cgst').val(tax_total);
+	jQuery('.hire_charge_sgst').val(tax_total);
+	jQuery('.hire_charge_igst').val(tax_total);
+
+	jQuery('.delivery_charge_cgst').val(tax_total);
+	jQuery('.delivery_charge_sgst').val(tax_total);
+	jQuery('.delivery_charge_igst').val(tax_total);
+
+	jQuery('.damage_charge_cgst').val(tax_total);
+	jQuery('.damage_charge_sgst').val(tax_total);
+	jQuery('.damage_charge_igst').val(tax_total);
+
+	jQuery('.lost_charge_cgst').val(tax_total);
+	jQuery('.lost_charge_sgst').val(tax_total);
+	jQuery('.lost_charge_igst').val(tax_total);
 
 	jQuery('.vat_amt_txt').text(tax_total);
 	jQuery('.vat_amt').val(tax_total);
@@ -187,6 +233,19 @@ function calculateGst(gst_for = '', sub_tot = 0, delivery_chrg = 0, damage_chrg 
 		var lost_chrg_sgst = parseFloat(( lost_chrg * 9 / 100 ).toFixed(2));
 
 
+		jQuery('.hire_charge_cgst').val(subtot_cgst);
+		jQuery('.hire_charge_sgst').val(subtot_sgst);
+
+		jQuery('.delivery_charge_cgst').val(delivery_chrg_cgst);
+		jQuery('.delivery_charge_sgst').val(delivery_chrg_sgst);
+
+		jQuery('.damage_charge_cgst').val(damage_chrg_cgst);
+		jQuery('.damage_charge_sgst').val(damage_chrg_sgst);
+
+		jQuery('.lost_charge_cgst').val(lost_chrg_cgst);
+		jQuery('.lost_charge_sgst').val(lost_chrg_sgst);
+
+
 		var cgst = (subtot_cgst + delivery_chrg_cgst + damage_chrg_cgst + lost_chrg_cgst);
 		cgst = Math.round10(cgst.toFixed(3), -2);
 		cgst = cgst.toFixed(2);
@@ -207,6 +266,11 @@ function calculateGst(gst_for = '', sub_tot = 0, delivery_chrg = 0, damage_chrg 
 		var delivery_chrg_igst = parseFloat(( delivery_chrg * 18 / 100 ).toFixed(2));
 		var damage_chrg_igst = parseFloat(( damage_chrg * 18 / 100 ).toFixed(2));
 		var lost_chrg_igst = parseFloat(( lost_chrg * 18 / 100 ).toFixed(2));
+
+		jQuery('.hire_charge_igst').val(subtot_igst);
+		jQuery('.delivery_charge_igst').val(delivery_chrg_igst);
+		jQuery('.damage_charge_igst').val(damage_chrg_igst);
+		jQuery('.lost_charge_igst').val(lost_chrg_igst);
 
 		var igst = (subtot_igst + delivery_chrg_igst + damage_chrg_igst + lost_chrg_igst);
 

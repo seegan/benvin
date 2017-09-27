@@ -28,10 +28,23 @@ class Hiring {
 		$return_detail = $wpdb->prefix.'shc_return_detail';
 
 
+	
+
+
 
 		$return_query = "SELECT r.id FROM wp_shc_return as r WHERE ( CAST(r.return_date AS date) BETWEEN '${bill_from}' and '${bill_to}')  AND r.master_id = ${master_id} AND r.active = 1";
 
 		$deposit_query = "SELECT d.id FROM wp_shc_deposit as d WHERE ( CAST(d.deposit_date AS date) BETWEEN '${bill_from}' and '${bill_to}') AND d.master_id = ${master_id} AND d.active = 1"; 
+
+
+
+        $vat_transport_query = "SELECT SUM(u.unloading_charge) as unloading_charge FROM ( ${return_query} ) as t1 JOIN wp_shc_unloading as u ON t1.id = u.return_id WHERE u.active = 1";
+
+        $data['vat_transport_charges'] = 0.00;
+        $vat_transport_charge = $wpdb->get_row($vat_transport_query);
+        if( $vat_transport_charge && $vat_transport_charge->unloading_charge ) {
+            $data['vat_transport_charges'] = $vat_transport_charge->unloading_charge;
+        }
 
 
 		$loading_charge_query = "SELECT ( CASE WHEN SUM(l.loading_charge) is null THEN 0 ELSE SUM(l.loading_charge) END ) as loading_charge FROM ( ${deposit_query} ) as t2 JOIN wp_shc_loading as l ON t2.id = l.deposit_id WHERE l.active = 1";

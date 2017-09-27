@@ -318,17 +318,6 @@
 												$i++;
 											}
 									?>
-										<!-- <tr>
-											<td colspan="7" style="font-size: 13px;font-weight: bold;">MRRs <?php echo $hiring_items['return_ids'] ?> Transport & Unloading.
-											<input type="hidden" name="transport_return_id" value="<?php echo $hiring_items['return_ids'] ?>">
-											</td>
-											<td>
-												<div class="right-align-txt"></div>
-												<input type="hidden" class="row_hiring_amt" name="unloading_total" value="<?php echo $hiring_items['loading_charges']; ?>">
-											</td>
-											<td></td>
-										</tr> -->
-
 
 
 										<tr>
@@ -369,13 +358,16 @@
 												<div class="align-txt right-align-txt">
 													<span class="after_discount_txt"></span>
 													<input type="hidden" class="after_discount_amt" name="after_discount_amt" value="0.00">
+													<input type="hidden" class="hire_charge_cgst" name="hire_charge_cgst" value="0.00">
+													<input type="hidden" class="hire_charge_sgst" name="hire_charge_sgst" value="0.00">
+													<input type="hidden" class="hire_charge_igst" name="hire_charge_igst" value="0.00">
 												</div>
 											</td>
 											<td></td>
 										</tr>
 
 
-										<tr>
+										<tr class="delivery-tr">
 											<td colspan="7" style="text-align: right;">
 												<div class="align-txt">Delivery Charges</div>
 											</td>
@@ -383,12 +375,20 @@
 												<div class="align-txt right-align-txt">
 													<span class="del_tot_txt"><?php echo moneyFormatIndia(number_format($hiring_items['delivery_charges'],2)); ?></span>
 													<input type="hidden" class="del_chrg_val" name="del_chrg" value="<?php echo $hiring_items['delivery_charges']; ?>">
+													<input type="hidden" class="delivery_charge_cgst" name="delivery_charge_cgst" value="0.00">
+													<input type="hidden" class="delivery_charge_sgst" name="delivery_charge_sgst" value="0.00">
+													<input type="hidden" class="delivery_charge_igst" name="delivery_charge_igst" value="0.00">
+
+
+													<input type="hidden" class="vat_transport_charges" value="<?php echo $hiring_items['vat_transport_charges']; ?>">
+													<input type="hidden" class="gst_transport_charges" value="<?php echo $hiring_items['delivery_charges']; ?>">
+
 												</div>
 											</td>
 											<td></td>
 										</tr>
 
-										<tr>
+										<tr class="damage-tr">
 											<td colspan="7" style="text-align: right;">
 												<div class="align-txt">Cleaning and Maintanance Charges</div>
 											</td>
@@ -396,11 +396,14 @@
 												<div class="align-txt right-align-txt">
 													<span class="dmg_tot_txt"><?php echo moneyFormatIndia(number_format($hiring_items['damage_charges'],2)); ?></span>
 													<input type="hidden" class="dmg_chrg_val" name="dmg_chrg" value="<?php echo $hiring_items['damage_charges']; ?>">
+													<input type="hidden" class="damage_charge_cgst" name="damage_charge_cgst" value="0.00">
+													<input type="hidden" class="damage_charge_sgst" name="damage_charge_sgst" value="0.00">
+													<input type="hidden" class="damage_charge_igst" name="damage_charge_igst" value="0.00">
 												</div>
 											</td>
 											<td></td>
 										</tr>
-										<tr>
+										<tr class="lost-tr">
 											<td colspan="7" style="text-align: right;">
 												<div class="align-txt">Material Lost Charges</div>
 											</td>
@@ -408,13 +411,16 @@
 												<div class="align-txt right-align-txt">
 													<span class="lost_tot_txt"><?php echo moneyFormatIndia(number_format($hiring_items['lost_charges'],2)); ?></span>
 													<input type="hidden" class="lost_chrg_val" name="lost_chrg" value="<?php echo $hiring_items['damage_charges']; ?>">
+													<input type="hidden" class="lost_charge_cgst" name="lost_charge_cgst" value="0.00">
+													<input type="hidden" class="lost_charge_sgst" name="lost_charge_sgst" value="0.00">
+													<input type="hidden" class="lost_charge_igst" name="lost_charge_igst" value="0.00">													
 												</div>
 											</td>
 											<td></td>
 										</tr>
 
 
-										<tr class="">
+										<tr class="before-tax-tr">
 											<td colspan="7" style="text-align: right;">
 												<div class="align-txt">Total</div>
 											</td>

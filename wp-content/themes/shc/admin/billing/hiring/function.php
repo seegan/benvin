@@ -60,8 +60,9 @@ function create_billing() {
 		'master_id' => isset($params['master_id']) ? $params['master_id'] : 0,
 		'bill_from' => isset($params['master_id']) ? $params['bill_from'] : '0000:00:00',
 		'bill_to'  => isset($params['master_id']) ? $params['bill_to'] : '0000:00:00',
-		'return_ids' => isset($params['master_id']) ? $params['transport_return_id'] : '',
-		'transportation_charge' => isset($params['master_id']) ? $params['unloading_total'] : 0.00,
+		/*$params['transport_return_id']*/
+		'return_ids' => isset($params['master_id']) ? '' : '',
+		'transportation_charge' => isset($params['master_id']) ? $params['del_chrg'] : 0.00,
 		'sub_tot' => isset($params['sub_tot']) ? $params['sub_tot'] : 0.00,
 
 
