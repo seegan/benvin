@@ -163,17 +163,8 @@
 											}
 									?>
 										<tr>
-											<td colspan="7" style="font-size: 13px;font-weight: bold;">MRRs <?php echo $bill_data['hiring_data']->return_ids ?> Transport & Unloading.
-											</td>
-											<td>
-												<div class="right-align-txt">
-													<?php echo $bill_data['hiring_data']->transportation_charge ?>
-												</div>
-											</td>
-										</tr>
-										<tr>
 											<td colspan="7" style="text-align: right;">
-												<div class="align-txt">Sub Total : </div>
+												<div class="align-txt">Total (Hire Charges) : </div>
 											</td>
 											<td>
 												<div class="align-txt right-align-txt">
@@ -181,7 +172,6 @@
 												</div>
 											</td>
 										</tr>
-
 										<?php 
 										if( isset($bill_data['hiring_data']->discount_avail) && $bill_data['hiring_data']->discount_avail == 'yes' ) {
 										?>
@@ -209,10 +199,66 @@
 												</div>
 											</td>
 										</tr>
-
 										<?php
 										}
 
+										
+										if( isset($bill_data['hiring_data']->transportation_charge) && $bill_data['hiring_data']->transportation_charge != 0 ) {
+										?>
+											<tr class="delivery-tr">
+												<td colspan="7" style="text-align: right;">
+													<div class="align-txt">Delivery Charges</div>
+												</td>
+												<td>
+													<div class="align-txt right-align-txt">
+														<span><?php echo $bill_data['hiring_data']->transportation_charge; ?></span>
+													</div>
+												</td>
+											</tr>
+										<?php
+										}
+										if( isset($bill_data['hiring_data']->damage_charge) && $bill_data['hiring_data']->damage_charge != 0 ) {
+										?>
+											<tr class="damage-tr">
+												<td colspan="7" style="text-align: right;">
+													<div class="align-txt">Cleaning and Maintanance Charges</div>
+												</td>
+												<td>
+													<div class="align-txt right-align-txt">
+														<span><?php echo $bill_data['hiring_data']->damage_charge; ?></span>
+													</div>
+												</td>
+											</tr>
+										<?php
+										}
+										if( isset($bill_data['hiring_data']->lost_charge) && $bill_data['hiring_data']->lost_charge != 0 ) {
+										?>
+											<tr class="lost-tr">
+												<td colspan="7" style="text-align: right;">
+													<div class="align-txt">Material Lost Charges </div>
+												</td>
+												<td>
+													<div class="align-txt right-align-txt">
+														<span><?php echo $bill_data['hiring_data']->lost_charge; ?></span>					
+													</div>
+												</td>
+											</tr>
+										<?php
+										}
+										if( isset($bill_data['hiring_data']->transportation_charge) && $bill_data['hiring_data']->transportation_charge != 0 && isset($bill_data['hiring_data']->transportation_charge) && $bill_data['hiring_data']->transportation_charge != 0 && isset($bill_data['hiring_data']->lost_charge) && $bill_data['hiring_data']->lost_charge != 0 ) {
+										?>
+											<tr class="lost-tr">
+												<td colspan="7" style="text-align: right;">
+													<div class="align-txt">Total </div>
+												</td>
+												<td>
+													<div class="align-txt right-align-txt">
+														<span><?php echo $bill_data['hiring_data']->total_before_tax; ?></span>					
+													</div>
+												</td>
+											</tr>
+										<?php
+										}
 										if($bill_data['hiring_data']->tax_from != 'no_tax') {
 
 											if($bill_data['hiring_data']->tax_from == 'gst') {
@@ -339,20 +385,3 @@
 	</div>
 
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
