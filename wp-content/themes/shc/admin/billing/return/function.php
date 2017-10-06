@@ -77,6 +77,9 @@ function create_return() {
 		$return_id = $wpdb->insert_id;
 		create_admin_history(array('updated_by' => $loggdin_user, 'update_in' => $return_id, 'detail' => 'return_create' ));
 
+
+
+
 		$wpdb->insert($unloading_table, array('return_id' => $return_id, 'master_id' => $master_id, 'unloading_charge' => $total, 'return_date' => $return_date ) );
 		$loading_id = $wpdb->insert_id;
 
@@ -89,6 +92,7 @@ function create_return() {
 		$wpdb->insert($unloading_detail_table, array('return_id' => $return_id, 'unloading_id' => $loading_id, 'charge_for' => 'damage', 'charge_amt' => $damage ) );
 
 		if($return_id) {
+
 
 
 
@@ -112,10 +116,6 @@ function create_return() {
 			}
 
 
-
-
-
-
 			if(!$is_return) {
 				$lost_data = array('master_id' => $master_id, 'return_id' => $return_id, 'lost_qty' => $params['lost_qty_total'], 'lost_total' => $params['lost_cost'], 'updated_by' => $loggdin_user);
 
@@ -123,7 +123,7 @@ function create_return() {
 				$lost_id = $wpdb->insert_id;
 				create_admin_history(array('updated_by' => $loggdin_user, 'update_in' => $lost_id, 'detail' => 'lost_create' ));
 
-				foreach ($params['return_detail'] as $l_value) {
+				foreach ($params['lost_detail'] as $l_value) {
 
 					if($l_value['lost_qty'] != '' && $l_value['lost_qty'] > 0 ) {
 						$wpdb->insert($lost_detail_table, array('master_id' => $master_id, 'lost_id' => $lost_id, 'return_id' => $return_id, 'lot_id' => $l_value['lot_id'], 'lost_qty' => $l_value['lost_qty'] , 'lost_unit_price' => $l_value['lost_per_unit'], 'lost_total' => $l_value['lost_row_total'] ));

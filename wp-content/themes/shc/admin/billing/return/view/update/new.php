@@ -91,10 +91,9 @@
 
 
 
-
 						<div class="col-lg-12">
 							<div class="deposit-repeater return_detail_group" style="margin-top:20px;">
-								<table class="table table-bordered">
+								<table class="table table-bordered" data-repeater-list="lost_detail">
 									<thead>
 										<tr>
 											<th rowspan="2" style="width:50px;" class="center-th"><div>S.No</div></th>

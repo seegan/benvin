@@ -90,6 +90,10 @@ function create_billing() {
 		'bill_time' => isset($params['master_id']) ? $params['billing_time'] : '00:00',
 	);
 
+
+
+
+
 	if($params['action'] == 'create_billing') {
 		
 		$bill_no_data = getCorrectBillNumber($params['bill_no'], $params['site_id'], 'shc_hiring', $params['billing_date']);
@@ -189,6 +193,20 @@ function create_billing() {
 			}
 		}
 	}
+
+
+
+	$gst_data['hiring_gst'] = array('hiring_id' => $hiring_bill_id ,'hsn_code' => '', 'hsn_name' => 'hiring', 'taxable_value' => $params['after_discount_amt'], 'cgst_val' => $params['hire_charge_cgst'], 'sgst_val' => $params['hire_charge_sgst'], 'igst_val' => $params['hire_charge_igst'] );
+	$gst_data['transport_gst'] = array('hiring_id' => $hiring_bill_id ,'hsn_code' => '', 'hsn_name' => 'transport', 'taxable_value' => $params['del_chrg'], 'cgst_val' => $params['delivery_charge_cgst'], 'sgst_val' => $params['delivery_charge_sgst'], 'igst_val' => $params['delivery_charge_igst'] );
+	$gst_data['damage_gst'] = array('hiring_id' => $hiring_bill_id ,'hsn_code' => '', 'hsn_name' => 'damage', 'taxable_value' => $params['dmg_chrg'], 'cgst_val' => $params['damage_charge_cgst'], 'sgst_val' => $params['damage_charge_sgst'], 'igst_val' => $params['damage_charge_igst'] );
+	$gst_data['lost_gst'] = array('hiring_id' => $hiring_bill_id ,'hsn_code' =>'', 'hsn_name' =>  'lost', 'taxable_value' => $params['lost_chrg'], 'cgst_val' => $params['lost_charge_cgst'], 'sgst_val' => $params['lost_charge_sgst'], 'igst_val' => $params['lost_charge_igst'] );
+
+	$wpdb->delete( 'wp_shc_hiring_gst', array( 'hiring_id' => $hiring_bill_id ) );
+
+	foreach ($gst_data as $gst_value) {
+		$wpdb->insert('wp_shc_hiring_gst', $gst_value);
+	}
+
 
 
 	echo json_encode($data);
