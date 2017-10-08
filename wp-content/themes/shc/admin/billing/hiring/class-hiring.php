@@ -381,6 +381,7 @@ ON bill.id = sdd.id WHERE bill.bill_qty > 0 AND
 		$hiring_table = $wpdb->prefix.'shc_hiring';
 		$hiring_detail_table = $wpdb->prefix.'shc_hiring_detail';
 		$lot_table = $wpdb->prefix.'shc_lots';
+		$hiring_gst = $wpdb->prefix.'shc_hiring_gst';
 
 		$hiring_query = "SELECT * FROM ${hiring_table} WHERE active = 1 AND id = ${bill_id}";
 		$hiring_data = $wpdb->get_row($hiring_query);
@@ -393,6 +394,13 @@ ON bill.id = sdd.id WHERE bill.bill_qty > 0 AND
 			$detail_query = "SELECT hd.lot_id, SUM(hd.qty) as qty, hd.bill_from, hd.bill_to, hd.bill_days, hd.rate_per_day, SUM(hd.amount) as amount, hd.min_checked, SUM(hd.hiring_amt) as hiring_amt,   l.product_name, l.product_type FROM ${hiring_detail_table} as hd JOIN ${lot_table} as l ON hd.lot_id = l.id WHERE hd.hiring_bill_id = ${bill_id} AND hd.active = 1 GROUP BY hd.lot_id, hd.bill_days, hd.rate_per_day, hd.min_checked, hd.bill_from, hd.bill_to";
 
 			$data['hiring_detail'] = $wpdb->get_results($detail_query);
+
+
+
+			$hiring_gst_query = "SELECT * FROM ${hiring_gst} WHERE hiring_id = ${bill_id} AND active = 1";
+			$data['hiring_gst_detail'] = $wpdb->get_results($hiring_gst_query);
+
+
 			return $data;
 		}
 		return false;

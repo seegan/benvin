@@ -7,6 +7,7 @@
 
 	$lost_data['lost_detail'] = false;
 	$lost_data['lost_total'] = false;
+	$with_sd = ( isset($_GET['sd']) && $_GET['sd'] == 0 ) ? 0 : 1;
 
 	if($master_data['master_data']) {
 		$customer_id = $master_data['master_data']->customer_id;
@@ -14,7 +15,7 @@
 
 		$customer_detail = getCustomerData($customer_id);
 		$site_detail = getSiteData($site_id);
-		$statement_data = getAccountStatement($master_id, $statement_date);
+		$statement_data = getAccountStatement($master_id, $statement_date, $with_sd);
 
 		$statement = isset($statement_data['statement_data']) ? $statement_data['statement_data'] : false;
 		$cd_data = isset($statement_data['cd_total']) ? $statement_data['cd_total'] : false;
@@ -68,6 +69,7 @@
 				<div class="x_content">
 					<div class="form-horizontal form-label-left" id="create_billing">
 						<div class="col-lg-6">
+							<input type="hidden" class="statement_id" value="<?php echo $master_id; ?>">
 							<?php
 							if($master_data) {
 								echo "<div class='address-line'>MRI : ".$master_data['master_data']->id."</div>";
@@ -77,6 +79,9 @@
 								<span class="customer-name"><?php echo ($customer_detail->name) ? $customer_detail->name : ''; ?></span>
 							</div>
 							<div class="address-line">Address : <span class="address-txt"><?php echo ($customer_detail->address) ? $customer_detail->address : ''; ?></span>
+							</div>
+							<div class="address-line">
+								With SD : <input type="checkbox" class="statement_with_sd" value="1" style="margin-top: -2px;" <?php echo ($with_sd == 1 ) ? 'checked' : ''; ?>>
 							</div>
 						</div>
 						<div class="col-lg-6">

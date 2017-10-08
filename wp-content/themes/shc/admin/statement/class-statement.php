@@ -21,7 +21,7 @@ class Statement {
 
 
 
-	function get_AccountStatement($master_id = 0, $date_to = '0000-00-00') {
+	function get_AccountStatement($master_id = 0, $date_to = '0000-00-00', $sd = 1) {
 		global $wpdb;
 		$loading_table = $wpdb->prefix.'shc_loading';
 		$deposit_table = $wpdb->prefix.'shc_deposit';
@@ -75,16 +75,21 @@ class Statement {
 		    
 		) as full ORDER BY full.r_date ASC, full.priority ASC";*/
 
-
-		$query = "SELECT * FROM (
-
-
-			SELECT deposit.* FROM 
+		$sd_query = "";
+		if($sd == 1) {
+			$sd_query = "SELECT deposit.* FROM 
 			(
 				SELECT 1 as priority, sd.bill_from_comp, sd.deposit_date as r_date, date(sd.deposit_date) as bill_date, 'To Security Deposit' as description, CONCAT('SD ', sd.bill_no) as bill_ref, '' as credit,  sd.total as debit FROM wp_shc_deposit as sd WHERE sd.active = 1 AND sd.master_id IN (${master_id}) AND date(sd.deposit_date) <= date('${date_to}')
 			) as deposit
 
-			UNION ALL
+			UNION ALL";
+		}
+
+		$query = "SELECT * FROM (
+
+
+			${sd_query}
+			
 
 			SELECT loading.* FROM
 			(
@@ -93,7 +98,7 @@ class Statement {
 				  WHEN ld.charge_for = 'loading' THEN 2
 				  WHEN ld.charge_for = 'transportation' THEN 3
 				END ) as priority,
-				dp.bill_from_comp, dp.r_date, dp.bill_date, CONCAT('To ', ld.charge_for) as description, dp.bill_ref, '' as credit, ld.charge_amt as debit FROM ( SELECT sd.bill_from_comp, sd.deposit_date as r_date, date(sd.deposit_date) as bill_date, CONCAT('SD ', sd.bill_no) as bill_ref, l.id as loading_id  FROM wp_shc_deposit as sd JOIN wp_shc_loading l ON sd.id = l.deposit_id WHERE sd.active = 1 AND sd.master_id IN (${master_id}) AND date(sd.deposit_date) <= date('${date_to}') AND l.active = 1 )  as dp JOIN wp_shc_loading_detail as ld ON dp.loading_id = ld.loading_id WHERE ld.charge_amt != 0.00
+				dp.bill_from_comp, dp.r_date, dp.bill_date, CONCAT('To ', ld.charge_for) as description, dp.bill_ref, ld.charge_amt as credit, '' as debit FROM ( SELECT sd.bill_from_comp, sd.deposit_date as r_date, date(sd.deposit_date) as bill_date, CONCAT('SD ', sd.bill_no) as bill_ref, l.id as loading_id  FROM wp_shc_deposit as sd JOIN wp_shc_loading l ON sd.id = l.deposit_id WHERE sd.active = 1 AND sd.master_id IN (${master_id}) AND date(sd.deposit_date) <= date('${date_to}') AND l.active = 1 )  as dp JOIN wp_shc_loading_detail as ld ON dp.loading_id = ld.loading_id WHERE ld.charge_amt != 0.00
 			) as loading
 
 			UNION ALL
