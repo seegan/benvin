@@ -95,10 +95,27 @@ jQuery(document).ready(function(){
                   var print_url = print_page.quotation+'?quotation_no='+bill_id+'&headers='+headers;
                   var title = 'Quotation';
                 }
+                if(action == 'print_deposit') {
+                  var print_url = print_page.deposit+'?bill_no='+bill_id+'&headers='+headers;
+                  var title = 'Deposit Challan';
+                }
+                if(action == 'print_delivery') {
+                  var print_url = print_page.delivery+'?bill_no='+bill_id+'&headers='+headers;
+                  var title = 'Delivery Challan';
+                }
+                if(action == 'print_return') {
+                  var print_url = print_page.return+'?bill_no='+bill_id+'&headers='+headers;
+                  var title = 'Meterial Return Receipt';
+                }
                 if(action == 'print_hiring') {
                   var print_url = print_page.hiring+'?bill_no='+bill_id+'&headers='+headers;
                   var title = 'Hiring Bill';
                 }
+                if(action == 'print_receipt') {
+                  var print_url = print_page.receipt+'?bill_no='+bill_id+'&headers='+headers;
+                  var title = 'Payment Receipt';
+                }
+
 
                 PrintInv(print_url, title);
                 jQuery( this ).dialog( "close" );

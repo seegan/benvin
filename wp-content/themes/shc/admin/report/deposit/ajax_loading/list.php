@@ -68,7 +68,7 @@
                                                     <img src="<?php echo get_template_directory_uri() . '/admin/inc/images/open-icon.png'?>">
                                                 </a>
                                             </div>
-                                            <div class="print_record left-float" >
+                                            <div class="print_record left-float" data-action="print_deposit" data-action-from="list" data-print-id="<?php echo $deposit_id; ?>">
                                               <img src="<?php echo get_template_directory_uri() . '/admin/inc/images/printer-icon.png'?>">
                                             </div>                                        
                                             <div class="delete_record left-float" data-action="shc_deposit" data-action-from="list" data-delete-id="<?php echo $deposit_id; ?>">
