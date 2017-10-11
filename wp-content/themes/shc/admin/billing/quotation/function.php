@@ -66,7 +66,6 @@ function create_quotation() {
 	if(isset($params['action']) && $params['action'] == 'create_quotation') {
 
 		$bill_no_data = getCorrectBillNumber($params['bill_no'], $params['site_id'], 'shc_quotatio', $params['date']);
-
 		$detail_main['bill_from_comp'] = $bill_no_data['bill_from_comp'];
 		$detail_main['bill_no'] = $bill_no_data['bill_no'];
 		$detail_main['updated_by'] = $loggdin_user;
