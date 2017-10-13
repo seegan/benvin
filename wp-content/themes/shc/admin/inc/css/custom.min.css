@@ -5109,3 +5109,9 @@ input[type=text].to_date:hover {
 .center-txt {
     text-align: center;
 }
+.left-right {
+    float: right;
+}
+.print_record {
+    cursor: pointer;
+}
