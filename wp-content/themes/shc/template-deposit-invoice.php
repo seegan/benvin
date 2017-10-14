@@ -27,6 +27,9 @@ if(isset($_GET['deposit_id'])) {
 	$invoice_data = $security_data['invoice_data'];
 	$deposit_detail = $security_data['deposit_detail'];
 
+	$company_id = $invoice_data->bill_from_comp;
+	$company_data = getCompaniesById($company_id);
+
 	$dt = new DateTime($security_data['deposit_data']->deposit_date);
 	$date = $dt->format('d-m-Y');
 	$time = $dt->format('h:i A');
@@ -279,7 +282,7 @@ if(isset($_GET['deposit_id'])) {
 						NO : <?php echo $invoice_data->company_id.'/SD '.$invoice_data->bill_no; ?>
 					</div>
 					<div class="left-float top-center">
-						<center><b>DELIVERY CHALLAN</b></center>
+						<center><b>DEPOSIT CHALLAN</b></center>
 					</div>
 					<div class="left-float top-right">
 						Date : <?php echo $date; ?>
@@ -350,8 +353,6 @@ if(isset($_GET['deposit_id'])) {
 
 				$tota_row = count($deposit_detail);
 			}
-
-
 
 			for ($i=0; $i < $pages; $i++) { 
 				$page_start = ( $i * $per_page ) + 1;
@@ -487,7 +488,7 @@ if(isset($_GET['deposit_id'])) {
 			<div class="left-float" style="width:200px;">
 				<table class="table table-bordered" style="margin-bottom: 0px;">
 					<tr>
-						<td style="width: 110px;">Cheque No <span style="float: right;">:</span> </td>
+						<td style="width: 85px;">Cheque No <span style="float: right;">:</span> </td>
 						<td><?php  echo ($invoice_data->cheque_no !== '0.00') ? $invoice_data->cheque_no : ''; ?></td>
 					</tr>
 					<tr>
@@ -520,7 +521,7 @@ if(isset($_GET['deposit_id'])) {
 				SUNDAY HOLIDAY
 			</div>
 			<div class="left-float" style="width: 154px;">
-				<div style="margin-top: -10px;">For JBC Associates</div>
+				<div style="margin-top: -10px;">For <?php echo $company_data->company_name; ?></div>
 				<div style="margin-top: 30px;">Manager / Accountant</div>
 			</div>
 			<div class="clear"></div>

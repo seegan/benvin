@@ -96,15 +96,15 @@ jQuery(document).ready(function(){
                   var title = 'Quotation';
                 }
                 if(action == 'print_deposit') {
-                  var print_url = print_page.deposit+'?bill_no='+bill_id+'&headers='+headers;
+                  var print_url = print_page.deposit+'?deposit_id='+bill_id+'&headers='+headers;
                   var title = 'Deposit Challan';
                 }
                 if(action == 'print_delivery') {
-                  var print_url = print_page.delivery+'?bill_no='+bill_id+'&headers='+headers;
+                  var print_url = print_page.delivery+'?delivery_id='+bill_id+'&headers='+headers;
                   var title = 'Delivery Challan';
                 }
                 if(action == 'print_return') {
-                  var print_url = print_page.return+'?bill_no='+bill_id+'&headers='+headers;
+                  var print_url = print_page.return+'?return_id='+bill_id+'&headers='+headers;
                   var title = 'Meterial Return Receipt';
                 }
                 if(action == 'print_hiring') {
