@@ -19,8 +19,6 @@
 		    }
 		}
 
-
-
 		function get_LoadingData($deposi_id = '', $key = '' ) {
 			global $wpdb;
 			$loading_table = $wpdb->prefix.'shc_loading';		

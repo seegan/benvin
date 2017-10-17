@@ -284,6 +284,7 @@ END )
 		
 
 		if($data['return_data'] = $wpdb->get_row($query)) {
+
 			$return_detail_query = "SELECT l.lot_no, l.product_name, l.product_type, f.* FROM ${lots_table} as l JOIN ( 
     
     SELECT rd.id as return_detail_id, rd.lot_id, rd.qty FROM ${return_table} as r 
@@ -300,6 +301,12 @@ END )
     JOIN ${return_detail} rd ON r.id = rd.return_id WHERE r.id = ${return_id} AND rd.active = 1 AND r.active = 1 GROUP BY rd.lot_id
 
 ) as f ON l.id = f.lot_id";
+
+	
+			$invoice_query = "SELECT mf.*, c.name, c.mobile, c.address, cs.site_name, cs.site_address, cs.phone_number, cs.gst_number, cs.gst_for, comp.company_id, comp.company_name  FROM ( SELECT r.bill_from_comp, r.bill_no, r.master_id, r.return_date, r.vehicle_number, r.driver_name, r.driver_mobile, r.created_at, r.active, m.customer_id, m.site_id FROM wp_shc_return as r JOIN wp_shc_master as m ON r.master_id = m.id WHERE r.id = ${return_id} ) as mf JOIN wp_shc_customers as c ON mf.customer_id = c.id JOIN wp_shc_customer_site as cs ON mf.site_id = cs.id JOIN wp_shc_companies as comp ON mf.bill_from_comp = comp.id";
+
+			$data['invoice_data'] = $wpdb->get_row($invoice_query);
+
 
 			$data['return_detail'] = $wpdb->get_results($return_detail_query);
 			$data['group_detail'] = $wpdb->get_results($group_detail_query);

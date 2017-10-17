@@ -19,20 +19,21 @@
 <body class="page">
 
 <?php
-$delivery_data = false;
-$delivery_detail = false;
+$return_data = false;
+$return_detail = false;
 
 if(isset($_GET['return_id'])) {
-	$delivery_data = getDeliveryData($_GET['return_id']);
-	$invoice_data = $delivery_data['invoice_data'];
-	$delivery_detail = $delivery_data['delivery_detail'];
+	$return_data = getReturnData($_GET['return_id']);
+	$invoice_data = $return_data['invoice_data'];
+	$return_detail = (isset($return_data['group_detail']) && $return_data['group_detail'])  ? $return_data['group_detail'] : false;
 
 	$company_id = $invoice_data->bill_from_comp;
 	$company_data = getCompaniesById($company_id);
 
-	$dt = new DateTime($delivery_data['delivery_data']->delivery_date);
+	$dt = new DateTime($return_data['return_data']->return_date);
 	$date = $dt->format('d-m-Y');
 	$time = $dt->format('h:i A');
+
 }
 ?>
 	<style type="text/css">
@@ -43,8 +44,6 @@ if(isset($_GET['return_id'])) {
 		    padding: 0;
 		}
 		@media print {
-
-
 
 /*total width 794*/
 
@@ -279,7 +278,7 @@ if(isset($_GET['return_id'])) {
 						NO : <?php echo $invoice_data->company_id.'/MRR '.$invoice_data->bill_no; ?>
 					</div>
 					<div class="left-float top-center">
-						<center><b>DELIVERY CHALLAN</b></center>
+						<center><b>METERIAL RETURN RECEIPT</b></center>
 					</div>
 					<div class="left-float top-right">
 						Date : <?php echo $date; ?>
@@ -344,11 +343,11 @@ if(isset($_GET['return_id'])) {
 			$pieces = false;
 			$tota_row = 0;
 
-			if($delivery_detail) {
-				$pages = ceil(count($delivery_detail)/$per_page);
-				$pieces = array_chunk($delivery_detail, $per_page);
+			if($return_detail) {
+				$pages = ceil(count($return_detail)/$per_page);
+				$pieces = array_chunk($return_detail, $per_page);
 
-				$tota_row = count($delivery_detail);
+				$tota_row = count($return_detail);
 			}
 
 			for ($i=0; $i < $pages; $i++) { 
@@ -370,12 +369,17 @@ if(isset($_GET['return_id'])) {
 										<th class="center-th" style="" rowspan="2">
 											<div class="text-center">Description</div>
 										</th>
-										<th class="center-th" style="width:70px;" rowspan="2">
+										<th class="center-th" style="width: 150px" rowspan="2">
 											<div class="text-center">Qty</div>
 										</th>
 									</tr>
 								</thead>
 								<?php 
+								$unloading = getUnloadingData($_GET['return_id'], 'unloading');
+								$transportation = getUnloadingData($_GET['return_id'], 'transportation');
+								$damage = getUnloadingData($_GET['return_id'], 'damage');
+								$total = getUnloadingData($_GET['return_id'], 'total');
+
 								foreach ($pieces[$i] as $key => $value) {
 									$data_thirty = splitCurrency($value->rate_thirty);
 									$data_ninety = splitCurrency($value->rate_ninety);
@@ -387,14 +391,53 @@ if(isset($_GET['return_id'])) {
 											<span style="width:110px;float: right;text-align: left;"><?php echo $value->product_type; ?></span>
 										</td>
 										<td>
-											<div class="text-center"><?php echo $value->qty; ?></div>
+											<div class="text-right" style="padding-right: 25px;"><?php echo $value->qty; ?></div>
 										</td>
 									</tr>
 								<?php
 									$page_start++;
 								}
 								?>
-								
+								<tr>
+									<td></td>
+									<td><span style="width:110px;float: right;text-align: left;">-</span></td>
+									<td><div class="text-right" style="padding-right: 25px;">-</div></td>
+								</tr>
+								<?php
+									if($unloading != 0) {
+								?>
+								<tr>
+									<td colspan="2"><div class="text-right">Unloading Charge : </div></td>
+									<td><div class="text-right" style="padding-right: 20px;"><?php echo $unloading; ?></div></td>
+								</tr>
+								<?php
+									}
+									if($transportation != 0) {
+								?>
+								<tr>
+									<td colspan="2"><div class="text-right">Transportation Charge : </div></td>
+									<td><div class="text-right" style="padding-right: 20px;"><?php echo $transportation; ?></div></td>
+								</tr>
+								<?php
+									}
+									if($damage != 0) {
+								?>
+								<tr>
+									<td colspan="2"><div class="text-right">Damage Charge : </div></td>
+									<td><div class="text-right" style="padding-right: 20px;"><?php echo $damage; ?></div></td>
+								</tr>
+								<?php
+									}
+									if($total != 0) {
+								?>
+								<tr>
+									<td colspan="2"><div class="text-right">Total : </div></td>
+									<td><div class="text-right" style="padding-right: 20px;"><?php echo $total; ?></div></td>
+								</tr>
+								<?php
+									}
+								?>
+
 							</table>
 						</div>
 					</div>

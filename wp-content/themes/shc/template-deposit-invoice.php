@@ -34,6 +34,7 @@ if(isset($_GET['deposit_id'])) {
 	$date = $dt->format('d-m-Y');
 	$time = $dt->format('h:i A');
 }
+
 ?>
 	<style type="text/css">
 
@@ -421,16 +422,10 @@ if(isset($_GET['deposit_id'])) {
 									if($tota_row == $page_start) {
 										$total_thirty_days = splitCurrency($invoice_data->total_thirty_days);
 										$total_ninety_days = splitCurrency($invoice_data->total_ninety_days);
+
+										$discount_amt = splitCurrency($invoice_data->discount_amt);
+										$deposit_total = splitCurrency($invoice_data->total);
 								?>
-										<tr>
-											<td></td>
-											<td></td>
-											<td></td>
-											<td></td>
-											<td></td>
-											<td></td>
-											<td></td>
-										</tr>
 										<tr>
 											<td></td>
 											<td></td>
@@ -447,6 +442,22 @@ if(isset($_GET['deposit_id'])) {
 											<td style="text-align: right;"><div class="text-center" style="text-align: right;"><?php echo $total_ninety_days['rs'] ?></div></td>
 											<td><div class="text-center"><?php echo $total_ninety_days['ps'] ?></div></td>
 										</tr>
+										<?php
+											if($invoice_data->discount_avail == 'yes') {
+										?>
+										<tr>
+											<td colspan="5"><div class="text-right">Discount ( <?php echo $invoice_data->discount_percentage; ?>% ) :</div></td>
+											<td><div class="text-center" style="text-align: right;"><?php echo $discount_amt['rs']; ?></div></td>
+											<td><div class="text-center"><?php echo $discount_amt['ps']; ?></div></td>
+										</tr>	
+										<?php
+											}
+										?>	
+										<tr>
+											<td colspan="5"><div class="text-right">Deposit Amount :</div></td>
+											<td><div class="text-center" style="text-align: right;"><?php echo $deposit_total['rs']; ?></div></td>
+											<td><div class="text-center"><?php echo $deposit_total['ps']; ?></div></td>
+										</tr>								
 								<?php
 									}
 									$page_start++;
@@ -470,7 +481,7 @@ if(isset($_GET['deposit_id'])) {
 				<div style="width: 100%;">
 					<div class="left-float">Rupees</div>
 					<div class="left-float" style="min-width: 360px;border-bottom: 1px dotted;height: 20px;margin-left: 5px;">
-						<?php echo ucfirst(convert_number_to_words_full($invoice_data->total_ninety_days)); ?>
+						<?php echo ucfirst(convert_number_to_words_full($invoice_data->total)); ?>
 					</div>
 					<div class="clear"></div>
 				</div>
