@@ -20,18 +20,17 @@
 
 
 <?php
-$quotation_data = false;
+$hiring_data = false;
+$hiring_gst_data = false;
+$bill_data = getHiringBillDataPrint($_GET['bill_no']);
+if(isset($bill_data['hiring_data']) && isset($_GET['bill_no']) && $_GET['bill_no'] != '') {
+	$hiring_data = $bill_data['hiring_data'];
+	$hiring_gst_data = $bill_data['hiring_gst_detail'];
 
-$bill_data = getQutationDetail($_GET['quotation_no']); 
-
-
-if(isset($bill_data['quotation_data']) && isset($_GET['quotation_no']) && $_GET['quotation_no'] != '') {
-	$quotation_data = $bill_data['quotation_data'];
-
-	$company_id = $quotation_data->bill_from_comp;
+	$company_id = $hiring_data->bill_from_comp;
 	$company_data = getCompaniesById($company_id);
 
-	$master_data = getMasterDetail($quotation_data->master_id);
+	$master_data = getMasterDetail($hiring_data->master_id);
 	$master_data = ($master_data) ? $master_data : false;
 
 	$customer_id = $master_data['master_data']->customer_id;
@@ -40,22 +39,23 @@ if(isset($bill_data['quotation_data']) && isset($_GET['quotation_no']) && $_GET[
 	$customer_detail = getCustomerData($customer_id);
 	$site_detail = getSiteData($site_id);
 
-	$bill_number = billNumberText($company_id, $bill_data['quotation_data']->bill_no, 'Quotation');
+	$bill_number = billNumberText($company_id, $bill_data['hiring_data']->bill_no, 'HB');
 
-	$tax_for = $quotation_data->tax_from;
+	$tax_for = $hiring_data->tax_from;
 
-	$gst_total = $quotation_data->cgst_amt + $quotation_data->sgst_amt + $quotation_data->igst_amt;
+	$gst_total = $hiring_data->cgst_amt + $hiring_data->sgst_amt + $hiring_data->igst_amt;
 }
+
 
 	$pages = false;
 	$per_page = 16;
 	$pieces = false;
 	$tota_row = 0;
 
-	if($quotation_data) {
-		$pages = ceil(count($bill_data['quotation_detail'])/$per_page);
-		$pieces = array_chunk($bill_data['quotation_detail'], $per_page);
-		$tota_row = count($bill_data['quotation_detail']);
+	if($hiring_data) {
+		$pages = ceil(count($bill_data['hiring_detail'])/$per_page);
+		$pieces = array_chunk($bill_data['hiring_detail'], $per_page);
+		$tota_row = count($bill_data['hiring_detail']);
 		$reminder = ($tota_row % $per_page);
 /*				$page_short = false;
 		if($reminder > 12) {
@@ -70,7 +70,7 @@ if(isset($bill_data['quotation_data']) && isset($_GET['quotation_no']) && $_GET[
 	for ($i = 0; $i < $pages; $i++) { 
 		$tot_tmp = 0;
 		foreach ($pieces[$i] as $key => $h_value) {
-			$tot_tmp = $tot_tmp + $h_value->rate_ninety;
+			$tot_tmp = $tot_tmp + $h_value->hiring_amt;
 		}
 		$page_total[$i] = $page_total[$i-1] + $tot_tmp;
 	}
@@ -338,7 +338,7 @@ if(isset($bill_data['quotation_data']) && isset($_GET['quotation_no']) && $_GET[
 				</div>
 				<div class="customer-detail inner-container" style="margin-top: 2px;margin-bottom:2px;">
 					<div class="billing-title">
-						QUOTATION
+						HIRE BILL
 					</div>
 				</div>
 			</td>
@@ -360,7 +360,7 @@ if(isset($bill_data['quotation_data']) && isset($_GET['quotation_no']) && $_GET[
 							<table class="table table-bordered" style="margin-bottom: 2px;">
 								<thead>
 									<tr>
-										<th colspan="2">
+										<th colspan="4">
 											<div style="min-height: 100px;padding:5px;">
 												<div style="line-height:10px;">
 													To: 
@@ -381,7 +381,7 @@ if(isset($bill_data['quotation_data']) && isset($_GET['quotation_no']) && $_GET[
 											<div style="min-height: 100px;padding:5px;">
 												<div>
 													<div style="line-height: 20px;height: 25px;">
-														<div style="float:left;width: 60px">NO</div>
+														<div style="float:left;width: 60px">BILL NO</div>
 														<div style="float:left;">
 															: <?php echo $bill_number['bill_no']; ?>
 														</div>
@@ -390,7 +390,7 @@ if(isset($bill_data['quotation_data']) && isset($_GET['quotation_no']) && $_GET[
 													<div style="line-height: 20px;height: 25px;">
 														<div style="float:left;width: 60px">DATE</div>
 														<div style="float:left;">
-															: <?php echo date('d-m-Y', strtotime($quotation_data->bill_date)); ?>
+															: <?php echo date('d-m-Y', strtotime($hiring_data->bill_date)); ?>
 														</div>
 														<div class="clear"></div>
 													</div>
@@ -416,15 +416,22 @@ if(isset($bill_data['quotation_data']) && isset($_GET['quotation_no']) && $_GET[
 										<th class="center-th" style="width:35px;padding:0;" rowspan="2">
 											<div class="text-center">Qty</div>
 										</th>
-										<th class="center-th" style="padding: 0;">
-											<div class="text-center">UOM</div>
+										<th class="center-th" style="padding: 0;" colspan="3">
+											<div class="text-center">Peroid</div>
 										</th>
 										<th class="center-th" style="padding: 0;">
-											<div class="text-center">Rate / 30 Day<br>Rs Ps</div>
+											<div class="text-center">Rate/Day</div>
 										</th>
 										<th class="center-th" style="padding: 0;width: 80px;">
-											<div class="text-center">Hiring Charge For 30 Days</div>
+											<div class="text-center">Amount</div>
 										</th>
+									</tr>
+									<tr>
+										<th style="padding: 0;width: 70px;"><div class="text-center">From</div></th>
+										<th style="padding: 0;width: 70px;"><div class="text-center">To</div></th>
+										<th style="padding: 0;width: 35px;"><div class="text-center">No of Days</div></th>
+										<th style="padding: 0;width: 65px;"><div class="text-right">Rs Ps</div></th>
+										<th style="padding: 0;width: 35px;"><div class="text-right">Rs Ps</div></th>
 									</tr>
 								</thead>
 
@@ -440,6 +447,8 @@ if(isset($bill_data['quotation_data']) && isset($_GET['quotation_no']) && $_GET[
 										<td><div class="text-center">-</div></td>
 										<td><div class="text-center">-</div></td>
 										<td><div class="text-center">-</div></td>
+										<td><div class="text-center">-</div></td>
+										<td><div class="text-right">-</div></td>
 										<td>
 											<div class="text-right">
 												<?php echo moneyFormatIndia( number_format($page_total[$i-1],2) ); ?>
@@ -466,18 +475,28 @@ if(isset($bill_data['quotation_data']) && isset($_GET['quotation_no']) && $_GET[
 											</div>
 										</td>
 										<td>
+											<div class="text-center" style="text-align: right;">
+												<?php echo date('d.m.Y', strtotime($value->bill_from));?>
+											</div>
+										</td>
+										<td>
 											<div class="text-center">
-												Nos
+												<?php echo date('d.m.Y', strtotime($value->bill_to));?>
+											</div>
+										</td>
+										<td>
+											<div class="text-center">
+												<?php echo $value->bill_days; ?>
 											</div>
 										</td>
 										<td>
 											<div class="text-rigth">
-												<?php echo moneyFormatIndia($value->rate_thirty); ?>
+												<?php echo moneyFormatIndia($value->rate_per_day); ?>
 											</div>
 										</td>
 										<td>
 											<div class="text-rigth">
-												<?php echo moneyFormatIndia($value->rate_ninety); ?>
+												<?php echo moneyFormatIndia($value->hiring_amt); ?>
 											</div>
 										</td>
 									</tr>
@@ -495,90 +514,135 @@ if(isset($bill_data['quotation_data']) && isset($_GET['quotation_no']) && $_GET[
 											<td></td>
 											<td></td>
 											<td></td>
+											<td></td>
+											<td></td>
 										</tr>
 										<tr>
-											<td colspan="5">
-												<div class="text-center">
-													<b>Total Hire Charge 30 Days </b>
-												</div>
-											</td>
+											<td colspan="7"><div class="text-center">Total (Hire Charges)</div></td>
 											<td>
 												<div class="text-rigth">
-													<?php echo moneyFormatIndia($quotation_data->sub_total); ?>
+													<?php echo moneyFormatIndia($hiring_data->sub_tot); ?>
 												</div>
 											</td>
 										</tr>
 										<?php
-											if($quotation_data->discount_avail != 'no') {
+											if($hiring_data->discount_avail != 'no' && $hiring_data->discount_amount != 0) {
 										?>
 										<tr>
-											<td colspan="5"><div class="text-center">Less Discount <?php echo $quotation_data->discount_percentage.'%'; ?></div></td>
+											<td colspan="7"><div class="text-center">Discount</div></td>
 											<td>
 												<div class="text-right">
-													<?php echo moneyFormatIndia($quotation_data->discount_amt); ?>
+													<?php echo moneyFormatIndia($hiring_data->discount_amount); ?>
+												</div>
+											</td>
+										</tr>
+										<tr>
+											<td colspan="7"><div class="text-center">Total After Discount</div></td>
+											<td>
+												<div class="text-rigth">
+													<?php echo moneyFormatIndia($hiring_data->total_after_discount); ?>
 												</div>
 											</td>
 										</tr>
 										<?php
 											}
+
+											if( isset($hiring_data->transportation_charge) && $hiring_data->transportation_charge != 0 ) {
 										?>
 										<tr>
-											<td colspan="5">
-												<div class="text-center"><b>Taxable Amount</b></div>
-											</td>
+											<td colspan="7"><div class="text-center">Delivery Charges</div></td>
 											<td>
 												<div class="text-right">
-													<?php echo moneyFormatIndia($quotation_data->after_discount_amt); ?>
+													<?php echo moneyFormatIndia($hiring_data->transportation_charge); ?>
 												</div>
 											</td>
 										</tr>
 										<?php
+											}
+											if( isset($hiring_data->damage_charge) && $hiring_data->damage_charge != 0 ) {
+										?>
+										<tr>
+											<td colspan="7"><div class="text-center">Cleaning and Maintanance Charges</div></td>
+											<td>
+												<div class="text-right">
+													<?php echo moneyFormatIndia($hiring_data->damage_charge); ?>
+												</div>
+											</td>
+										</tr>
+										<?php
+											}
+											if( isset($hiring_data->lost_charge) && $hiring_data->lost_charge != 0 ) {
+										?>
+										<tr>
+											<td colspan="7"><div class="text-center">Material Lost Charges</div></td>
+											<td>
+												<div class="text-right">
+													<?php echo moneyFormatIndia($hiring_data->lost_charge); ?>
+												</div>
+											</td>
+										</tr>
+										<?php
+											}
+										if( isset($hiring_data->transportation_charge) && $hiring_data->transportation_charge != 0 && isset($hiring_data->transportation_charge) && $hiring_data->transportation_charge != 0 && isset($hiring_data->lost_charge) && $hiring_data->lost_charge != 0 ) {
+										?>
+											<tr class="lost-tr">
+												<td colspan="7" >
+													<div class="text-center">Total</div>
+												</td>
+												<td>
+													<div class="text-right">
+														<span><?php echo moneyFormatIndia($hiring_data->total_before_tax); ?></span>					
+													</div>
+												</td>
+											</tr>
+										<?php
+										}
 
-										if($quotation_data->tax_from != 'no_tax') {
+										if($hiring_data->tax_from != 'no_tax') {
 
-											if($quotation_data->tax_from == 'gst') {
+											if($hiring_data->tax_from == 'gst') {
 
-												if($quotation_data->gst_for == 'cgst') {
+												if($hiring_data->gst_for == 'cgst') {
 
 										?>
 												<tr>
-													<td colspan="5"><div class="text-center">CGST - 9%</div></td>
+													<td colspan="7"><div class="text-center"><b>CGST - 9%</b></div></td>
 													<td>
 														<div class="text-rigth">
-															<?php echo moneyFormatIndia($quotation_data->cgst_amt); ?>
+															<?php echo moneyFormatIndia($hiring_data->cgst_amt); ?>
 														</div>
 													</td>
 												</tr>
 												<tr>
-													<td colspan="5"><div class="text-center">SGST - 9%</div></td>
+													<td colspan="7"><div class="text-center"><b>SGST - 9%</b></div></td>
 													<td>
 														<div class="text-rigth">
-															<?php echo moneyFormatIndia($quotation_data->sgst_amt); ?>
+															<?php echo moneyFormatIndia($hiring_data->sgst_amt); ?>
 														</div>
 													</td>
 												</tr>
 										<?php
 												}
-												if($quotation_data->gst_for == 'igst') {
+												if($hiring_data->gst_for == 'igst') {
 										?>
 												<tr>
-													<td colspan="5"><div class="text-center">IGST - 18%</div></td>
+													<td colspan="7"><div class="text-center"><b>IGST - 18%</b></div></td>
 													<td>
 														<div class="text-rigth">
-															<?php echo moneyFormatIndia($quotation_data->igst_amt); ?>
+															<?php echo moneyFormatIndia($hiring_data->igst_amt); ?>
 														</div>
 													</td>
 												</tr>
 										<?php
 												}
 											}
-											if($quotation_data->tax_from == 'vat') {
+											if($hiring_data->tax_from == 'vat') {
 											?>
 												<tr>
-													<td colspan="5"><div class="text-center">VAT - 5%</div></td>
+													<td colspan="7"><div class="text-center"><b>VAT - 5%</b></div></td>
 													<td>
 														<div class="text-rigth">
-															<?php echo moneyFormatIndia($quotation_data->vat_amt); ?>
+															<?php echo moneyFormatIndia($hiring_data->vat_amt); ?>
 														</div>
 													</td>
 												</tr>
@@ -587,10 +651,10 @@ if(isset($bill_data['quotation_data']) && isset($_GET['quotation_no']) && $_GET[
 											?>
 
 											<tr>
-												<td colspan="5"><div class="text-center">Total</div></td>
+												<td colspan="7"><div class="text-center">Total Including Tax</div></td>
 												<td>
 													<div class="text-right">
-														<?php echo moneyFormatIndia($quotation_data->tax_include_tot); ?>
+														<?php echo moneyFormatIndia($hiring_data->tax_include_tot); ?>
 													</div>
 												</td>
 											</tr>
@@ -599,18 +663,18 @@ if(isset($bill_data['quotation_data']) && isset($_GET['quotation_no']) && $_GET[
 										?>
 
 										<tr>
-											<td colspan="5"><div class="text-center">Round off</div></td>
+											<td colspan="7"><div class="text-center">Round off</div></td>
 											<td>
 												<div class="text-right">
-													<?php echo moneyFormatIndia($quotation_data->round_off); ?>
+													<?php echo moneyFormatIndia($hiring_data->round_off); ?>
 												</div>
 											</td>
 										</tr>
 										<tr>
-											<td colspan="5"><div class="text-center"><b>Total Including Tax</b></div></td>
+											<td colspan="7"><div class="text-center"><b>Total</b></div></td>
 											<td>
 												<div class="text-right">
-													<?php echo moneyFormatIndia($quotation_data->for_thirty_days); ?>
+													<?php echo moneyFormatIndia($hiring_data->hiring_total); ?>
 												</div>
 											</td>
 										</tr>
@@ -620,35 +684,142 @@ if(isset($bill_data['quotation_data']) && isset($_GET['quotation_no']) && $_GET[
 												<td>Amount Chargable (in words)</td>
 											</tr>
 											<tr>
-												<td><b>INR <?php echo ucwords(convert_number_to_words_full($quotation_data->for_thirty_days)); ?></b></td>
+												<td><b>INR <?php echo ucwords(convert_number_to_words_full($hiring_data->hiring_total)); ?></b></td>
 											</tr>
 										</table>
 
-										<div style="font-size: 16px;font-weight: bold;margin: 10px 0;">	<u>Requirements</u>
-										</div>
-										<?php
-											echo $quotation_data->requirements;
-										?>
+											<?php
+												if($hiring_data->tax_from != 'no_tax') {
+													if($hiring_gst_data) {
+											?>
+													<table class="table table-bordered" style="margin-top:10px;margin-bottom: 5px;">
+														<thead>
+															<tr>
+																<th class="center-th" style="" rowspan="2">
+																	<div class="text-center">HSN</div>
+																</th>
+																<th class="center-th" style="width:90px;padding:0;" rowspan="2">
+																	<div class="text-center">Taxable Value</div>
+																</th>
+																<?php 
+																	if($hiring_data->gst_for == 'cgst') {
+																?>
+																		<th class="center-th" style="padding: 0;" colspan="2">
+																			<div class="text-center">CGST</div>
+																		</th>
+																		<th class="center-th" style="padding: 0;" colspan="2">
+																			<div class="text-center">SGST</div>
+																		</th>
+																<?php
+																	}
+																	if($hiring_data->gst_for == 'igst') {
+																?>
+																		<th class="center-th" style="padding: 0;" colspan="2">
+																			<div class="text-center">IGST</div>
+																		</th>
+																<?php
+																	}
+																?>
 
-										<div>
-											<div class="left-float" style="width:40px;">***</div>
-											<div class="left-float" style="width:100%;">
-												
-												<table class="table table-bordered">
+															</tr>
+															<tr>
+																<?php 
+																	if($hiring_data->gst_for == 'cgst') {
+																?>
+																		<th style="padding: 0;width: 70px;"><div class="text-center">Rate</div></th>
+																		<th style="padding: 0;width: 70px;"><div class="text-center">Amount</div></th>
+																		<th style="padding: 0;width: 70px;"><div class="text-center">Rate</div></th>
+																		<th style="padding: 0;width: 70px;"><div class="text-center">Amount</div></th>
+																<?php
+																	}
+																	if($hiring_data->gst_for == 'igst') {
+																?>
+																		<th style="padding: 0;width: 70px;"><div class="text-center">Rate</div></th>
+																		<th style="padding: 0;width: 70px;"><div class="text-center">Amount</div></th>
+																<?php 
+																	}
+																?>
+															</tr>
+														</thead>
+														<tbody>
+															<?php
+																foreach ($hiring_gst_data as $gs_value) {
+															?>
+																	<tr>
+																		<td>
+																			<div class="text-center">
+																				<?php echo $gs_value->hsn_code; ?>
+																			</div>
+																		</td>
+																		<td>
+																			<div class="text-right">
+																				<?php echo moneyFormatIndia($gs_value->taxable_value); ?>
+																			</div>
+																		</td>
+																		<?php 
+																			if($hiring_data->gst_for == 'cgst') {
+																		?>
+																				<td>
+																					<div class="text-right">
+																						9%
+																					</div>
+																				</td>
+																				<td>
+																					<div class="text-right">
+																						<?php echo moneyFormatIndia($gs_value->cgst_val); ?>
+																					</div>
+																				</td>
+																				<td>
+																					<div class="text-right">
+																						9%
+																					</div>
+																				</td>
+																				<td>
+																					<div class="text-right">
+																						<?php echo moneyFormatIndia($gs_value->sgst_val); ?>
+																					</div>
+																				</td>
+																		<?php
+																			}
+																			if($hiring_data->gst_for == 'igst') {
+																		?>
+																				<td>
+																					<div class="text-right">
+																						18%
+																					</div>
+																				</td>
+																				<td>
+																					<div class="text-right">
+																						<?php echo moneyFormatIndia($gs_value->igst_val); ?>
+																					</div>
+																				</td>
+																		<?php
+																			}
+																		?>
+																	</tr>
+																<?php
+																}
+																?>
+
+
+
+														</tbody>
+													</table>
+												<table>
 													<tr>
-														<td><div style="text-align: center;width: 200px;">Other Requirements</div></td>
-														<td><div style="text-align: center;">Passport size Photo, ID Proof, Address Proof (Company details, Site details and Contact details) </div></td>
+														<td>Tax Amount (in words)</td>
+													</tr>
+													<tr>
+														<td><b>INR <?php echo ucwords(convert_number_to_words_full($gst_total)); ?></b></td>
 													</tr>
 												</table>
-											</div>
-											<div class="clear"></div>
-										</div>
-
 								<?php
+											}
+										}
 									} else {
 								?>
 										<tr>
-											<td colspan="5">
+											<td colspan="7">
 												<div class="text-center">CF / TOTAL</div>
 											</td>
 											<td>

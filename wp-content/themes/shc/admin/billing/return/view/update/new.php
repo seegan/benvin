@@ -264,7 +264,7 @@
 
 
 						<div class="col-lg-12">
-							<div class="">
+							<div class="damage_detail">
 
 
 								<div class="deposit-repeater1 damage_detail" style="margin-top:20px;">
@@ -334,9 +334,6 @@
 	                          		}
 	                          	?>
 	                       	</div>
-
-
-
 						</div>
 
 

@@ -1,5 +1,7 @@
 <?php
-	$master_id = ( isset($_GET['id']) && $_GET['id'] != 0 ) ? $_GET['id'] : 0;
+	$statement_id = ( isset($_GET['id']) && $_GET['id'] != 0 ) ? $_GET['id'] : 0;
+	$master_id = explode(",", $statement_id);
+	$master_id = isset($master_id[0]) ? $master_id[0] : 0;
 
 	$master_data = getMasterDetail($master_id);
 	$master_data = ($master_data) ? $master_data : false;
@@ -15,7 +17,7 @@
 
 		$customer_detail = getCustomerData($customer_id);
 		$site_detail = getSiteData($site_id);
-		$statement_data = getAccountStatement($master_id, $statement_date, $with_sd);
+		$statement_data = getAccountStatement($statement_id, $statement_date, $with_sd);
 
 		$statement = isset($statement_data['statement_data']) ? $statement_data['statement_data'] : false;
 		$cd_data = isset($statement_data['cd_total']) ? $statement_data['cd_total'] : false;
@@ -69,7 +71,7 @@
 				<div class="x_content">
 					<div class="form-horizontal form-label-left" id="create_billing">
 						<div class="col-lg-6">
-							<input type="hidden" class="statement_id" value="<?php echo $master_id; ?>">
+							<input type="hidden" class="statement_id" value="<?php echo $statement_id; ?>">
 							<?php
 							if($master_data) {
 								echo "<div class='address-line'>MRI : ".$master_data['master_data']->id."</div>";
@@ -115,7 +117,7 @@
 													$company_id = $s_value->bill_from_comp;
 
 													if($s_value->description == 'Missing Cost'  ) {
-														if($s_value->debit && $s_value->debit != 0) {
+														if($s_value->credit != 0 && $s_value->credit) {
 										?>
 													<tr>
 														<td>

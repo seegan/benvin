@@ -99,12 +99,16 @@ jQuery(document).ready(function () {
 			jQuery('.show_return').css('display', 'none');
 			jQuery('.show_row_return').css('display', 'none');
 
+			jQuery('.damage_detail').css('display', 'none');
+
 
 		} else {
 			jQuery('.show_return').css('display', 'table-cell');
 			jQuery('.show_row_return').css('display', 'table-row');
 			jQuery('.show_lost').css('display', 'none');
 			jQuery('.show_row_lost').css('display', 'none');
+
+			jQuery('.damage_detail').css('display', 'block');
 		}
 	})
 

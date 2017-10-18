@@ -59,14 +59,14 @@ add_action( 'wp_ajax_nopriv_create_master', 'create_master' );
 function getMasterDetail($master_id = '') {
 	global $wpdb;
 	$master_table = $wpdb->prefix.'shc_master';
-	$deposit_table = $wpdb->prefix.'shc_deposit';
-	$deposit_detail = $wpdb->prefix.'shc_deposit_detail';
-	$lots_table = $wpdb->prefix.'shc_lots';
+	$customer_table = $wpdb->prefix.'shc_customers';
 
-	$query = "SELECT * FROM ${master_table} WHERE active = 1 AND id = ${master_id}";
+	$query = "SELECT m.*,c.name as customer_name, c.mobile as customer_mobile, c.address as customer_address, c.bill_from_comp  FROM ${master_table} as m JOIN ${customer_table} as c ON m.customer_id = c.id WHERE m.active = 1 AND m.id = ${master_id}";
 
 	$data['master_data'] = $wpdb->get_row($query);
 
 	return $data;
 }
+
+
 ?>

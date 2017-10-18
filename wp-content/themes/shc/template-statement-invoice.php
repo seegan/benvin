@@ -20,9 +20,20 @@
 <?php
 $statement_data = false;
 $date_to = isset($_GET['date_to']) ? $_GET['date_to'] : date('Y-m-d');
-$bill_data = getAccountStatement($_GET['statement_id'], $date_to);
+$with_sd = ( isset($_GET['sd']) && $_GET['sd'] == 0 ) ? 0 : 1;
 
+$statement_id = explode(",", $_GET['statement_id']);
+$statement_id = isset($statement_id[0]) ? $statement_id[0] : 0;
+
+$master_data = getMasterDetail($statement_id);
+$company_data = getCompaniesById($master_data['master_data']->bill_from_comp);
+
+$bill_data = getAccountStatement($_GET['statement_id'], $date_to, $with_sd);
 $cd_data = isset($bill_data['cd_total']) ? $bill_data['cd_total'] : false;
+
+
+$lost_data = getLostStatement($_GET['statement_id'], $date_to);
+$damage_data = getDamageStatement($_GET['statement_id'], $date_to);
 
 
 	$credit_amount = 0.00;
@@ -51,23 +62,15 @@ $cd_data = isset($bill_data['cd_total']) ? $bill_data['cd_total'] : false;
 		$debit_bal = '';
 	}
 
-
-
-
-
-$statement_id = explode(",", $_GET['statement_id']);
-$statement_id = isset($statement_id[0]) ? $statement_id[0] : 0;
-
 if(isset($_GET['statement_id']) && $_GET['statement_id'] != ''){
 	$statement_data = $bill_data['statement_data'];
 
 	$master_data = getMasterDetail($statement_id);
 	$master_data = ($master_data) ? $master_data : false;
 
-
-
 /*	$company_id = $statement_data->bill_from_comp;
-	$company_data = getCompaniesById($company_id);*/
+	$company_data = getCompaniesById($company_id);
+*/
 
 	$customer_id = $master_data['master_data']->customer_id;
 	$site_id = $master_data['master_data']->site_id;
@@ -188,9 +191,6 @@ if(isset($_GET['statement_id']) && $_GET['statement_id'] != ''){
 		    .table td, .table th {
 		      background-color: transparent !important;
 		    }
-		    .bill-detail {
-		    	height: 650px;
-		    }
 
 			.footer {
 				position: fixed;
@@ -297,12 +297,9 @@ if(isset($_GET['statement_id']) && $_GET['statement_id'] != ''){
 		    .table td, .table th {
 		      background-color: transparent !important;
 		    }
-		    .bill-detail {
-		    	height: 650px;
-		    }
 
 			.footer {
-				position: fixed;
+				/*position: fixed;*/
             	bottom: 0px;
             	left: 0px;
 			}
@@ -373,7 +370,7 @@ if(isset($_GET['statement_id']) && $_GET['statement_id'] != ''){
 				</div>
 				<div class="customer-detail inner-container" style="margin-top: 2px;margin-bottom:2px;">
 					<div class="billing-title">
-						QUOTATION
+						STATEMENT
 					</div>
 				</div>
 			</td>
@@ -459,14 +456,15 @@ if(isset($_GET['statement_id']) && $_GET['statement_id'] != ''){
 									$company_id = $value->bill_from_comp;
 
 									if($value->description == 'Missing Cost'  ) {
-										if($value->debit && $value->debit != 0) {
+										if($value->credit && $value->credit != 0) {
 								?>
 											<tr>
+												<td></td>
 												<td>
-													<?php echo date("d-m-Y", strtotime($value->bill_date)); ?>
+													
 												</td>
 												<td>
-													<?php echo $value->description; ?>
+													<div class="text-center"><?php echo $value->description; ?></div>
 												</td>
 												<td>
 													
@@ -494,7 +492,7 @@ if(isset($_GET['statement_id']) && $_GET['statement_id'] != ''){
 											</div>
 										</td>
 										<td>
-											<div class="text-center">
+											<div class="text-left">
 												<?php echo $value->description; ?>
 											</div>
 										</td>
@@ -544,6 +542,7 @@ if(isset($_GET['statement_id']) && $_GET['statement_id'] != ''){
 												<?php echo ( $debit_amount != 0 ) ? moneyFormatIndia($debit_amount) : ''; ?>
 											</td>
 										</tr>
+
 								<?php
 									} else {
 								?>
@@ -568,6 +567,8 @@ if(isset($_GET['statement_id']) && $_GET['statement_id'] != ''){
 								?>
 								
 							</table>
+
+
 						</div>
 					</div>
 				</td>
@@ -577,6 +578,56 @@ if(isset($_GET['statement_id']) && $_GET['statement_id'] != ''){
 		?>
 	</tbody>
 </table>
+
+
+
+	<?php
+		if( $lost_data['lost_detail'] && $lost_data['lost_total'] ) {
+	?>
+	<div class="customer-detail inner-container" style="margin-top: 2px;margin-bottom:2px;">
+		<div class="billing-title" style="margin-top:10px;">
+			MISSING DETAIL
+		</div>
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th style="width:35px;" class="center-th">
+						<div style="width:30px;" class="text-center">SI #</div>
+					</th>
+					<th><div class="text-center">Description</div></th>
+					<th style="width:85px;"><div class="text-center">Qty</div></th>
+					<th style="width:100px;"><div class="text-center">Rate/Unit</div></th>
+					<th style="width:100px;"><div class="text-center">Amount</div></th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php
+					$i = 1;
+					foreach ($lost_data['lost_detail'] as $ld_value) {
+				?>
+				<tr>
+					<td><div class="text-center"><?php echo $i; ?></div></td>
+					<td><div class="text-center"><?php echo $ld_value->product_name.' '.$ld_value->product_type; ?></div></td>
+					<td><div class="text-center"><?php echo $ld_value->lost_qty; ?></div></td>
+					<td><div class="text-center"><?php echo $ld_value->lost_unit_price; ?></div></td>
+					<td><div class="text-right"><?php echo $ld_value->lost_total; ?></div></td>
+				</tr>
+				<?php
+					$i++;
+				}
+				?>
+				<tr>
+					<td colspan="4"><div class="text-center">Total</div></td>
+					<td><div class="text-right"><?php echo $lost_data['lost_total']->debit; ?></div></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<?php
+	}
+	?>
+
+
 
 <div class="footer" style="margin-bottom:20px;">
 

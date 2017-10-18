@@ -31,6 +31,8 @@ class Statement {
 		$return_table = $wpdb->prefix.'shc_return';
 
 
+
+
 /*		$query = "SELECT * FROM (
 
 
@@ -98,7 +100,7 @@ class Statement {
 				  WHEN ld.charge_for = 'loading' THEN 2
 				  WHEN ld.charge_for = 'transportation' THEN 3
 				END ) as priority,
-				dp.bill_from_comp, dp.r_date, dp.bill_date, CONCAT('To ', ld.charge_for) as description, dp.bill_ref, ld.charge_amt as credit, '' as debit FROM ( SELECT sd.bill_from_comp, sd.deposit_date as r_date, date(sd.deposit_date) as bill_date, CONCAT('SD ', sd.bill_no) as bill_ref, l.id as loading_id  FROM wp_shc_deposit as sd JOIN wp_shc_loading l ON sd.id = l.deposit_id WHERE sd.active = 1 AND sd.master_id IN (${master_id}) AND date(sd.deposit_date) <= date('${date_to}') AND l.active = 1 )  as dp JOIN wp_shc_loading_detail as ld ON dp.loading_id = ld.loading_id WHERE ld.charge_amt != 0.00
+				dp.bill_from_comp, dp.r_date, dp.bill_date, CONCAT('By ', ld.charge_for) as description, dp.bill_ref, ld.charge_amt as credit, '' as debit FROM ( SELECT sd.bill_from_comp, sd.deposit_date as r_date, date(sd.deposit_date) as bill_date, CONCAT('SD ', sd.bill_no) as bill_ref, l.id as loading_id  FROM wp_shc_deposit as sd JOIN wp_shc_loading l ON sd.id = l.deposit_id WHERE sd.active = 1 AND sd.master_id IN (${master_id}) AND date(sd.deposit_date) <= date('${date_to}') AND l.active = 1 )  as dp JOIN wp_shc_loading_detail as ld ON dp.loading_id = ld.loading_id WHERE ld.charge_amt != 0.00
 			) as loading
 
 			UNION ALL
@@ -119,7 +121,7 @@ class Statement {
 
 			SELECT lost.* FROM
 			(
-				SELECT 1 as priority, sr.bill_from_comp, NOW() as r_date, '' as bill_date, 'Missing Cost' as description, '' as bill_ref, '' as credit, SUM(lst.lost_total) as debit FROM ${lost_table} as lst JOIN ${return_table} as sr ON lst.return_id = sr.id WHERE lst.master_id IN (${master_id}) AND date(sr.return_date) <= date('${date_to}') AND lst.active = 1 AND sr.active = 1
+				SELECT 1 as priority, sr.bill_from_comp, NOW() as r_date, '' as bill_date, 'By Missing Cost' as description, '' as bill_ref, SUM(lst.lost_total) as credit, '' as debit FROM ${lost_table} as lst JOIN ${return_table} as sr ON lst.return_id = sr.id WHERE lst.master_id IN (${master_id}) AND date(sr.return_date) <= date('${date_to}') AND lst.active = 1 AND sr.active = 1
 			) as lost
 
 		    
@@ -140,10 +142,10 @@ class Statement {
 	function get_LostStatement($master_id = 0, $date_to = '0000-00-00') {
 		global $wpdb;
 		$detail_query = "SELECT full.*, l.product_name, l.product_type FROM ( SELECT ld.lot_id, SUM(ld.lost_qty) as lost_qty, ld.lost_unit_price, SUM(ld.lost_total) as lost_total FROM (
-				SELECT lst.* FROM wp_shc_lost as lst JOIN wp_shc_return as sr ON lst.return_id = sr.id WHERE lst.master_id = ${master_id} AND date(sr.return_date) <= date('${date_to}') AND lst.active = 1 AND sr.active = 1 )
+				SELECT lst.* FROM wp_shc_lost as lst JOIN wp_shc_return as sr ON lst.return_id = sr.id WHERE lst.master_id IN (${master_id}) AND date(sr.return_date) <= date('${date_to}') AND lst.active = 1 AND sr.active = 1 )
 			as lost_table JOIN wp_shc_lost_detail as ld ON ld.lost_id = lost_table.id WHERE ld.active = 1 GROUP BY ld.lot_id, ld.lost_unit_price ) as full JOIN wp_shc_lots as l ON full.lot_id = l.id";
 
-		$total_query = "SELECT SUM(lst.lost_total) as debit FROM wp_shc_lost as lst JOIN wp_shc_return as sr ON lst.return_id = sr.id WHERE lst.master_id = ${master_id} AND date(sr.return_date) <= date('${date_to}') AND lst.active = 1 AND sr.active = 1";
+		$total_query = "SELECT SUM(lst.lost_total) as debit FROM wp_shc_lost as lst JOIN wp_shc_return as sr ON lst.return_id = sr.id WHERE lst.master_id IN (${master_id}) AND date(sr.return_date) <= date('${date_to}') AND lst.active = 1 AND sr.active = 1";
 		
 		$data['lost_detail'] = $wpdb->get_results($detail_query);
 		$data['lost_total'] = $wpdb->get_row($total_query);
@@ -155,9 +157,9 @@ class Statement {
 	function get_DamageStatement($master_id = 0, $date_to = '0000-00-00') {
 
 		global $wpdb;
-		$total_query = "SELECT SUM(rd.damage_total) as debit FROM wp_shc_return_damage as rd JOIN wp_shc_return as sr ON rd.return_id = sr.id WHERE rd.master_id = ${master_id} AND date(sr.return_date) <= date('${date_to}') AND rd.active = 1 AND sr.active = 1";
+		$total_query = "SELECT SUM(rd.damage_total) as debit FROM wp_shc_return_damage as rd JOIN wp_shc_return as sr ON rd.return_id = sr.id WHERE rd.master_id IN (${master_id}) AND date(sr.return_date) <= date('${date_to}') AND rd.active = 1 AND sr.active = 1";
 
-		$detail_query = "SELECT rdd.damage_detail, rdd.damage_charge FROM ( SELECT rd.* FROM wp_shc_return_damage as rd JOIN wp_shc_return as sr ON rd.return_id = sr.id WHERE rd.master_id = ${master_id} AND date(sr.return_date) <= date('${date_to}') AND rd.active = 1 AND sr.active = 1 ) as dmg JOIN wp_shc_return_damage_detail as rdd ON dmg.id = rdd.damage_id WHERE rdd.active = 1";
+		$detail_query = "SELECT rdd.damage_detail, rdd.damage_charge FROM ( SELECT rd.* FROM wp_shc_return_damage as rd JOIN wp_shc_return as sr ON rd.return_id = sr.id WHERE rd.master_id IN (${master_id}) AND date(sr.return_date) <= date('${date_to}') AND rd.active = 1 AND sr.active = 1 ) as dmg JOIN wp_shc_return_damage_detail as rdd ON dmg.id = rdd.damage_id WHERE rdd.active = 1";
 
 		$data['damage_total'] = $wpdb->get_row($total_query);
 		$data['damage_detail'] = $wpdb->get_results($detail_query);
