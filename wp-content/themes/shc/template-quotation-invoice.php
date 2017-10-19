@@ -20,17 +20,19 @@
 
 
 <?php
-$hiring_data = false;
+$quotation_data = false;
 $hiring_gst_data = false;
-$bill_data = getHiringBillDataPrint($_GET['bill_no']);
-if(isset($bill_data['hiring_data']) && isset($_GET['bill_no']) && $_GET['bill_no'] != '') {
-	$hiring_data = $bill_data['hiring_data'];
-	$hiring_gst_data = $bill_data['hiring_gst_detail'];
+$bill_data = getQutationDetail($_GET['quotation_no']);
 
-	$company_id = $hiring_data->bill_from_comp;
+
+
+if(isset($bill_data['quotation_data']) && isset($_GET['quotation_no']) && $_GET['quotation_no'] != '') {
+	$quotation_data = $bill_data['quotation_data'];
+
+	$company_id = $quotation_data->bill_from_comp;
 	$company_data = getCompaniesById($company_id);
 
-	$master_data = getMasterDetail($hiring_data->master_id);
+	$master_data = getMasterDetail($quotation_data->master_id);
 	$master_data = ($master_data) ? $master_data : false;
 
 	$customer_id = $master_data['master_data']->customer_id;
@@ -39,11 +41,11 @@ if(isset($bill_data['hiring_data']) && isset($_GET['bill_no']) && $_GET['bill_no
 	$customer_detail = getCustomerData($customer_id);
 	$site_detail = getSiteData($site_id);
 
-	$bill_number = billNumberText($company_id, $bill_data['hiring_data']->bill_no, 'HB');
+	$bill_number = billNumberText($company_id, $bill_data['quotation_data']->bill_no, 'HB');
 
-	$tax_for = $hiring_data->tax_from;
+	$tax_for = $quotation_data->tax_from;
 
-	$gst_total = $hiring_data->cgst_amt + $hiring_data->sgst_amt + $hiring_data->igst_amt;
+	$gst_total = $quotation_data->cgst_amt + $quotation_data->sgst_amt + $quotation_data->igst_amt;
 }
 
 
@@ -52,10 +54,10 @@ if(isset($bill_data['hiring_data']) && isset($_GET['bill_no']) && $_GET['bill_no
 	$pieces = false;
 	$tota_row = 0;
 
-	if($hiring_data) {
-		$pages = ceil(count($bill_data['hiring_detail'])/$per_page);
-		$pieces = array_chunk($bill_data['hiring_detail'], $per_page);
-		$tota_row = count($bill_data['hiring_detail']);
+	if($quotation_data) {
+		$pages = ceil(count($bill_data['quotation_detail'])/$per_page);
+		$pieces = array_chunk($bill_data['quotation_detail'], $per_page);
+		$tota_row = count($bill_data['quotation_detail']);
 		$reminder = ($tota_row % $per_page);
 /*				$page_short = false;
 		if($reminder > 12) {
@@ -390,7 +392,7 @@ if(isset($bill_data['hiring_data']) && isset($_GET['bill_no']) && $_GET['bill_no
 													<div style="line-height: 20px;height: 25px;">
 														<div style="float:left;width: 60px">DATE</div>
 														<div style="float:left;">
-															: <?php echo date('d-m-Y', strtotime($hiring_data->bill_date)); ?>
+															: <?php echo date('d-m-Y', strtotime($quotation_data->bill_date)); ?>
 														</div>
 														<div class="clear"></div>
 													</div>
@@ -416,22 +418,15 @@ if(isset($bill_data['hiring_data']) && isset($_GET['bill_no']) && $_GET['bill_no
 										<th class="center-th" style="width:35px;padding:0;" rowspan="2">
 											<div class="text-center">Qty</div>
 										</th>
-										<th class="center-th" style="padding: 0;" colspan="3">
-											<div class="text-center">Peroid</div>
+										<th class="center-th" style="width:35px;padding:0;" rowspan="2">
+											<div class="text-center">UOM</div>
 										</th>
 										<th class="center-th" style="padding: 0;">
-											<div class="text-center">Rate/Day</div>
+											<div class="text-center">Rate / 30 Days</div>
 										</th>
 										<th class="center-th" style="padding: 0;width: 80px;">
-											<div class="text-center">Amount</div>
+											<div class="text-center">Hiring Charges For 30 Days</div>
 										</th>
-									</tr>
-									<tr>
-										<th style="padding: 0;width: 70px;"><div class="text-center">From</div></th>
-										<th style="padding: 0;width: 70px;"><div class="text-center">To</div></th>
-										<th style="padding: 0;width: 35px;"><div class="text-center">No of Days</div></th>
-										<th style="padding: 0;width: 65px;"><div class="text-right">Rs Ps</div></th>
-										<th style="padding: 0;width: 35px;"><div class="text-right">Rs Ps</div></th>
 									</tr>
 								</thead>
 
@@ -475,16 +470,6 @@ if(isset($bill_data['hiring_data']) && isset($_GET['bill_no']) && $_GET['bill_no
 											</div>
 										</td>
 										<td>
-											<div class="text-center" style="text-align: right;">
-												<?php echo date('d.m.Y', strtotime($value->bill_from));?>
-											</div>
-										</td>
-										<td>
-											<div class="text-center">
-												<?php echo date('d.m.Y', strtotime($value->bill_to));?>
-											</div>
-										</td>
-										<td>
 											<div class="text-center">
 												<?php echo $value->bill_days; ?>
 											</div>
@@ -514,135 +499,133 @@ if(isset($bill_data['hiring_data']) && isset($_GET['bill_no']) && $_GET['bill_no
 											<td></td>
 											<td></td>
 											<td></td>
-											<td></td>
-											<td></td>
 										</tr>
 										<tr>
-											<td colspan="7"><div class="text-center">Total (Hire Charges)</div></td>
+											<td colspan="5"><div class="text-center">Total (Hire Charges)</div></td>
 											<td>
 												<div class="text-rigth">
-													<?php echo moneyFormatIndia($hiring_data->sub_tot); ?>
+													<?php echo moneyFormatIndia($quotation_data->sub_tot); ?>
 												</div>
 											</td>
 										</tr>
 										<?php
-											if($hiring_data->discount_avail != 'no' && $hiring_data->discount_amount != 0) {
+											if($quotation_data->discount_avail != 'no' && $quotation_data->discount_amount != 0) {
 										?>
 										<tr>
-											<td colspan="7"><div class="text-center">Discount</div></td>
+											<td colspan="5"><div class="text-center">Discount</div></td>
 											<td>
 												<div class="text-right">
-													<?php echo moneyFormatIndia($hiring_data->discount_amount); ?>
+													<?php echo moneyFormatIndia($quotation_data->discount_amount); ?>
 												</div>
 											</td>
 										</tr>
 										<tr>
-											<td colspan="7"><div class="text-center">Total After Discount</div></td>
+											<td colspan="5"><div class="text-center">Total After Discount</div></td>
 											<td>
 												<div class="text-rigth">
-													<?php echo moneyFormatIndia($hiring_data->total_after_discount); ?>
+													<?php echo moneyFormatIndia($quotation_data->total_after_discount); ?>
 												</div>
 											</td>
 										</tr>
 										<?php
 											}
 
-											if( isset($hiring_data->transportation_charge) && $hiring_data->transportation_charge != 0 ) {
+											if( isset($quotation_data->transportation_charge) && $quotation_data->transportation_charge != 0 ) {
 										?>
 										<tr>
-											<td colspan="7"><div class="text-center">Delivery Charges</div></td>
+											<td colspan="5"><div class="text-center">Delivery Charges</div></td>
 											<td>
 												<div class="text-right">
-													<?php echo moneyFormatIndia($hiring_data->transportation_charge); ?>
+													<?php echo moneyFormatIndia($quotation_data->transportation_charge); ?>
 												</div>
 											</td>
 										</tr>
 										<?php
 											}
-											if( isset($hiring_data->damage_charge) && $hiring_data->damage_charge != 0 ) {
+											if( isset($quotation_data->damage_charge) && $quotation_data->damage_charge != 0 ) {
 										?>
 										<tr>
-											<td colspan="7"><div class="text-center">Cleaning and Maintanance Charges</div></td>
+											<td colspan="5"><div class="text-center">Cleaning and Maintanance Charges</div></td>
 											<td>
 												<div class="text-right">
-													<?php echo moneyFormatIndia($hiring_data->damage_charge); ?>
+													<?php echo moneyFormatIndia($quotation_data->damage_charge); ?>
 												</div>
 											</td>
 										</tr>
 										<?php
 											}
-											if( isset($hiring_data->lost_charge) && $hiring_data->lost_charge != 0 ) {
+											if( isset($quotation_data->lost_charge) && $quotation_data->lost_charge != 0 ) {
 										?>
 										<tr>
-											<td colspan="7"><div class="text-center">Material Lost Charges</div></td>
+											<td colspan="5"><div class="text-center">Material Lost Charges</div></td>
 											<td>
 												<div class="text-right">
-													<?php echo moneyFormatIndia($hiring_data->lost_charge); ?>
+													<?php echo moneyFormatIndia($quotation_data->lost_charge); ?>
 												</div>
 											</td>
 										</tr>
 										<?php
 											}
-										if( isset($hiring_data->transportation_charge) && $hiring_data->transportation_charge != 0 && isset($hiring_data->transportation_charge) && $hiring_data->transportation_charge != 0 && isset($hiring_data->lost_charge) && $hiring_data->lost_charge != 0 ) {
+										if( isset($quotation_data->transportation_charge) && $quotation_data->transportation_charge != 0 && isset($quotation_data->transportation_charge) && $quotation_data->transportation_charge != 0 && isset($quotation_data->lost_charge) && $quotation_data->lost_charge != 0 ) {
 										?>
 											<tr class="lost-tr">
-												<td colspan="7" >
+												<td colspan="5" >
 													<div class="text-center">Total</div>
 												</td>
 												<td>
 													<div class="text-right">
-														<span><?php echo moneyFormatIndia($hiring_data->total_before_tax); ?></span>					
+														<span><?php echo moneyFormatIndia($quotation_data->total_before_tax); ?></span>					
 													</div>
 												</td>
 											</tr>
 										<?php
 										}
 
-										if($hiring_data->tax_from != 'no_tax') {
+										if($quotation_data->tax_from != 'no_tax') {
 
-											if($hiring_data->tax_from == 'gst') {
+											if($quotation_data->tax_from == 'gst') {
 
-												if($hiring_data->gst_for == 'cgst') {
+												if($quotation_data->gst_for == 'cgst') {
 
 										?>
 												<tr>
-													<td colspan="7"><div class="text-center"><b>CGST - 9%</b></div></td>
+													<td colspan="5"><div class="text-center"><b>CGST - 9%</b></div></td>
 													<td>
 														<div class="text-rigth">
-															<?php echo moneyFormatIndia($hiring_data->cgst_amt); ?>
+															<?php echo moneyFormatIndia($quotation_data->cgst_amt); ?>
 														</div>
 													</td>
 												</tr>
 												<tr>
-													<td colspan="7"><div class="text-center"><b>SGST - 9%</b></div></td>
+													<td colspan="5"><div class="text-center"><b>SGST - 9%</b></div></td>
 													<td>
 														<div class="text-rigth">
-															<?php echo moneyFormatIndia($hiring_data->sgst_amt); ?>
+															<?php echo moneyFormatIndia($quotation_data->sgst_amt); ?>
 														</div>
 													</td>
 												</tr>
 										<?php
 												}
-												if($hiring_data->gst_for == 'igst') {
+												if($quotation_data->gst_for == 'igst') {
 										?>
 												<tr>
-													<td colspan="7"><div class="text-center"><b>IGST - 18%</b></div></td>
+													<td colspan="5"><div class="text-center"><b>IGST - 18%</b></div></td>
 													<td>
 														<div class="text-rigth">
-															<?php echo moneyFormatIndia($hiring_data->igst_amt); ?>
+															<?php echo moneyFormatIndia($quotation_data->igst_amt); ?>
 														</div>
 													</td>
 												</tr>
 										<?php
 												}
 											}
-											if($hiring_data->tax_from == 'vat') {
+											if($quotation_data->tax_from == 'vat') {
 											?>
 												<tr>
-													<td colspan="7"><div class="text-center"><b>VAT - 5%</b></div></td>
+													<td colspan="5"><div class="text-center"><b>VAT - 5%</b></div></td>
 													<td>
 														<div class="text-rigth">
-															<?php echo moneyFormatIndia($hiring_data->vat_amt); ?>
+															<?php echo moneyFormatIndia($quotation_data->vat_amt); ?>
 														</div>
 													</td>
 												</tr>
@@ -651,10 +634,10 @@ if(isset($bill_data['hiring_data']) && isset($_GET['bill_no']) && $_GET['bill_no
 											?>
 
 											<tr>
-												<td colspan="7"><div class="text-center">Total Including Tax</div></td>
+												<td colspan="5"><div class="text-center">Total Including Tax</div></td>
 												<td>
 													<div class="text-right">
-														<?php echo moneyFormatIndia($hiring_data->tax_include_tot); ?>
+														<?php echo moneyFormatIndia($quotation_data->tax_include_tot); ?>
 													</div>
 												</td>
 											</tr>
@@ -663,18 +646,18 @@ if(isset($bill_data['hiring_data']) && isset($_GET['bill_no']) && $_GET['bill_no
 										?>
 
 										<tr>
-											<td colspan="7"><div class="text-center">Round off</div></td>
+											<td colspan="5"><div class="text-center">Round off</div></td>
 											<td>
 												<div class="text-right">
-													<?php echo moneyFormatIndia($hiring_data->round_off); ?>
+													<?php echo moneyFormatIndia($quotation_data->round_off); ?>
 												</div>
 											</td>
 										</tr>
 										<tr>
-											<td colspan="7"><div class="text-center"><b>Total</b></div></td>
+											<td colspan="5"><div class="text-center"><b>Total</b></div></td>
 											<td>
 												<div class="text-right">
-													<?php echo moneyFormatIndia($hiring_data->hiring_total); ?>
+													<?php echo moneyFormatIndia($quotation_data->hiring_total); ?>
 												</div>
 											</td>
 										</tr>
@@ -684,12 +667,12 @@ if(isset($bill_data['hiring_data']) && isset($_GET['bill_no']) && $_GET['bill_no
 												<td>Amount Chargable (in words)</td>
 											</tr>
 											<tr>
-												<td><b>INR <?php echo ucwords(convert_number_to_words_full($hiring_data->hiring_total)); ?></b></td>
+												<td><b>INR <?php echo ucwords(convert_number_to_words_full($quotation_data->hiring_total)); ?></b></td>
 											</tr>
 										</table>
 
 											<?php
-												if($hiring_data->tax_from != 'no_tax') {
+												if($quotation_data->tax_from != 'no_tax') {
 													if($hiring_gst_data) {
 											?>
 													<table class="table table-bordered" style="margin-top:10px;margin-bottom: 5px;">
@@ -702,7 +685,7 @@ if(isset($bill_data['hiring_data']) && isset($_GET['bill_no']) && $_GET['bill_no
 																	<div class="text-center">Taxable Value</div>
 																</th>
 																<?php 
-																	if($hiring_data->gst_for == 'cgst') {
+																	if($quotation_data->gst_for == 'cgst') {
 																?>
 																		<th class="center-th" style="padding: 0;" colspan="2">
 																			<div class="text-center">CGST</div>
@@ -712,7 +695,7 @@ if(isset($bill_data['hiring_data']) && isset($_GET['bill_no']) && $_GET['bill_no
 																		</th>
 																<?php
 																	}
-																	if($hiring_data->gst_for == 'igst') {
+																	if($quotation_data->gst_for == 'igst') {
 																?>
 																		<th class="center-th" style="padding: 0;" colspan="2">
 																			<div class="text-center">IGST</div>
@@ -724,7 +707,7 @@ if(isset($bill_data['hiring_data']) && isset($_GET['bill_no']) && $_GET['bill_no
 															</tr>
 															<tr>
 																<?php 
-																	if($hiring_data->gst_for == 'cgst') {
+																	if($quotation_data->gst_for == 'cgst') {
 																?>
 																		<th style="padding: 0;width: 70px;"><div class="text-center">Rate</div></th>
 																		<th style="padding: 0;width: 70px;"><div class="text-center">Amount</div></th>
@@ -732,7 +715,7 @@ if(isset($bill_data['hiring_data']) && isset($_GET['bill_no']) && $_GET['bill_no
 																		<th style="padding: 0;width: 70px;"><div class="text-center">Amount</div></th>
 																<?php
 																	}
-																	if($hiring_data->gst_for == 'igst') {
+																	if($quotation_data->gst_for == 'igst') {
 																?>
 																		<th style="padding: 0;width: 70px;"><div class="text-center">Rate</div></th>
 																		<th style="padding: 0;width: 70px;"><div class="text-center">Amount</div></th>
@@ -757,7 +740,7 @@ if(isset($bill_data['hiring_data']) && isset($_GET['bill_no']) && $_GET['bill_no
 																			</div>
 																		</td>
 																		<?php 
-																			if($hiring_data->gst_for == 'cgst') {
+																			if($quotation_data->gst_for == 'cgst') {
 																		?>
 																				<td>
 																					<div class="text-right">
@@ -781,7 +764,7 @@ if(isset($bill_data['hiring_data']) && isset($_GET['bill_no']) && $_GET['bill_no
 																				</td>
 																		<?php
 																			}
-																			if($hiring_data->gst_for == 'igst') {
+																			if($quotation_data->gst_for == 'igst') {
 																		?>
 																				<td>
 																					<div class="text-right">
