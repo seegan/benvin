@@ -40,7 +40,7 @@
 		<div class="col-lg-9">
 			<div class="x_panel">
 				<div class="x_title">
-					<h2>Quotation</h2>
+					<h1>Quotation</h1>
 					<div class="print_record left-right" data-action="print_quotation" data-action-from="list" data-print-id="<?php echo  $quotation_detail->id; ?>">
 						<img src="<?php echo get_template_directory_uri() ?>/admin/inc/images/printer-icon.png">
 					</div>
@@ -196,6 +196,44 @@
 										<?php
 												$i++;
 											}
+										} else {
+									?>
+										<tr data-repeater-item class="repeterin div-table-row" class="repeterin div-table-row" data-lotid="0" data-stockbal="0">
+											<td>
+												<div class="rowno align-txt">1</div>
+												<input type="hidden" class="quotation_detail_id" name="quotation_detail_id" value="0">
+												<input type="hidden" class="lot_id_orig" name="lot_id_orig" value="0">
+											</td>
+											<td>
+												<select name="lot_number" class="lot_id" tabindex="-1" aria-hidden="true"></select>
+											</td>
+											<td>
+												<input type="text" name="qty" value="1" style="border-color: rgba(118, 118, 118, 0);width:80px;height:34px;margin:0;" class="dpt_qty">
+											</td>
+											<td>
+												<div class="align-txt unit_price_txt">0.00</div>
+												<input type="hidden" name="unit_price" class="unit_price" value="0.00">
+											</td>
+											<td>
+												<div class="align-txt t_rs_txt">0</div>
+												<input type="hidden" name="thirty_rs_price" value="0.00" class="thirty_rs_price">
+											</td>
+											<td>
+												<div class="align-txt t_ps_txt">00</div>
+											</td>
+											<td>
+												<div class="align-txt n_rs_txt">0</div>
+												<input type="hidden" name="ninety_rs_price" value="0.00" class="ninety_rs_price">
+											</td>
+											<td>
+												<div class="align-txt n_ps_txt">00</div>
+											</td>
+											<td>
+												<a href="#" data-repeater-delete="" style="font-size: 16px;font-weight: bold; color: #ff0000;line-height: 30px;">x</a>
+												<input type="hidden" value="Delete">
+											</td>
+										</tr>
+									<?php
 										}
 									?>
 
@@ -441,11 +479,14 @@
 
 							<div class="row">
 								<div class="col-lg-12">
-									<h2><u>Requirements</u></h2>
-
 									<ul>
 										<li>
+											<h2><u>Requirements</u></h2>
 											<textarea class="txtEditor1" name="quotation_txt"><?php echo $quotation_detail->requirements ?></textarea> 
+										</li>
+										<li>
+											<h2><u>Bank Details</u></h2>
+											<textarea class="txtEditor2" name="bank_details"><?php echo $quotation_detail->bank_details ?></textarea>
 										</li>
 									</ul>
 									<div>

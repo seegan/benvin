@@ -455,7 +455,7 @@ if(isset($_GET['statement_id']) && $_GET['statement_id'] != ''){
 								foreach ($pieces[$i] as $key => $value) {
 									$company_id = $value->bill_from_comp;
 
-									if($value->description == 'Missing Cost'  ) {
+									if($value->description == 'By Missing Cost'  ) {
 										if($value->credit && $value->credit != 0) {
 								?>
 											<tr>

@@ -65,7 +65,10 @@
 		<div class="col-lg-9">
 			<div class="x_panel">
 				<div class="x_title">
-					<h2>Account Statement</h2>
+					<h1>Account Statement</h1>
+					<div class="print_record left-right" data-action="print_statement" data-action-from="list" data-print-id="<?php echo $_GET['id']; ?>">
+						<img src="<?php echo get_template_directory_uri() ?>/admin/inc/images/printer-icon.png">
+					</div>
 					<div class="clearfix"></div>
 				</div>
 				<div class="x_content">
@@ -87,7 +90,7 @@
 							</div>
 						</div>
 						<div class="col-lg-6">
-							<div class="address-line">Date : <span class="billing-date"><input type="text" name="billing_date" value="<?php echo $statement_date; ?>" style="border-color: rgba(118, 118, 118, 0);height: 34px;margin: 0;" class="datepicker"></span>
+							<div class="address-line">Date : <span class="billing-date"><input type="text" name="billing_date" value="<?php echo $statement_date; ?>" style="border-color: rgba(118, 118, 118, 0);height: 34px;margin: 0;" class="datepicker statement_date"></span>
 							</div>
 							<div class="address-line">Site : 
 								<select type="text" name="delivery_site_name" class="delivery_site_name" data-dvalue="<?php echo ($site_detail) ? $site_detail->id : ''; ?>"  data-sitename="<?php echo ($site_detail) ? $site_detail->site_name : ''; ?>">
@@ -116,12 +119,12 @@
 												foreach ($statement as $s_value) {
 													$company_id = $s_value->bill_from_comp;
 
-													if($s_value->description == 'Missing Cost'  ) {
+													if($s_value->description == 'By Missing Cost'  ) {
 														if($s_value->credit != 0 && $s_value->credit) {
 										?>
 													<tr>
 														<td>
-															<?php echo date("d-m-Y", strtotime($s_value->bill_date)); ?>
+															
 														</td>
 														<td>
 															<?php echo $s_value->description; ?>

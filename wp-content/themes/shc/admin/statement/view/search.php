@@ -11,7 +11,7 @@
 		<div class="col-lg-9">
 			<div class="x_panel">
 				<div class="x_title">
-					<h2>Statement By Master ID</h2>
+					<h1>Statement By Master ID</h1>
 					<div class="clearfix"></div>
 				</div>
 				<div class="x_content">

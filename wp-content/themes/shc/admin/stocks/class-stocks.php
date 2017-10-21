@@ -110,4 +110,26 @@
 	}
 
 
+
+
+
+
+/*Out Stocks*/
+
+/*SELECT delivered.id as lot_id, ( delivered.delivery_qty - returned.return_qty ) as out_stock FROM
+(
+	SELECT l.id, (CASE WHEN delivery_data.delivery_qty IS NULL THEN 0 ELSE delivery_data.delivery_qty END ) as delivery_qty FROM wp_shc_lots as l LEFT JOIN ( SELECT dd.lot_id , SUM(dd.qty) as delivery_qty  FROM wp_shc_delivery as d JOIN wp_shc_delivery_detail as dd ON d.id = dd.delivery_id WHERE d.active = 1 AND dd.active = 1 GROUP BY dd.lot_id ) as delivery_data ON l.id = delivery_data.lot_id      
+) as delivered
+
+JOIN 
+
+(
+	SELECT l.id, (CASE WHEN return_data.return_qty IS NULL THEN 0 ELSE return_data.return_qty END ) as return_qty FROM wp_shc_lots as l LEFT JOIN ( SELECT rd.lot_id, SUM(rd.qty) as return_qty FROM wp_shc_return as r JOIN wp_shc_return_detail as rd ON r.id = rd.return_id WHERE r.active = 1 AND rd.active = 1 AND r.is_return = 1 GROUP BY rd.lot_id ) as return_data ON l.id = return_data.lot_id    
+) as returned
+
+ON 
+
+delivered.id = returned.id*/
+
+
 ?>

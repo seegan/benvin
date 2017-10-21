@@ -74,10 +74,21 @@ jQuery(document).ready(function(){
       var action_from = jQuery(this).attr('data-action-from');
 
       if(action_from == 'list') {
-        var bill_txt = "Print "+ jQuery(this).closest('tr').find('.bill_txt').text().trim()+" With Headers?";
-        bill_txt += "<div style='text-align:center;'><input type='radio' name='headers_avail' value='yes' checked style='margin-top: -2px;'>Yes <input type='radio' name='headers_avail' value='no' style='margin-top: -2px;'>No</div>";
+        var bill_txt = "Print "+ jQuery(this).closest('tr').find('.bill_txt').text().trim()+" With Headers ?";
+        bill_txt = "<div style='text-align:center;'>"+bill_txt+"&nbsp;&nbsp;<input type='radio' name='headers_avail' value='yes' checked style='margin-top: -2px;'>Yes <input type='radio' name='headers_avail' value='no' style='margin-top: -2px;'>No</div>";
+        
+        if(action == 'print_statement') {
+          var sd = jQuery('.statement_with_sd:checked').length;
+          var date_to = jQuery('.statement_date').val();
+
+          bill_txt += "<div style='text-align:center;'>With SD ?&nbsp;&nbsp;<input type='checkbox' class='with_sd' value='1' style='margin-top: -2px;' checked='"+sd+"'></div>";
+          bill_txt += "<div style='text-align:center;'>Statement Date To :&nbsp;&nbsp;<input type='text' value='"+date_to+"' class='statement_date_to' style='height: 25px;width: 120px;'></div>";
+        }
+
+        var p_title = "Print";
       } else {
         var bill_txt = "Are you Sure to delete this data?";
+        var p_title = "Delete";
       }
 
       jQuery( ".print-box" ).dialog({
@@ -85,7 +96,7 @@ jQuery(document).ready(function(){
           height: "auto",
           width: 400,
           modal: true,
-          title: "Delete",
+          title: p_title,
           buttons: {
               Print: function() {
 
@@ -109,6 +120,12 @@ jQuery(document).ready(function(){
                 }
                 if(action == 'print_hiring') {
                   var print_url = print_page.hiring+'?bill_no='+bill_id+'&headers='+headers;
+                  var title = 'Hiring Bill';
+                }
+                if(action == 'print_statement') {
+                  var sd = jQuery('.with_sd:checked').length;
+                  var date_to = jQuery('.statement_date_to').val();
+                  var print_url = print_page.statement+'?statement_id='+bill_id+'&headers='+headers+'&sd='+sd+'&date_to='+date_to;
                   var title = 'Hiring Bill';
                 }
                 if(action == 'print_receipt') {

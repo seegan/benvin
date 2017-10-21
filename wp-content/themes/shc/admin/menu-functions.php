@@ -41,8 +41,9 @@ global $src_capabilities;
 	    'dashicons-list-view',
 	    6
 	);
-	add_submenu_page('list_stocks', 'Stock List', 'Stock List', $src_capabilities['stocks']['permission']['stock_list'], 'list_stocks', 'list_stocks' );
+	add_submenu_page('list_stocks', 'Stock History', 'Stock History', $src_capabilities['stocks']['permission']['stock_list'], 'list_stocks', 'list_stocks' );
 	add_submenu_page('list_stocks', 'Add Stock', 'Add Stock', $src_capabilities['stocks']['permission']['add_stock'], 'add_stocks', 'add_stocks' );
+	add_submenu_page('list_stocks', 'Stock List', 'Stock List', $src_capabilities['stocks']['permission']['add_stock'], 'list_stock_avail', 'list_stock_avail' );
 
 
 	add_menu_page(

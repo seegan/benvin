@@ -1,5 +1,6 @@
 jQuery(document).ready(function () {
   jQuery(".txtEditor1").richText();
+  jQuery(".txtEditor2").richText();
 
 	populate_site_select_search('old', 'quotation');
 

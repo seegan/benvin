@@ -55,7 +55,10 @@
 		<div class="col-lg-9">
 			<div class="x_panel">
 				<div class="x_title">
-					<h2>Security Deposit</h2>
+					<h1>Security Deposit</h1>
+					<div class="print_record left-right" data-action="print_deposit" data-action-from="list" data-print-id="<?php echo $_GET['deposit_id']; ?>">
+						<img src="<?php echo get_template_directory_uri() ?>/admin/inc/images/printer-icon.png">
+					</div>
 					<div class="clearfix"></div>
 				</div>
 				<div class="x_content">

@@ -54,7 +54,10 @@
 		<div class="col-lg-9">
 			<div class="x_panel">
 				<div class="x_title">
-					<h2>Item Return</h2>
+					<h1>Item Return</h1>
+					<div class="print_record left-right" data-action="print_return" data-action-from="list" data-print-id="<?php echo $_GET['return_id']; ?>">
+						<img src="<?php echo get_template_directory_uri() ?>/admin/inc/images/printer-icon.png">
+					</div>
 					<div class="clearfix"></div>
 				</div>
 				<div class="x_content">
