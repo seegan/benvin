@@ -132,4 +132,20 @@ ON
 delivered.id = returned.id*/
 
 
+
+
+
+/*SELECT closing_stock.lot_id, ( new_stock.new_stock_total + closing_stock.closing_total ) as total_stock FROM
+(
+    SELECT l.id as lot_id, (CASE WHEN stock_closing.closing_stock IS NULL THEN 0 ELSE stock_closing.closing_stock END) as closing_total  FROM wp_shc_lots as l LEFT JOIN ( SELECT c.id, cd.lot_id, cd.closing_stock FROM wp_shc_stock_closing as c LEFT JOIN wp_shc_stock_closing_detail as cd ON c.id = cd.closing_id WHERE c.active = 1 AND cd.active = 1 ) as stock_closing ON l.id = stock_closing.lot_id    
+) as closing_stock
+
+JOIN 
+
+( 
+    SELECT l.id as lot_id, (CASE WHEN stock.new_stock IS NULL THEN 0 ELSE stock.new_stock END) as new_stock_total FROM wp_shc_lots as l LEFT JOIN ( SELECT s.lot_number as lot_no, SUM(s.stock_count) as new_stock FROM wp_shc_stock as s WHERE s.active = 1 GROUP BY s.lot_number ) as stock ON l.id = stock.lot_no 
+) as new_stock
+ON
+closing_stock.lot_id = new_stock.lot_id*/
+
 ?>
