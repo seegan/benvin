@@ -167,14 +167,24 @@ function create_stock_closing() {
 	
 	$closing_date = isset($_POST['closing_date']) ? $_POST['closing_date'] : date('Y-m-d');
 
+	$closing_data = getStockDates($closing_date);
+	$delete_from = $closing_data->next_stock_from;
+
+	$stock_closing_delete_query = "DELETE FROM ${stock_closing_table} WHERE date(closing_stock) >=date('${delete_from}')";
+	$stock_closing_detail_delete_query = "DELETE FROM ${stock_closing_detail_table} WHERE date(closing_stock) >=date('${delete_from}')";
+
+	$wpdb->query($stock_closing_delete_query);
+	$wpdb->query($stock_closing_detail_delete_query);
+
+	$stocks_bal = getStockOnDate($closing_date);
 
 	$wpdb->insert($stock_closing_table, array('closing_date' => $closing_date ));
 	$closing_id = $wpdb->insert_id;
-	$stocks_bal = getStockOnDate($closing_date);
+
 
 	if($stocks_bal) {
 		foreach ($stocks_bal as $key => $s_value) {
-			$wpdb->insert($stock_closing_detail_table, array('closing_id' => $closing_id, 'lot_id' => $s_value->id, 'closing_stock' => $s_value->new_stock ));
+			$wpdb->insert($stock_closing_detail_table, array('closing_id' => $closing_id, 'lot_id' => $s_value->id, 'closing_stock' => $s_value->new_stock, 'closing_date' => $closing_date  ));
 		}
 	}
 
