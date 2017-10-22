@@ -118,13 +118,13 @@
 
 /*SELECT delivered.id as lot_id, ( delivered.delivery_qty - returned.return_qty ) as out_stock FROM
 (
-	SELECT l.id, (CASE WHEN delivery_data.delivery_qty IS NULL THEN 0 ELSE delivery_data.delivery_qty END ) as delivery_qty FROM wp_shc_lots as l LEFT JOIN ( SELECT dd.lot_id , SUM(dd.qty) as delivery_qty  FROM wp_shc_delivery as d JOIN wp_shc_delivery_detail as dd ON d.id = dd.delivery_id WHERE d.active = 1 AND dd.active = 1 GROUP BY dd.lot_id ) as delivery_data ON l.id = delivery_data.lot_id      
+	SELECT l.id, (CASE WHEN delivery_data.delivery_qty IS NULL THEN 0 ELSE delivery_data.delivery_qty END ) as delivery_qty FROM wp_shc_lots as l LEFT JOIN ( SELECT dd.lot_id , SUM(dd.qty) as delivery_qty  FROM wp_shc_delivery as d JOIN wp_shc_delivery_detail as dd ON d.id = dd.delivery_id WHERE d.active = 1 AND date(d.delivery_date) >= date('2017-10-22') AND date(d.delivery_date) <= date('2017-10-30') AND dd.active = 1 GROUP BY dd.lot_id ) as delivery_data ON l.id = delivery_data.lot_id      
 ) as delivered
 
 JOIN 
 
 (
-	SELECT l.id, (CASE WHEN return_data.return_qty IS NULL THEN 0 ELSE return_data.return_qty END ) as return_qty FROM wp_shc_lots as l LEFT JOIN ( SELECT rd.lot_id, SUM(rd.qty) as return_qty FROM wp_shc_return as r JOIN wp_shc_return_detail as rd ON r.id = rd.return_id WHERE r.active = 1 AND rd.active = 1 AND r.is_return = 1 GROUP BY rd.lot_id ) as return_data ON l.id = return_data.lot_id    
+	SELECT l.id, (CASE WHEN return_data.return_qty IS NULL THEN 0 ELSE return_data.return_qty END ) as return_qty FROM wp_shc_lots as l LEFT JOIN ( SELECT rd.lot_id, SUM(rd.qty) as return_qty FROM wp_shc_return as r JOIN wp_shc_return_detail as rd ON r.id = rd.return_id WHERE r.active = 1 AND date(r.return_date) >= date('2017-10-22') AND date(r.return_date) <= date('2017-10-30') AND rd.active = 1 AND r.is_return = 1 GROUP BY rd.lot_id ) as return_data ON l.id = return_data.lot_id   
 ) as returned
 
 ON 
@@ -137,13 +137,13 @@ delivered.id = returned.id*/
 
 /*SELECT closing_stock.lot_id, ( new_stock.new_stock_total + closing_stock.closing_total ) as total_stock FROM
 (
-    SELECT l.id as lot_id, (CASE WHEN stock_closing.closing_stock IS NULL THEN 0 ELSE stock_closing.closing_stock END) as closing_total  FROM wp_shc_lots as l LEFT JOIN ( SELECT c.id, cd.lot_id, cd.closing_stock FROM wp_shc_stock_closing as c LEFT JOIN wp_shc_stock_closing_detail as cd ON c.id = cd.closing_id WHERE c.active = 1 AND cd.active = 1 ) as stock_closing ON l.id = stock_closing.lot_id    
+    SELECT l.id as lot_id, (CASE WHEN stock_closing.closing_stock IS NULL THEN 0 ELSE stock_closing.closing_stock END) as closing_total  FROM wp_shc_lots as l LEFT JOIN ( SELECT c.id, cd.lot_id, cd.closing_stock FROM wp_shc_stock_closing as c LEFT JOIN wp_shc_stock_closing_detail as cd ON c.id = cd.closing_id WHERE c.active = 1 AND cd.active = 1 AND c.closing_date = date('2017-10-21') ) as stock_closing ON l.id = stock_closing.lot_id     
 ) as closing_stock
 
 JOIN 
 
 ( 
-    SELECT l.id as lot_id, (CASE WHEN stock.new_stock IS NULL THEN 0 ELSE stock.new_stock END) as new_stock_total FROM wp_shc_lots as l LEFT JOIN ( SELECT s.lot_number as lot_no, SUM(s.stock_count) as new_stock FROM wp_shc_stock as s WHERE s.active = 1 GROUP BY s.lot_number ) as stock ON l.id = stock.lot_no 
+    SELECT l.id as lot_id, (CASE WHEN stock.new_stock IS NULL THEN 0 ELSE stock.new_stock END) as new_stock_total FROM wp_shc_lots as l LEFT JOIN ( SELECT s.lot_number as lot_no, SUM(s.stock_count) as new_stock FROM wp_shc_stock as s WHERE s.active = 1 AND s.created_at >= date('2017-10-22') AND s.created_at <= date('2017-10-30')  GROUP BY s.lot_number ) as stock ON l.id = stock.lot_no 
 ) as new_stock
 ON
 closing_stock.lot_id = new_stock.lot_id*/

@@ -19,7 +19,7 @@
 
 	<div class="row">
 
-		<div class="col-lg-6">
+		<div class="col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-2">
 			<div class="x_panel">
 				<div class="x_title">
 					<h2>Add New Customer <small>Sessions</small></h2>

@@ -7,3 +7,5 @@ wp_shc_quotation table add requirements, amount_payable
 
 wp_shc_hiring table add damage_charge, lost_charge, total_before_tax
 wp_shc_lost_detail table lost_unit_price  change decimal 15,2
+
+stock_closing and stock_closing_details table add

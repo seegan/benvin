@@ -5125,3 +5125,10 @@ input[type=text].to_date:hover {
     right: 0;
     top: 0;
 }
+
+.stock_date_loader {
+    position: absolute;
+    right: 15px;
+    top: 8px;
+    display: none;
+}

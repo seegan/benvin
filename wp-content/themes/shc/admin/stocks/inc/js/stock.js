@@ -79,6 +79,60 @@ jQuery(document).ready(function () {
 
 
 
+    /*Add stock Form Submit*/
+    jQuery("#create_stock_closing").bind('submit', function (e) {
+        jQuery('#lightbox').css('display','block');
+        jQuery.ajax({
+            type: "POST",
+            dataType : "json",
+            url: frontendajax.ajaxurl,
+            data: {
+                action : 'create_stock_closing',
+                closing_date : jQuery('[name="stock_closing_to"]').val()
+            },
+            success: function (data) {
+                clearPopup();
+                jQuery('#lightbox').css('display','none');
+
+                if(data.redirect != 0) { 
+                    setTimeout(function() {
+                        managePopupContent(data);
+                    }, 1000);
+                }
+                if(data.success == 0) {
+                    popItUp('Error', data.msg);
+                } else {
+                    popItUp('Success', data.msg);
+                }
+            
+            }
+        });
+        e.preventDefault();
+        return false;
+    });
+
+
+
+    jQuery('[name="stock_closing_to"]').on('change', function() {
+        var stock_to = jQuery(this).val();
+        jQuery('.previous_close_date').val('');
+        jQuery('.stock_date_loader').css('display','block');
+        jQuery.ajax({
+            type: "POST",
+            dataType : "json",
+            url: frontendajax.ajaxurl,
+            data: {
+                action : 'getPreviousStockClosingdate',
+                stock_to : stock_to
+            },
+            success: function (data) {
+                jQuery('.previous_close_date').val(data.closing_date);
+                jQuery('.stock_date_loader').css('display','none');
+            }
+        });
+    })
+
+
 });
 
 function formatStateStockCreate (state) {
