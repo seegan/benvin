@@ -31,7 +31,6 @@
                             <th class="column-title">Action </th>
                         </tr>
                     </thead>
-
                     <tbody>
                     <?php
                         if( isset($customer_list['result']) && $customer_list['result'] ) {
@@ -57,7 +56,6 @@
                             }
                         }
                     ?>
-
                     </tbody>
                 </table>
             </div>

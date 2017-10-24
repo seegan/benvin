@@ -43,7 +43,6 @@
                                     <td class=""><?php echo $s_value->product_name; ?></td>
                                     <td class=""><?php echo $s_value->product_type; ?></td>
                                     <td class=""><?php echo $s_value->stock_count; ?></td>
-                                    <td class=""><?php echo $s_value->buying_total; ?></td>
                                     <td class=""><?php echo $s_value->stock_created; ?></td>
                                     <td class=""><a href="<?php echo menu_page_url( 'add_stocks', 0 )."&stock_id=${stock_id}"; ?>">Update</a></td>
                                 </tr>

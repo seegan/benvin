@@ -38,6 +38,14 @@ if(isset($_GET['stock_id']) && $stock = get_stock($_GET['stock_id']) ) {
 						</div>
 						<div class="divider-dashed"></div>
 						<div class="form-group">
+							<label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name"> Stock Date <span class="required">*</span>
+							</label>
+							<div class="col-md-6 col-sm-6 col-xs-12">
+								<input type="text" id="created_at" name="created_at" required="required" min="1" class="form-control col-md-7 col-xs-12 datepicker" value="<?php echo ($stock) ? $stock->created_at : date('Y-m-d'); ?>">
+							</div>
+						</div>
+						<div class="divider-dashed"></div>
+						<div class="form-group">
 							<label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Product Name <span class="required"></span>
 							</label>
 							<div class="col-md-6 col-sm-6 col-xs-12">
@@ -58,14 +66,6 @@ if(isset($_GET['stock_id']) && $stock = get_stock($_GET['stock_id']) ) {
 							</label>
 							<div class="col-md-6 col-sm-6 col-xs-12">
 								<input type="text" id="unit_price" readonly class="form-control col-md-7 col-xs-12" value="<?php echo ($stock) ? $stock->unit_price : ''; ?>">
-							</div>
-						</div>
-						<div class="divider-dashed"></div>
-						<div class="form-group">
-							<label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Buying Total (Rs) <span class="required"></span>
-							</label>
-							<div class="col-md-6 col-sm-6 col-xs-12">
-								<input type="text" id="buying_total" name="buying_total" class="form-control col-md-7 col-xs-12" value="<?php echo ($stock) ? $stock->buying_total : '0.00'; ?>">
 							</div>
 						</div>
 						<div class="divider-dashed"></div>

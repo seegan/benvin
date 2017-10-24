@@ -30,8 +30,6 @@ global $src_capabilities;
 	add_submenu_page('list_lots', 'Products List', 'Product List', $src_capabilities['lots']['permission']['lot_list'], 'list_lots', 'list_lots' );
 	add_submenu_page('list_lots', 'Add Product', 'Add Product', $src_capabilities['lots']['permission']['add_lot'], 'add_lot', 'add_lot' );
 
-
-
 	add_menu_page(
 	    __( 'Stock', 'shc'),
 	    'Stock',
@@ -43,9 +41,8 @@ global $src_capabilities;
 	);
 	add_submenu_page('list_stocks', 'Stock History', 'Stock History', $src_capabilities['stocks']['permission']['stock_list'], 'list_stocks', 'list_stocks' );
 	add_submenu_page('list_stocks', 'Add Stock', 'Add Stock', $src_capabilities['stocks']['permission']['add_stock'], 'add_stocks', 'add_stocks' );
-	add_submenu_page('list_stocks', 'Stock List', 'Stock List', $src_capabilities['stocks']['permission']['add_stock'], 'list_stock_avail', 'list_stock_avail' );
+	add_submenu_page('list_stocks', 'Stock Detail', 'Stock Detail', $src_capabilities['stocks']['permission']['add_stock'], 'list_stock_avail', 'list_stock_avail' );
 	add_submenu_page('list_stocks', 'Closing Settings', 'Closing Settings', $src_capabilities['stocks']['permission']['add_stock'], 'stock_closing_settings', 'stock_closing_settings' );
-
 
 	add_menu_page(
 	    __( 'Employee', 'shc'),
@@ -139,6 +136,9 @@ function list_stocks() {
 }
 function add_stocks() {
 	require 'stocks/add-stock.php';
+}
+function list_stock_avail() {
+	require 'stocks/avail-stock.php';
 }
 function stock_closing_settings() {
 	require 'stocks/closing-stock-settings.php';

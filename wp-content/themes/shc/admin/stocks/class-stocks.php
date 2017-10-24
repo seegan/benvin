@@ -65,7 +65,7 @@
 		    	}
 		    }
 
-		    $query 				= "SELECT l.*, s.id as stock_id, s.stock_count, s.buying_total, s.created_at as stock_created FROM ${stock_table} as s JOIN ${lots_table} as l ON s.lot_number = l.id WHERE s.active = 1 ${condition}";
+			$query 				= "SELECT l.*, s.id as stock_id, s.stock_count, s.created_at as stock_created FROM ${stock_table} as s JOIN ${lots_table} as l ON s.lot_number = l.id WHERE s.active = 1 ${condition}";
 
 		    $total_query        = "SELECT COUNT(1) FROM (${query}) AS combined_table";
 		    $total              = $wpdb->get_var( $total_query );

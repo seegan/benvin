@@ -170,9 +170,8 @@ function create_stock_closing() {
 	$closing_data = getStockDates($closing_date);
 	$delete_from = $closing_data->next_stock_from;
 
-	$stock_closing_delete_query = "DELETE FROM ${stock_closing_table} WHERE date(closing_stock) >=date('${delete_from}')";
-	$stock_closing_detail_delete_query = "DELETE FROM ${stock_closing_detail_table} WHERE date(closing_stock) >=date('${delete_from}')";
-
+	$stock_closing_delete_query = "DELETE FROM ${stock_closing_table} WHERE date(closing_date) >= date('${delete_from}')";
+	$stock_closing_detail_delete_query = "DELETE FROM ${stock_closing_detail_table} WHERE date(closing_date) >= date('${delete_from}')";
 	$wpdb->query($stock_closing_delete_query);
 	$wpdb->query($stock_closing_detail_delete_query);
 
@@ -180,7 +179,6 @@ function create_stock_closing() {
 
 	$wpdb->insert($stock_closing_table, array('closing_date' => $closing_date ));
 	$closing_id = $wpdb->insert_id;
-
 
 	if($stocks_bal) {
 		foreach ($stocks_bal as $key => $s_value) {
@@ -195,14 +193,6 @@ function create_stock_closing() {
 
 	echo json_encode($data);
 	die();
-
-/*	$previous_closing_data = getStockDates($closing_date);
-	$previous_closing_date 	= $previous_closing_data->previous_stock_end;
-
-*/
-
-
-
 }
 add_action( 'wp_ajax_create_stock_closing', 'create_stock_closing' );
 add_action( 'wp_ajax_nopriv_create_stock_closing', 'create_stock_closing' );
@@ -223,7 +213,7 @@ function getStockOnDate($closing_date = '') {
 	) as closing_stock 
 	JOIN 
 	( 
-	    SELECT l.id as lot_id, (CASE WHEN stock.new_stock IS NULL THEN 0 ELSE stock.new_stock END) as new_stock_total FROM wp_shc_lots as l LEFT JOIN ( SELECT s.lot_number as lot_no, SUM(s.stock_count) as new_stock FROM wp_shc_stock as s WHERE s.active = 1 AND s.created_at >= date('${opening_date}') AND s.created_at <= date('${closing_date}')  GROUP BY s.lot_number ) as stock ON l.id = stock.lot_no 
+	    SELECT l.id as lot_id, (CASE WHEN stock.new_stock IS NULL THEN 0 ELSE stock.new_stock END) as new_stock_total FROM wp_shc_lots as l LEFT JOIN ( SELECT s.lot_number as lot_no, SUM(s.stock_count) as new_stock FROM wp_shc_stock as s WHERE s.active = 1 AND date(s.created_at) >= date('${opening_date}') AND date(s.created_at) <= date('${closing_date}')  GROUP BY s.lot_number ) as stock ON l.id = stock.lot_no 
 	) as new_stock 
 	ON 
 	closing_stock.lot_id = new_stock.lot_id";
@@ -239,7 +229,7 @@ function getStockOnDate($closing_date = '') {
 	ON 
 	delivered.id = returned.id";
 
-	$stock_on_date_query = "SELECT l.id,  (old_stock.total_stock + stocks_in.in_stock) as new_stock FROM (${opening_stocks}) as old_stock JOIN (${in_stock}) as stocks_in ON old_stock.lot_id = stocks_in.lot_id JOIN wp_shc_lots as l ON stocks_in.lot_id = l.id ORDER BY l.id ASC";
+	$stock_on_date_query = "SELECT l.id, l.product_name, l.product_type,  (old_stock.total_stock + stocks_in.in_stock) as new_stock FROM (${opening_stocks}) as old_stock JOIN (${in_stock}) as stocks_in ON old_stock.lot_id = stocks_in.lot_id JOIN wp_shc_lots as l ON stocks_in.lot_id = l.id ORDER BY l.id ASC";
 	$stock_data = $wpdb->get_results($stock_on_date_query);
 
 	return $stock_data;

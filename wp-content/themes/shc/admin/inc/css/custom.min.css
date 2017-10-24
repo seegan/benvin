@@ -4281,14 +4281,16 @@ div[data-role=editor-toolbar] {
     background-color: #fff;
     border: 1px solid #ccc;
     border-radius: 0;
-    min-height: 38px
+    min-height: 35px
 }
 
 .select2-container--default .select2-selection--single .select2-selection__rendered {
     color: #73879C;
     padding-top: 5px
 }
-
+.select2-container {
+    border: 1px solid rgba(118,118,118,1.0);
+}
 .select2-container--default .select2-selection--multiple .select2-selection__rendered {
     padding-top: 3px
 }

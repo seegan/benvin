@@ -327,8 +327,6 @@ function create_admin_history($data) {
 	//special_price_create
 }
 
-
-
 function billNumberText($bill_from_comp = 0, $bill_no = 0, $bill_for = 0) {
 
 	$company_data = getCompaniesById($bill_from_comp);
@@ -359,9 +357,9 @@ function getFinancialYear( $current_date = '' ) {
 function moneyFormatIndia($num){
 
 $explrestunits = "" ;
-$num=preg_replace('/,+/', '', $num);
+$num = preg_replace('/,+/', '', $num);
 $words = explode(".", $num);
-$des="00";
+$des = "00";
 if(count($words)<=2){
     $num=$words[0];
     if(count($words)>=2){$des=$words[1];}
