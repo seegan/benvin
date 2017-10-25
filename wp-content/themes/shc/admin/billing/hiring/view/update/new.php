@@ -140,13 +140,13 @@
 								<div>
 									<div style="float:left; width:60px;line-height: 35px;"> Bill To </div>
 									<div style="float:left;">: <input type="text" name="bill_to" value="<?php echo isset($_GET['bill_to']) ? $_GET['bill_to'] : $bill_to ?>" style="border-color: rgba(118, 118, 118, 0);height: 34px;margin: 0;width:90px;" class="datepicker bill_to"></div>
-									<div style="float:left;"><input type="button" class="get_bill" value="Get Bill"></div>
+									<div style="float:left;"><input type="button" class="get_bill" value="Get Proforma Invoice"></div>
 								</div>
 								<div class="clear"></div>
 							</div>
 						</div>
 						<div class="col-lg-6">
-							<div class="address-line">Date : <span class="billing-date"><input type="text" name="billing_date" value="<?php echo $billing_date; ?>" style="border-color: rgba(118, 118, 118, 0);height: 34px;margin: 0;" class="datepicker financial_date"></span></div>
+							<div class="address-line">Proforma Invoice Date : <span class="billing-date"><input type="text" name="billing_date" value="<?php echo $billing_date; ?>" style="border-color: rgba(118, 118, 118, 0);height: 34px;margin: 0;" class="datepicker financial_date"></span></div>
 							<div class="address-line">Time : <input type="time" name="billing_time" value="<?php echo $billing_time; ?>" style="border-color: rgba(118, 118, 118, 0);height: 34px;margin: 0;" class="billing-time"></div>
 							<div class="address-line">Site : 
 								<select type="text" name="delivery_site_name" class="delivery_site_name" data-dvalue="<?php echo ($site_detail) ? $site_detail->id : ''; ?>"  data-sitename="<?php echo ($site_detail) ? $site_detail->site_name : ''; ?>">
@@ -558,7 +558,7 @@
 	                          				echo "<input type='hidden' name='update_current_bill' value='".$current_bill_no."'>";
 	                          			} else {
 	                          				echo "<input type='hidden' name='action' class='action' value='create_billing'>";
-	                          				echo "<button type='submit' class='btn btn-success create_billing'>Generate Bill</button>";
+	                          				echo "<button type='submit' class='btn btn-success create_billing'>Generate Invoice</button>";
 	                          			}
 	                          		}
 	                          	?>
