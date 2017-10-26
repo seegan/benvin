@@ -88,11 +88,8 @@ function create_billing() {
 
 		'bill_date' => isset($params['master_id']) ? $params['billing_date'] : '0000:00:00',
 		'bill_time' => isset($params['master_id']) ? $params['billing_time'] : '00:00',
+		'payment_date' => isset($params['master_id']) ? $params['billing_date'] : '0000:00:00',
 	);
-
-
-
-
 
 	if($params['action'] == 'create_billing') {
 		

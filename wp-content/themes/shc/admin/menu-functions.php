@@ -91,7 +91,8 @@ global $src_capabilities;
 	add_submenu_page('master_report', 'Deposit List', 'Deposit List', $src_capabilities['report']['permission']['deposit_report'], 'deposit_report', 'deposit_report' );
 	add_submenu_page('master_report', 'Delivery List', 'Delivery List', $src_capabilities['report']['permission']['delivery_report'], 'delivery_report', 'delivery_report' );
 	add_submenu_page('master_report', 'Return List', 'Return List', $src_capabilities['report']['permission']['return_report'], 'return_report', 'return_report' );
-	add_submenu_page('master_report', 'Hiring List', 'Hiring List', $src_capabilities['report']['permission']['bill_report'], 'hiring_report', 'hiring_report' );
+	add_submenu_page('master_report', 'Proforma Invoice List', 'Proforma Invoice List', $src_capabilities['report']['permission']['bill_report'], 'proforma_invoice_list', 'proforma_invoice_list' );
+	add_submenu_page('master_report', 'Hiring Bill List', 'Hiring Bill List', $src_capabilities['report']['permission']['bill_report'], 'hiring_report', 'hiring_report' );
 	add_submenu_page('master_report', 'Receipt List', 'Receipt List', $src_capabilities['report']['permission']['obc_report'], 'obc_report', 'obc_report' );
 	add_submenu_page('master_report', 'Statement', 'Statement', $src_capabilities['report']['permission']['statement'], 'new_statement', 'new_statement' );
 
@@ -163,6 +164,7 @@ function list_attendance() {
 	require 'employee/listing/attendance-list.php';
 }
 
+
 function add_admin() {
     require 'users/add-admin.php';
 }
@@ -176,9 +178,6 @@ function add_admin_role() {
 function list_roles() {
     require 'roles/listing/role-list.php';
 }
-
-
-
 
 function master() {
     require 'billing/master/add-master.php';
@@ -221,6 +220,9 @@ function delivery_report() {
 }
 function return_report() {
     require 'report/return/list.php';
+}
+function proforma_invoice_list() {
+    require 'report/hiring/proforma_list.php';
 }
 function hiring_report() {
     require 'report/hiring/list.php';
