@@ -99,7 +99,7 @@
 		    	}
 		    }
 
-		    $query 				= " SELECT f.*, c.name, s.site_name FROM (SELECT h.*, m.customer_id, m.site_id FROM ${hiring_table} as h JOIN ${master_table} as m ON h.master_id = m.id WHERE m.active = 1) as f JOIN ${customer_table} as c ON f.customer_id = c.id JOIN ${site_table} as s ON f.site_id = s.id WHERE f.active = 1 ${condition}";
+		    $query 				= " SELECT f.*, c.name, s.site_name FROM (SELECT h.*, m.customer_id, m.site_id FROM ${hiring_table} as h JOIN ${master_table} as m ON h.master_id = m.id WHERE m.active = 1) as f JOIN ${customer_table} as c ON f.customer_id = c.id JOIN ${site_table} as s ON f.site_id = s.id WHERE f.active = 1 AND f.bill_status = 2 ${condition}";
 
 
 		    $total_query        = "SELECT COUNT(1) FROM (${query}) AS combined_table";

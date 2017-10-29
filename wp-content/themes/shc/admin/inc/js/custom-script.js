@@ -146,6 +146,53 @@ jQuery(document).ready(function(){
   });
 
 
+  jQuery('.bill_ststus_change').live('click', function(){
+      var action = jQuery(this).attr('data-action');
+      var bill_id = jQuery(this).attr('data-billid');
+      var bill_date = jQuery(this).attr('data-billdate');
+      var status = jQuery(this).attr('data-status');
+
+      var bill_txt = "<div style='text-align:center;'>Are you Sure to change Invoice Status to Paid?</div>";
+          bill_txt += "<div style='text-align:center;'>Payment Date :&nbsp;&nbsp;<input type='text' value='"+bill_date+"' class='status_date datepicker' style='height: 25px;width: 120px;'></div>";
+
+      var p_title = 'Bill Status';
+      jQuery( ".print-box" ).dialog({
+          resizable: false,
+          height: "auto",
+          width: 400,
+          modal: true,
+          title: p_title,
+          buttons: {
+              Update: function() {
+                var date = jQuery('.status_date').val();
+
+                jQuery.ajax({
+                    type: "POST",
+                    url: frontendajax.ajaxurl,
+                    data: {
+                      action : action,
+                      bill_id : bill_id,
+                      payment_date : date,
+                      status : status,
+                    },
+                    success: function (data) {
+                        location.reload();
+                    }
+                });
+
+                jQuery( this ).dialog( "close" );
+              },
+              Cancel: function() {
+                jQuery( this ).dialog( "close" );
+              }
+          }
+      });
+
+      jQuery( ".print-box .action-block" ).html(bill_txt);
+      console.log(action);
+      console.log(bill_id);
+  });
+
 
   jQuery('.deposit-repeater1').repeater({
     defaultValues: {

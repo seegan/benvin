@@ -203,6 +203,7 @@ function getTaxPrice(sub_tot = 0, delivery_chrg=0, damage_chrg = 0, lost_chrg = 
 	if(tax_from == 'no_tax') {
 		tax_total = parseFloat(0.00);
 	}
+	tax_total = parseFloat(tax_total);
 	tax_total = Math.round10(tax_total.toFixed(3), -2);
 	return tax_total;
 }

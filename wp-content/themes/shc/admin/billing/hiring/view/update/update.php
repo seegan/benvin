@@ -21,7 +21,6 @@
 		$billing_date = (isset($bill_data['hiring_data']->bill_date) && $bill_data['hiring_data']->bill_date != '') ? $bill_data['hiring_data']->bill_date : date('Y-m-d');
 		$billing_time = (isset($bill_data['hiring_data']->bill_time)) ? date('H:i', strtotime($bill_data['hiring_data']->bill_time)) : date('H:i');
 	}
-
 ?>
 
 <div class="container">
@@ -34,6 +33,18 @@
 			<div class="x_panel">
 				<div class="x_title">
 					<h1>Hiring Bill</h1>
+					
+						<?php
+							if($bill_data['hiring_data']->bill_status == 1) {
+								echo '<div class="bill_ststus_change left-right" data-action="bill_status_update" data-status="2" data-billdate="'.date('Y-m-d').'" data-billid="'.$_GET['bill_id'].'">';
+								echo '<img class="pay-now" src="'.get_template_directory_uri().'/admin/billing/inc/images/pay-now.png">';
+								echo '</div>';
+							} else {
+								echo '<div class="bill_ststus_change left-right" data-action="bill_status_update" data-status="1" data-billdate="0000-00-00" data-billid="'.$_GET['bill_id'].'">';
+								echo '<img class="paid" src="'.get_template_directory_uri().'/admin/billing/inc/images/paid.jpg">';
+								echo '</div>';
+							}
+						?>
 					<div class="print_record left-right" data-action="print_hiring" data-action-from="list" data-print-id="<?php echo $_GET['bill_id']; ?>">
 						<img src="<?php echo get_template_directory_uri() ?>/admin/inc/images/printer-icon.png">
 					</div>

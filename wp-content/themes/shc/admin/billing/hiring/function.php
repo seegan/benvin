@@ -219,6 +219,23 @@ add_action( 'wp_ajax_create_billing', 'create_billing' );
 add_action( 'wp_ajax_nopriv_create_billing', 'create_billing' );
 
 
+function bill_status_update() {
+	global $wpdb;
+	$hiring_table = $wpdb->prefix.'shc_hiring';
+	$loggdin_user = get_current_user_id();	
+
+	$wpdb->update($hiring_table, array('bill_status' => $_POST['status'], 'payment_date' => $_POST['payment_date'] ), array('id' => $_POST['bill_id']));
+
+	$bill_status_txt = 'bill_status_'.$_POST['status'];
+	create_admin_history(array('updated_by' => $loggdin_user, 'update_in' => $_POST['bill_id'], 'detail' => $bill_status_txt ));
+
+	die();
+}
+add_action( 'wp_ajax_bill_status_update', 'bill_status_update' );
+add_action( 'wp_ajax_nopriv_bill_status_update', 'bill_status_update' );
+
+
+
 function getHiringBillData($master_id = 0, $bill_id = 0) {
 	$hiring_bill = new Hiring();
 	return $hiring_bill->get_BillHiringData($master_id, $bill_id);

@@ -5119,15 +5119,27 @@ input[type=text].to_date:hover {
 .left-right {
     float: right;
 }
-.print_record {
+.print_record,.bill_ststus_change {
     cursor: pointer;
 }
+
 .x_title .print_record {
     position: absolute;
     right: 0;
     top: 0;
 }
-
+.x_title .bill_ststus_change img {
+    width: 50px;
+    margin-right: 8px;
+}
+.x_title .bill_ststus_change img.pay-now {
+    width: 170px;
+}
+.x_title .bill_ststus_change {
+    position: absolute;
+    right: 60px;
+    top: 0;
+}
 .stock_date_loader {
     position: absolute;
     right: 15px;

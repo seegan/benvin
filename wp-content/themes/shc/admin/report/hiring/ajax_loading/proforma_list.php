@@ -59,7 +59,9 @@
                                     <td class="">
                                         <?php
                                             if($c_value->bill_status == 1) {
+                                                echo '<div class="bill_ststus_change" data-action="bill_status_update" data-status="2" data-billdate="'.date('Y-m-d').'"  data-billid="'.$bill_id.'">';
                                                 echo '<div class="pending_bill"><img src="'.get_template_directory_uri() . '/admin/billing/inc/images/pending.png'.'"></div>';
+                                                echo '</div>';
                                             }
                                             if($c_value->bill_status == 2) {
                                                 echo '<img src="'.get_template_directory_uri() . '/admin/billing/inc/images/paid.png'.'">';
