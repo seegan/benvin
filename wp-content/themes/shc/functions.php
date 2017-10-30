@@ -109,15 +109,16 @@ require get_template_directory() . '/admin/statement/function.php';
 
 
 
-function sales_statistics_widget( $post, $callback_args ) {
+function customer_statistics_widget( $post, $callback_args ) {
 	include('admin/customer/ajax_loading/customer-list.php');
 }
-function sales_delivery_status_widget( $post, $callback_args ) {
-	include('report/sales-delivery-status.php');
+function quotation_status_widget( $post, $callback_args ) {
+	include('admin/report/quotation/ajax_loading/list.php');
 }
-function stock_status_widget( $post, $callback_args ) {
-	include('report/list-template/list-stock-detail.php');
+function hiring_list_widget( $post, $callback_args ) {
+	include('admin/report/quotation/ajax_loading/list.php');
 }
+
 function customer_status_widget( $post, $callback_args ) {
 	include('report/customers-report.php');
 }
@@ -126,9 +127,10 @@ function lot_status_chart_widget( $post, $callback_args ) {
 }
 
 function add_dashboard_widgets() {
-	add_meta_box( 'my_sales_tatistics_widget', 'Sales Statistics', 'sales_statistics_widget', 'dashboard', 'normal', 'high' );
-	add_meta_box( 'my_sales_delivery_status_widget', 'Sales Delivery Status', 'sales_delivery_status_widget', 'dashboard', 'side', 'high' );
-	add_meta_box( 'my_stock_status_widget', 'Stock Status', 'stock_status_widget', 'dashboard', 'normal', 'low' );
+	add_meta_box( 'customer_widget', 'Customers', 'customer_statistics_widget', 'dashboard', 'normal', 'high' );
+	add_meta_box( 'quotation_widget', 'Latest Quotation', 'quotation_status_widget', 'dashboard', 'normal', 'low' );
+	add_meta_box( 'hiring_widget', 'Hiring Bill List', 'hiring_list_widget', 'dashboard', 'side', 'high' );
+
 	add_meta_box( 'lot_status_chart_widget', 'Top Sale', 'lot_status_chart_widget', 'dashboard', 'side', 'low' );
 	add_meta_box( 'customer_status_widget', 'Customer List', 'customer_status_widget', 'dashboard', 'side', 'low' );
 } 

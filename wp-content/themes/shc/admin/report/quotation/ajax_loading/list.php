@@ -4,6 +4,7 @@
         $quotationlist = new QuotationList();
         $ppage = 5;
     }
+    
     $result_args = array(
         'orderby_field' => 'q.quotation_date',
         'page' => $quotationlist->cpage,
@@ -24,9 +25,8 @@
                             </th>
                             <th class="column-title">#MRI</th>
                             <th class="column-title">#Q.No</th>
-                            <th class="column-title">Customer Name </th>
+                            <th class="column-title" style="width: 160px;">Customer Name </th>
                             <th class="column-title">Site </th>
-                            <th class="column-title">Site Address </th>
                             <th class="column-title">Quotation On </th>
                             <th class="column-title">Action </th>
                         </tr>
@@ -55,8 +55,6 @@
                                     </td>
                                     <td class=""><?php echo $d_value->name; ?></td>
                                     <td class=""><?php echo $d_value->site_name; ?></td>
-                                    <td class=""><?php echo $d_value->site_address.', '.$d_value->phone_number; ?></i>
-                                    </td>
                                     <td class=""><?php echo $d_value->quotation_date; ?></td>
                                     <td>
                                         <div class="list_action">

@@ -26,7 +26,6 @@
                             <th class="column-title">Customer Name </th>
                             <th class="column-title">Mobile </th>
                             <th class="column-title">Address </th>
-                            <th class="column-title">Sale Total </th>
                             <th class="column-title">Registered On </th>
                             <th class="column-title">Action </th>
                         </tr>
@@ -47,7 +46,6 @@
                                     <td class=""><?php echo $c_value->mobile; ?></td>
                                     <td class=""><?php echo $c_value->address; ?></i>
                                     </td>
-                                    <td class=""><?php echo $c_value->sale_total; ?></td>
                                     <td class=""><?php echo $c_value->created_at; ?></td>
                                     <td><a href="<?php echo admin_url('admin.php?page=new_customer')."&id=${customer_id}"; ?>">Update</a></td>
                                 </tr>
