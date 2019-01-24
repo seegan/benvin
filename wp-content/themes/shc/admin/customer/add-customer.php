@@ -83,6 +83,12 @@
 								<input type="text" id="attn_name" name="attn_name" required="required" class="form-control col-md-7 col-xs-12" value="<?php echo ($customer) ? $customer->attn_name : ''; ?>">
 							</div>
 						</div>
+						<div class="form-group">
+							<label class="control-label col-md-3 col-sm-3 col-xs-12" for="attn-phone">Attn. Phone </label>
+							<div class="col-md-6 col-sm-6 col-xs-12">
+								<input type="text" id="attn_phone" name="attn_phone" required="required" class="form-control col-md-7 col-xs-12" value="<?php echo ($customer) ? $customer->attn_phone : ''; ?>">
+							</div>
+						</div>
 						<div class="divider-dashed"></div>
 						<div class="form-group">
 							<label class="control-label col-md-3 col-sm-3 col-xs-12" for="customer-email">Customer Email </label>

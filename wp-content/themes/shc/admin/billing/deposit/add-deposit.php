@@ -25,6 +25,7 @@
 </style>
 
 <?php
+	$quotation = new Quotation();
 	$menu_id = isset($_GET['id']) ? $_GET['id'] : false;
 	if( isset($_GET['id']) && isset($_GET['deposit_id'])  && $security_data = getDepositDetail($_GET['deposit_id']) ) { 
 		include( get_template_directory().'/admin/billing/deposit/view/update/update.php' );

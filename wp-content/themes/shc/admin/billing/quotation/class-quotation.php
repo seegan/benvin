@@ -44,4 +44,9 @@
 			return false;
 		}
 
+
+		function getLatestQuotation($master_id = '') {
+			
+		}
+
 	}

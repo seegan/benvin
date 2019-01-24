@@ -113,7 +113,9 @@
 								</select>
 								<input type="hidden" name="site_id" class="site_id" value="<?php echo $site_id; ?>">
 							</div>
-							<div class="address-line">Phone : <span class="site-phone"><?php echo ($site_detail) ? $site_detail->phone_number : ''; ?></span></div>
+							<div class="address-line">Attn. Name : <span class="attn-name"><?php echo ($customer_detail) ? $customer_detail->attn_name : ''; ?></span></div>
+							<div class="address-line">Attn Phone : <span class="site-phone"><?php echo ($customer_detail) ? $customer_detail->attn_phone : ''; ?></span></div>
+							<div class="address-line">GST : <span class="site-phone"><?php echo ($site_detail) ? $site_detail->gst_number : ''; ?></span></div>
 						</div>
 
 

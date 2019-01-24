@@ -42,13 +42,13 @@
 										<th colspan="3">
 											<div style="min-height: 100px;padding:5px;">
 												<div>
-													<div style="line-height: 18px;height: 18px;">
+													<div style="line-height: 14px;height: 14px;">
 														<div style="float:left;">
 															<?php echo $bill_number['bill_no']; ?>
 														</div>
 														<div class="clear"></div>
 													</div>
-													<div style="line-height: 18px;height: 18px;">
+													<div style="line-height: 14px;height: 14px;">
 														<div style="float:left;width: 60px">DATE</div>
 														<div style="float:left;">
 															: <?php echo date('d-m-Y', strtotime($quotation_data->quotation_date)); ?>
@@ -58,7 +58,7 @@
 													<?php
 													if( $customer_detail->attn_name && $customer_detail->attn_name != '') {
 													?>
-													<div style="line-height: 18px;height: 18px;">
+													<div style="line-height: 14px;height: 14px;">
 														<div style="float:left;width: 60px">Kind Attn. </div>
 														<div style="float:left;">
 															: <?php echo $customer_detail->attn_name; ?>
@@ -67,9 +67,20 @@
 													</div>
 													<?php
 													}
+													if( $customer_detail->attn_phone && $customer_detail->attn_phone != '') {
+													?>
+													<div style="line-height: 14px;height: 14px;">
+														<div style="float:left;width: 60px">Attn Phone. </div>
+														<div style="float:left;">
+															: <?php echo $customer_detail->attn_phone; ?>
+														</div>
+														<div class="clear"></div>
+													</div>
+													<?php
+													}
 													if( $customer_detail->customer_email && $customer_detail->customer_email != '') {
 													?>
-													<div style="line-height: 18px;height: 18px;">
+													<div style="line-height: 14px;height: 14px;">
 														<div style="float:left;width: 60px">Email </div>
 														<div style="float:left;">
 															: <?php echo $customer_detail->customer_email; ?>
@@ -81,7 +92,7 @@
 													?>
 
 													<div class="clear"></div>
-													<div style="line-height: 18px;height: 18px;">
+													<div style="line-height: 14px;height: 14px;">
 														<div style="float:left;width: 60px">SITE</div>
 														<div style="float:left;float: left;height: 30px;width: 190px;">
 															: <?php echo $site_detail->site_name; ?>

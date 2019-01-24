@@ -15,6 +15,9 @@
 		$master_data = getMasterDetail($_GET['id']);
 		$master_data = ($master_data) ? $master_data : false;
 
+		$latest_quotation = $quotation->getLatestQuotation($_GET['id']);
+		
+
 		if($master_data) {
 			$customer_id = $master_data['master_data']->customer_id;
 			$site_id = $master_data['master_data']->site_id;

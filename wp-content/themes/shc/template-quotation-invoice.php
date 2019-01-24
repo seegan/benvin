@@ -518,33 +518,39 @@ if(isset($bill_data['quotation_data']) && isset($_GET['quotation_no']) && $_GET[
 	?>
 
 		<div class="customer-detail inner-container" style="margin-top: 0px;margin-bottom:0px;">
-			<table class="table" style="margin-bottom:0px;">
+			<table class="table table-bordered">
 				<tr>
-					<td style="width:380px;">
-						<table class="table table-bordered">
-							<tr>
-								<td style="width: 120px;"><div class="text-center" style="padding:5px;">Other Requirements</div></td>
-								<td><div class="text-center" style="padding:5px;">Passport size Photo, ID Proof, Address Proof, (Company Details, Site Details, All Contract Details)</div></td>
-							</tr>
-						</table>
-						<table class="table table-bordered" style="margin-bottom:0px;">
-							<tr>
-								<td style="width: 120px;"><div class="text-center" style="padding:5px;">Amount Payable</div></td>
-								<td><div class="text-center" style="padding:5px;font-weight:bold;font-size:16px;">Rs. <?php echo moneyFormatIndia($quotation_data->amount_payable); ?></div></td>
-							</tr>
-						</table>
+					<td style="width: 120px;"><div class="text-center" style="padding:5px;">Other Requirements</div></td>
+					<td><div class="text-center" style="padding:5px;">Passport size Photo, ID Proof, Address Proof, (Company Details, Site Details, All Contract Details)</div></td>
+				</tr>
+			</table>
+
+			<table class="table table-bordered" style="margin-bottom:10px;">
+				<tr>
+					<td style="width:60px;vertical-align: middle;">Note:</td>
+					<td style="width: 120px;"><div class="text-center" style="padding:5px;">Amount Payable</div></td>
+					<td><div class="text-center" style="padding:5px;font-weight:bold;font-size:16px;">Rs. <?php echo moneyFormatIndia($quotation_data->amount_payable); ?></div></td>
+				</tr>
+			</table>
+			<table class="table table-bordered" style="margin-bottom:0px;">
+				<tr>
+					<td style="vertical-align: middle;">
+						Note:
+					</td>
+					<td style="vertical-align: middle;">
+						<div>
+							Warehouse Address: Plot No.28<br>
+							Medavakkam - Mambakkam Main Road,<br>
+							Ponmar, Chennai - 600 048,<br>
+							Opst Everest Weightbridge.<br>
+							Contact No: 89403 87837, 883839893
+						</div>
 					</td>
 					<td>
-						<table class="table table-bordered" style="margin-bottom:0px;">
-							<tr>
-								<td>
-									<div class="text-left" style="padding:5px;   min-height: 108px;">
-										<b><u>Banking Details</u></b><br>
-										<?php echo $quotation_data->bank_details ?>
-									</div>
-								</td>
-							</tr>
-						</table>
+						<div class="text-left" style="padding:5px;   min-height: 108px;">
+							<b><u>Banking Details</u></b><br>
+							<?php echo $quotation_data->bank_details ?>
+						</div>
 					</td>
 				</tr>
 			</table>
