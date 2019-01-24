@@ -23,7 +23,6 @@
 			$master_time = date('H:i', strtotime($master_data['master_data']->master_date));
 		}
 	}
-
 ?>
 <style type="text/css">
 	.address-line, .customer-name {
@@ -35,16 +34,13 @@
 </style>
 
 <div class="container">
-
-
-
 	<div class="row">
-
 		<div class="col-lg-12">
 			<div class="x_panel">
 				<div class="x_title">
 					<h2>Master Entry</h2>
 					<div class="clearfix"></div>
+					<input type="hidden" class="in_page" value="master_duplicate_check">
 				</div>
 				<div class="x_content">
 					<div class="form-horizontal form-label-left" id="create_master">
@@ -92,7 +88,8 @@
                           			echo "<button type='submit' class='btn btn-success create_master'>Update</button>";
                           		} else {
                           			echo "<input type='hidden' name='action' class='action' value='create_master'>";
-                          			echo "<button type='submit' class='btn btn-success create_master'>Submit</button>";
+                          			echo "<button type='submit' class='btn btn-success create_master' disabled>Submit</button>";
+                          			echo "<img class='submit_loder' src='".get_template_directory_uri().'/admin/inc/images/5.gif'."'>";
                           		}
                           	?>
                        	</div>

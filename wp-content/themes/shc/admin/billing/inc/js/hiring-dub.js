@@ -30,8 +30,6 @@ jQuery(document).ready(function () {
 		jQuery('.vat_tr').css('display', 'none');
 		jQuery('.gst_tr').css('display', 'none');
 
-		console.log('dfsdf');
-
 		if( tax_from == 'no_tax' ) {
 			jQuery('.tax_tr').css('display', 'none');
 		}

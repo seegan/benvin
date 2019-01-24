@@ -62,7 +62,7 @@ function get_lot_data(){
 	}
 
 	if($cond != 'no') {
-		$query = "SELECT f.id, f.lot_no, f.product_name, f.product_type, f.tax1, 
+		$query = "SELECT f.id, f.lot_no, f.product_name, f.product_type, f.tax1, f.weight, 
 
 		(
 		    CASE
@@ -70,7 +70,14 @@ function get_lot_data(){
 		        THEN f.unit_price
 		        ELSE f.special_price
 		    END
-		) as unit_price
+		) as unit_price,
+		(
+		    CASE
+		        WHEN f.minimum_bill_day_spl is NULL
+		        THEN f.minimum_bill_day
+		        ELSE f.minimum_bill_day_spl
+		    END
+		) as minimum_bill_day
 
 		FROM 
 
@@ -79,7 +86,11 @@ function get_lot_data(){
 		    (
 		        SELECT sp.price FROM ${special_table} sp WHERE sp.lot_id = l.id AND sp.active = 1 ${cond} ORDER BY sp.id DESC LIMIT 1
 
-		    ) as special_price
+		    ) as special_price,
+		    (
+		        SELECT sp.minimum_bill_day_spl FROM ${special_table} sp WHERE sp.lot_id = l.id AND sp.active = 1 ${cond} ORDER BY sp.id DESC LIMIT 1
+
+		    ) as minimum_bill_day_spl
 
 		    FROM ${lots_table} l WHERE ( lot_no LIKE '${lot_id}%' OR product_name LIKE '${lot_id}%' ) AND active = 1
 		) as f";
@@ -219,6 +230,7 @@ function create_deposit() {
 						'lot_id' 		=> $d_value['lot_id_orig'],
 						'qty' 			=> $d_value['qty'],
 						'unit_price' 	=> $d_value['unit_price'],
+						'minimum_bill_day' 	=> $d_value['minimum_bill_day'],
 						'rate_thirty' 	=> $d_value['thirty_rs_price'],
 						'rate_ninety' 	=> $d_value['ninety_rs_price'],
 						'active' 		=> 1

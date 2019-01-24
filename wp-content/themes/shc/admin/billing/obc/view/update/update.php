@@ -78,6 +78,17 @@
 							<div class="address-line">Phone : <span class="site-phone"><?php echo ($site_detail) ? $site_detail->phone_number : ''; ?></span></div>
 						</div>
 						<div class="col-lg-12">
+							<?php
+								$credit = (isset($obc_data->cd_notes) && $obc_data->cd_notes == 'credit') ? 'checked' : ''; 
+								$debit = (isset($obc_data->cd_notes) && $obc_data->cd_notes == 'debit') ? 'checked' : ''; 
+							?>
+							Receipt Type
+							<div style="margin-top: 5px;">
+								<input type="radio" name="cd_notes" style="margin-top:-2px;" class="cd_notes" checked value="credit" <?php echo $credit; ?>> Credit 
+								<input type="radio" name="cd_notes" style="margin-top:-2px;" class="cd_notes" value="debit" <?php echo $debit; ?> > Debit 
+							</div>
+						</div>
+						<div class="col-lg-12">
 
 
 							<div class="obc_detail amt_update" style="margin-top:20px;">
@@ -156,7 +167,7 @@
 	                          	<?php 
 	                          		if($master_data) {
 	                          			echo "<input type='hidden' name='master_id' class='master_id_input' value='".$master_data['master_data']->id."'>";
-										echo "<button type='submit' class='btn btn-success create_obc'>Create OBC</button>";
+										echo "<button type='submit' class='btn btn-success create_obc'>Create Receipt</button>";
 										echo "<input type='hidden' name='action' class='action' value='update_obc'>";
 	                          		}
 	                          	?>

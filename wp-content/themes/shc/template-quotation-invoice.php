@@ -18,85 +18,61 @@
 </head>
 <body class="page">
 
-
 <?php
 $quotation_data = false;
 $hiring_gst_data = false;
 $bill_data = getQutationDetail($_GET['quotation_no']);
-
+$headers = ( isset($_GET['headers']) && $_GET['headers'] !== '' && $_GET['headers'] == 'yes' ) ? true : false;
+if(!$headers) {
+	echo "<style>";
+	echo ".company-head{height:105px;} .company-detail-left .company-address, .company-detail-left .company-name {display:none;} .right-logo {display:none;} .footerb .foot {height:20px; background: none !important; height:20px;} .footerb .foot div { display: none;}";
+	echo "</style>";
+}
 
 
 if(isset($bill_data['quotation_data']) && isset($_GET['quotation_no']) && $_GET['quotation_no'] != '') {
 	$quotation_data = $bill_data['quotation_data'];
-
 	$company_id = $quotation_data->bill_from_comp;
 	$company_data = getCompaniesById($company_id);
-
 	$master_data = getMasterDetail($quotation_data->master_id);
 	$master_data = ($master_data) ? $master_data : false;
-
 	$customer_id = $master_data['master_data']->customer_id;
 	$site_id = $master_data['master_data']->site_id;
-
 	$customer_detail = getCustomerData($customer_id);
 	$site_detail = getSiteData($site_id);
-
 	$bill_number = billNumberText($company_id, $bill_data['quotation_data']->bill_no, 'Quotation');
-
 	$tax_for = $quotation_data->tax_from;
-
 	$gst_total = $quotation_data->cgst_amt + $quotation_data->sgst_amt + $quotation_data->igst_amt;
-
 }
 
-
 	$pages = false;
-	$per_page = 16;
+	$per_page = 28;
 	$pieces = false;
 	$tota_row = 0;
+	$reminder = 11;
+	$last_page = 0;
 
 	if($quotation_data) {
 		$pages = ceil(count($bill_data['quotation_detail'])/$per_page);
 		$pieces = array_chunk($bill_data['quotation_detail'], $per_page);
 		$tota_row = count($bill_data['quotation_detail']);
 		$reminder = ($tota_row % $per_page);
-/*				$page_short = false;
-		if($reminder > 12) {
-			$pages = $pages + 1;
-			$page_short = true;
-		}*/
 	}
-
-
-
-	$page_total[-1] = 0;
-	for ($i = 0; $i < $pages; $i++) { 
-		$tot_tmp = 0;
-		foreach ($pieces[$i] as $key => $h_value) {
-			$tot_tmp = $tot_tmp + $h_value->hiring_amt;
-		}
-		$page_total[$i] = $page_total[$i-1] + $tot_tmp;
-	}
-
-
 ?>
-
-
 	<style type="text/css">
 
 		@page {
 		    size: 'A4';
 		    margin: 0px;
-		    padding: 0;
+		    padding-bottom: 100px;
+		    font-size: 10px;
 		}
 		@media print {
 
 
-
-/*total width 794*/
-
-			.body {
+			body {
 				font-family: "Lucida Sans Unicode", "Lucida Grande", "sans-serif";
+				font-size: 10px;
 			}
 			.inner-container {
 				padding-left: 100px;
@@ -138,7 +114,7 @@ if(isset($bill_data['quotation_data']) && isset($_GET['quotation_no']) && $_GET[
     			font-size: 24px;
     			margin-bottom: 3px;
 			}
-			.company-detail-left .company-address {
+			.company-detail-left .company-address, .company-detail-left .company-gst {
 			    font-size: 13px;
     			font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 			}
@@ -156,26 +132,32 @@ if(isset($bill_data['quotation_data']) && isset($_GET['quotation_no']) && $_GET[
 		    .table td, .table th {
 		      background-color: transparent !important;
 		    }
-
-			.footer {
-				position: fixed;
-            	bottom: 0px;
-            	left: 0px;
+		    .page-block {
+		    	padding-bottom: 100px;
+		    }
+			.footerb {
+			    position: static;
+			    bottom: 20px;
+			    left: 0px;
+			    width: 100%;
+			    background: gray;
 			}
-			.footer .foot {
-			    background-color: #67a3b7 !important;
-			    -webkit-print-color-adjust: exact;
+			<?php
+			if($headers) {
+				echo ".footerb .foot {";
+				echo "    background-color: #67a3b7 !important;";
+				echo "    -webkit-print-color-adjust: exact;";
+				echo "}";
 			}
-
+			?>
 			.table>tbody>tr>td {
-				padding: 0 3px;
-				height: 20px;
+				padding: 1px 3px;
+				height: 15px;
 			}
 			.table-bordered>tbody>tr>td, .table-bordered>thead>tr>th {
 				border: 1px solid #000 !important;
 				-webkit-print-color-adjust: exact;
 			}
-
 			.billing-title {
 				text-align: center;
 				font-weight: bold;
@@ -187,26 +169,22 @@ if(isset($bill_data['quotation_data']) && isset($_GET['quotation_no']) && $_GET[
 			}
 			ol, ul {
 				padding-left: 13px;
+				list-style: none;
 			}
-
-/*.footer {
-  background: #ade6df;
-  color: #fff;
-  text-align: center;
-  font-family: 'Open Sans', sans-serif;
-  padding: 5px 0;
-  font-weight: 300;
-  position: fixed;
-  bottom: 0;
-  width: 715px;
-}*/
-
+			.change_height {
+				height: 20px;
+			}
+			.pagebreak { page-break-before: always; }
+			.condition-li li {
+				list-style: square;
+			}
+			.table>thead>tr>th {
+			    padding: 0px;
+			}
 		}
-
-
-
-			.body {
+			body {
 				font-family: "Lucida Sans Unicode", "Lucida Grande", "sans-serif";
+				font-size: 10px !important;
 			}
 			.inner-container {
 				padding-left: 100px;
@@ -248,7 +226,7 @@ if(isset($bill_data['quotation_data']) && isset($_GET['quotation_no']) && $_GET[
     			font-size: 24px;
     			margin-bottom: 3px;
 			}
-			.company-detail-left .company-address {
+			.company-detail-left .company-address, .company-detail-left .company-gst {
 			    font-size: 13px;
     			font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 			}
@@ -266,20 +244,25 @@ if(isset($bill_data['quotation_data']) && isset($_GET['quotation_no']) && $_GET[
 		    .table td, .table th {
 		      background-color: transparent !important;
 		    }
-
-			.footer {
+		    .page-block {
+		    	padding-bottom: 100px;
+		    }
+			.footerb {
 				/*position: fixed;*/
             	bottom: 0px;
             	left: 0px;
 			}
-			.footer .foot {
-			    background-color: #67a3b7 !important;
-			    -webkit-print-color-adjust: exact;
+			<?php
+			if($headers) {
+				echo ".footerb .foot {";
+				echo "    background-color: #67a3b7 !important;";
+				echo "    -webkit-print-color-adjust: exact;";
+				echo "}";
 			}
-
+			?>
 			.table>tbody>tr>td {
-				padding: 0 3px;
-				height: 20px;
+				padding: 1px 3px;
+				height: 15px;
 			}
 			.table-bordered>tbody>tr>td, .table-bordered>thead>tr>th {
 				border: 1px solid #000 !important;
@@ -297,444 +280,307 @@ if(isset($bill_data['quotation_data']) && isset($_GET['quotation_no']) && $_GET[
 			}
 			ol, ul {
 				padding-left: 15px;
+				list-style: none;
+			}
+			.change_height {
+				height: 20px;
+			}
+			.pagebreak { page-break-before: always; }
+			.condition-li li {
+				list-style: square;
+			}
+			.table>thead>tr>th {
+			    padding: 0px;
 			}
 	</style>
 
-
-
-<table class=""> 
-	<thead>
-		<tr>
-			<td>
-				<div class="customer-detail inner-container" style="margin-top: 20px;">
-					<div class="left-float company-detail-left">
-						<div class="company-name">
-							<h3><?php echo $company_data->company_name; ?></h3>
+<div class="page-block">
+	<table class=""> 
+		<thead>
+			<tr>
+				<td>
+					<div class="customer-detail inner-container" style="margin-top: 20px;">
+						<div class="left-float company-detail-left">
+							<div class="company-head">
+								<div class="company-name">
+									<h3><?php echo $company_data->company_name; ?></h3>
+								</div>
+								<div class="company-address">
+									<?php echo $company_data->address; ?>
+								</div>
+								<div class="company-address">
+									TEL: <?php echo $company_data->phone; ?>
+								</div>
+								<div class="company-address">
+									Mobile: <?php echo $company_data->mobile; ?>
+								</div>	
+							</div>
+							<div class="company-gst" style="margin-top:20px;">
+							<?php
+								if(isset($tax_for) && $tax_for == 'no_tax') {
+									echo "";
+								} else if(isset($tax_for) && $tax_for == 'vat') {
+									echo "<b>TIN: ".$company_data->tin_number."</b>";
+								} else {
+									echo "<b>GSTIN: ".$company_data->gst_number."</b>";
+								}
+							?>
+							</div>
 						</div>
-						<div class="company-address">
-							<?php echo $company_data->address; ?>
+						<div class="left-float top-right">
+							<div class="right-logo">
+								<img src="<?php echo get_template_directory_uri().'/admin/inc/images/invoice/'.$company_data->company_id.'.jpg' ;?>">
+							</div>
 						</div>
-						<div class="company-address">
-							TEL: <?php echo $company_data->phone; ?>
-						</div>
-						<div class="company-address">
-							Mobile: <?php echo $company_data->mobile; ?>
-						</div>
-
-						<div class="company-address">
-						<?php
-							if(isset($tax_for) && $tax_for == 'no_tax') {
-								echo "";
-							} else if(isset($tax_for) && $tax_for == 'vat') {
-								echo "<b>TIN: ".$company_data->tin_number."</b>";
-							} else {
-								echo "<b>GSTIN: ".$company_data->gst_number."</b>";
-							}
-						?>
+						<div class="clear"></div>
+					</div>
+					<div class="customer-detail inner-container" style="margin-top: 2px;margin-bottom:2px;">
+						<div class="billing-title">
+							QUOTATION
 						</div>
 					</div>
-					<div class="left-float top-right">
-						<div class="right-logo">
-							<img src="<?php echo get_template_directory_uri(); ?>/admin/inc/images/invoice/right-logo-1.jpg">
-						</div>
-					</div>
-					<div class="clear"></div>
-				</div>
-				<div class="customer-detail inner-container" style="margin-top: 2px;margin-bottom:2px;">
-					<div class="billing-title">
-						QUOTATION
-					</div>
-				</div>
-			</td>
-		</tr>
-	</thead>
-	<tbody>
-
-
-
+				</td>
+			</tr>
+		</thead>
+		<tbody>
 		<?php
 			for ($i = 0; $i < $pages; $i++) { 
 				$page_start = ( $i * $per_page ) + 1;
 				$current_page = ($i + 1);
-		?>
-			<tr>
-				<td>
-					<div class="inner-container" style="margin-top: 0px;">
-						<div class="bill-detail">
-							<table class="table table-bordered" style="margin-bottom: 2px;">
-								<thead>
-									<tr>
-										<th colspan="3">
-											<div style="min-height: 100px;padding:5px;">
-												<div style="line-height:10px;">
-													To: 
-												</div>
-												<div style="margin-left:30px;line-height:10px;">
-													<?php
-														echo $customer_detail->name;
-													?>
-												</div>
-												<div style="margin-left:30px;margin-top:5px;">
-													<?php
-														echo $customer_detail->address;
-													?>
-												</div>
-											</div>
-										</th>
-										<th colspan="3">
-											<div style="min-height: 100px;padding:5px;">
-												<div>
-													<div style="line-height: 20px;height: 25px;">
-														<div style="float:left;">
-															<?php echo $bill_number['bill_no']; ?>
-														</div>
-														<div class="clear"></div>
-													</div>
-													<div style="line-height: 20px;height: 25px;">
-														<div style="float:left;width: 60px">DATE</div>
-														<div style="float:left;">
-															: <?php echo date('d-m-Y', strtotime($quotation_data->quotation_date)); ?>
-														</div>
-														<div class="clear"></div>
-													</div>
-													<div style="line-height: 20px;height: 25px;">
-														<div style="float:left;width: 60px">SITE</div>
-														<div style="float:left;">
-															: <?php echo $site_detail->site_name; ?>
-														</div>
-														<div class="clear"></div>
-													</div>
-													<div class="clear"></div>
-												</div>
-											</div>
-										</th>
-									</tr>
-									<tr>
-										<th class="center-th" style="width: 50px;" rowspan="2">
-											<div class="text-center">S.No</div>
-										</th>
-										<th class="center-th" style="" rowspan="2">
-											<div class="text-center">Description</div>
-										</th>
-										<th class="center-th" style="width: 50px;" rowspan="2">
-											<div class="text-center">Qty</div>
-										</th>
-										<th class="center-th" style="width: 50px;" rowspan="2">
-											<div class="text-center">UOM</div>
-										</th>
-										<th class="center-th" style="padding: 0;">
-											<div class="text-center">Rate / 30 Days</div>
-										</th>
-										<th class="center-th" style="padding: 0;width: 100px;">
-											<div class="text-center">Hiring Charges For 30 Days</div>
-										</th>
-									</tr>
-								</thead>
-
-								<?php
-								foreach ($pieces[$i] as $key => $value) {
-									$data_thirty = splitCurrency($value->rate_thirty);
-									$data_ninety = splitCurrency($value->rate_ninety);
-								?>
-									<tr>
-										<td>
-											<div class="text-center">
-												<?php echo $page_start ?>
-											</div>
-										</td>
-										<td>
-											<?php echo $value->product_name; ?>
-											<span style="text-align: left;"><?php echo $value->product_type; ?></span>
-										</td>
-										<td>
-											<div class="text-center">
-												<?php echo $value->qty; ?>
-											</div>
-										</td>
-										<td>
-											<div class="text-center">
-												Nos
-											</div>
-										</td>
-										<td>
-											<div class="text-rigth">
-												<?php echo moneyFormatIndia($value->rate_thirty); ?>
-											</div>
-										</td>
-										<td>
-											<div class="text-rigth">
-												<?php echo moneyFormatIndia($value->rate_ninety); ?>
-											</div>
-										</td>
-									</tr>
-
-
-								<?php
-									$page_start++;
-								}
-								if($pages == $current_page) {
-								?>
-										<tr>
-											<td></td>
-											<td></td>
-											<td></td>
-											<td></td>
-											<td></td>
-											<td></td>
-										</tr>
-										<tr>
-											<td colspan="5"><div class="text-center">Total (Hire Charges)</div></td>
-											<td>
-												<div class="text-rigth">
-													<?php echo moneyFormatIndia($quotation_data->after_discount_amt); ?>
-												</div>
-											</td>
-										</tr>
-										<?php
-										if($quotation_data->discount_avail != 'no' && $quotation_data->discount_amount != 0) {
-										?>
-										<tr>
-											<td colspan="5"><div class="text-center">Discount</div></td>
-											<td>
-												<div class="text-right">
-													<?php echo moneyFormatIndia($quotation_data->discount_amount); ?>
-												</div>
-											</td>
-										</tr>
-										<tr>
-											<td colspan="5"><div class="text-center">Total After Discount</div></td>
-											<td>
-												<div class="text-rigth">
-													<?php echo moneyFormatIndia($quotation_data->total_after_discount); ?>
-												</div>
-											</td>
-										</tr>
-										<?php
-										}
-										if( isset($quotation_data->transportation_charge) && $quotation_data->transportation_charge != 0 ) {
-										?>
-										<tr>
-											<td colspan="5"><div class="text-center">Delivery Charges</div></td>
-											<td>
-												<div class="text-right">
-													<?php echo moneyFormatIndia($quotation_data->transportation_charge); ?>
-												</div>
-											</td>
-										</tr>
-										<?php
-										}
-										if( isset($quotation_data->damage_charge) && $quotation_data->damage_charge != 0 ) {
-										?>
-										<tr>
-											<td colspan="5"><div class="text-center">Cleaning and Maintanance Charges</div></td>
-											<td>
-												<div class="text-right">
-													<?php echo moneyFormatIndia($quotation_data->damage_charge); ?>
-												</div>
-											</td>
-										</tr>
-										<?php
-										}
-										if( isset($quotation_data->lost_charge) && $quotation_data->lost_charge != 0 ) {
-										?>
-										<tr>
-											<td colspan="5"><div class="text-center">Material Lost Charges</div></td>
-											<td>
-												<div class="text-right">
-													<?php echo moneyFormatIndia($quotation_data->lost_charge); ?>
-												</div>
-											</td>
-										</tr>
-										<?php
-										}
-										if( isset($quotation_data->transportation_charge) && $quotation_data->transportation_charge != 0 && isset($quotation_data->transportation_charge) && $quotation_data->transportation_charge != 0 && isset($quotation_data->lost_charge) && $quotation_data->lost_charge != 0 ) {
-										?>
-											<tr class="lost-tr">
-												<td colspan="5" >
-													<div class="text-center">Total</div>
-												</td>
-												<td>
-													<div class="text-right">
-														<span><?php echo moneyFormatIndia($quotation_data->total_before_tax); ?></span>					
-													</div>
-												</td>
-											</tr>
-										<?php
-										}
-
-										if($quotation_data->tax_from != 'no_tax') {
-
-											if($quotation_data->tax_from == 'gst') {
-
-												if($quotation_data->gst_for == 'cgst') {
-
-										?>
-												<tr>
-													<td colspan="5"><div class="text-center"><b>CGST - 9%</b></div></td>
-													<td>
-														<div class="text-rigth">
-															<?php echo moneyFormatIndia($quotation_data->cgst_amt); ?>
-														</div>
-													</td>
-												</tr>
-												<tr>
-													<td colspan="5"><div class="text-center"><b>SGST - 9%</b></div></td>
-													<td>
-														<div class="text-rigth">
-															<?php echo moneyFormatIndia($quotation_data->sgst_amt); ?>
-														</div>
-													</td>
-												</tr>
-										<?php
-												}
-												if($quotation_data->gst_for == 'igst') {
-										?>
-												<tr>
-													<td colspan="5"><div class="text-center"><b>IGST - 18%</b></div></td>
-													<td>
-														<div class="text-rigth">
-															<?php echo moneyFormatIndia($quotation_data->igst_amt); ?>
-														</div>
-													</td>
-												</tr>
-										<?php
-												}
-											}
-											if($quotation_data->tax_from == 'vat') {
-											?>
-												<tr>
-													<td colspan="5"><div class="text-center"><b>VAT - 5%</b></div></td>
-													<td>
-														<div class="text-rigth">
-															<?php echo moneyFormatIndia($quotation_data->vat_amt); ?>
-														</div>
-													</td>
-												</tr>
-											<?php
-											}
-											?>
-
-											<tr>
-												<td colspan="5"><div class="text-center">Total Including Tax</div></td>
-												<td>
-													<div class="text-right">
-														<?php echo moneyFormatIndia($quotation_data->tax_include_tot); ?>
-													</div>
-												</td>
-											</tr>
-										<?php
-										}
-										?>
-
-										<tr>
-											<td colspan="5"><div class="text-center">Round off</div></td>
-											<td>
-												<div class="text-right">
-													<?php echo moneyFormatIndia($quotation_data->round_off); ?>
-												</div>
-											</td>
-										</tr>
-										<tr>
-											<td colspan="5"><div class="text-center"><b>Total</b></div></td>
-											<td>
-												<div class="text-right">
-													<?php echo moneyFormatIndia($quotation_data->for_thirty_days); ?>
-												</div>
-											</td>
-										</tr>
-								<?php
-									}
-								?>
-							</table>
-						</div>
-					</div>
-				</td>
-			</tr>
-		<?php
+				$tr_class = ($current_page != $pages) ? 'change_height' : '';
+				include( get_template_directory().'/quotation-print-contenet.php' );
 			}
 		?>
+		</tbody>
+	</table>
+
+	<?php 
+		if($reminder == 0) {
+	?>
+		<div class="pagebreak" style="margin-top:100px;"> </div>
+		<div class="" style="padding-top:5px;"></div>
+		<table>
 			<tr>
 				<td>
-					<div class="customer-detail inner-container" style="margin-top: 15px;">
-						<h4><u>Requirements :-</u></h4>
-						<?php echo $quotation_data->requirements ?></td>
+					<div class="customer-detail inner-container" style="margin-top: 20px;">
+						<div class="left-float company-detail-left">
+							<div class="company-head">
+								<div class="company-name">
+									<h3><?php echo $company_data->company_name; ?></h3>
+								</div>
+								<div class="company-address">
+									<?php echo $company_data->address; ?>
+								</div>
+								<div class="company-address">
+									TEL: <?php echo $company_data->phone; ?>
+								</div>
+								<div class="company-address">
+									Mobile: <?php echo $company_data->mobile; ?>
+								</div>								
+							</div>
+
+							<div class="company-gst" style="margin-top:20px;">
+							<?php
+								if(isset($tax_for) && $tax_for == 'no_tax') {
+									echo "";
+								} else if(isset($tax_for) && $tax_for == 'vat') {
+									echo "<b>TIN: ".$company_data->tin_number."</b>";
+								} else {
+									echo "<b>GSTIN: ".$company_data->gst_number."</b>";
+								}
+							?>
+							</div>
+						</div>
+						<div class="left-float top-right">
+							<div class="right-logo">
+								<img src="<?php echo get_template_directory_uri().'/admin/inc/images/invoice/'.$company_data->company_id.'.jpg' ;?>">
+							</div>
+						</div>
+						<div class="clear"></div>
 					</div>
-			</tr>
+				</td>
+			</tr>			
+		</table>
+		<div class="" style="padding-top:15px;"></div>
+	<?php
+		}
+
+		$requirement_arr = explode("<li>", str_replace(array("<ol>","</ol>"),"",$quotation_data->requirements));
+		$requirement_arr = array_filter($requirement_arr, function($value) { return trim($value) !== ''; });
+		$fixed = 28;
+		$to_loop = $fixed - $reminder;
+		if($reminder >= 14 && $reminder < 27) {
+	?>
+		<div>
+			<table>
+				<tr>
+					<td>
+						<div class="customer-detail inner-container" style="margin-top: 15px;">
+							<h4><u>Requirements :-</u></h4>
+							<ul>
+							<?php 
+								foreach ($requirement_arr as $key => $value) {
+									$count = $key . '. ';
+									$li_data = str_replace(array("<ol>","</ol>","<li>","</li>"),"",$value);
+									if( $key <= $to_loop && $li_data != '') {
+										echo "<li>".$count.$li_data."</li>";
+										unset($requirement_arr[$key]);
+									}
+								}
+							?>
+							</ul>
+						</div>
+					</td>
+				</tr>
+			</table>
+		</div>
+	<?php
+		}
+		if($reminder>=14) {
+	?>
+		<div class="pagebreak" style="margin-top:100px;"> </div>
+		<div class="" style="padding-top:5px;"></div>
+		<table>
 			<tr>
 				<td>
-					<div class="customer-detail inner-container" style="margin-top: 0px;margin-bottom:0px;">
-						<table class="table" style="margin-bottom:0px;">
+					<div class="customer-detail inner-container" style="margin-top: 20px;">
+						<div class="left-float company-detail-left">
+							<div class="company-head">
+								<div class="company-name">
+									<h3><?php echo $company_data->company_name; ?></h3>
+								</div>
+								<div class="company-address">
+									<?php echo $company_data->address; ?>
+								</div>
+								<div class="company-address">
+									TEL: <?php echo $company_data->phone; ?>
+								</div>
+								<div class="company-address">
+									Mobile: <?php echo $company_data->mobile; ?>
+								</div>								
+							</div>
+
+							<div class="company-gst" style="margin-top:20px;">
+							<?php
+								if(isset($tax_for) && $tax_for == 'no_tax') {
+									echo "";
+								} else if(isset($tax_for) && $tax_for == 'vat') {
+									echo "<b>TIN: ".$company_data->tin_number."</b>";
+								} else {
+									echo "<b>GSTIN: ".$company_data->gst_number."</b>";
+								}
+							?>
+							</div>
+						</div>
+						<div class="left-float top-right">
+							<div class="right-logo">
+								<img src="<?php echo get_template_directory_uri().'/admin/inc/images/invoice/'.$company_data->company_id.'.jpg' ;?>">
+							</div>
+						</div>
+						<div class="clear"></div>
+					</div>
+				</td>
+			</tr>			
+		</table>
+		<div class="" style="padding-top:15px;"></div>
+	<?php
+		}
+		if(is_array($requirement_arr) && count($requirement_arr) > 0) {
+	?>
+		<div>
+			<table>
+				<tr>
+					<td>
+						<div class="customer-detail inner-container" style="margin-top: 15px;">
+							<?php
+								if(array_key_exists(1,$requirement_arr)) {
+									echo "<h4><u>Requirements :-</u></h4>";
+								}
+							?>
+							<ul>
+							<?php 
+								foreach ($requirement_arr as $key => $value) {
+									$count = $key . '. ';
+									$li_data = str_replace(array("<ol>","</ol>","<li>","</li>"),"",$value);
+									echo "<li>".$count.$li_data."</li>";
+									unset($requirement_arr[$key]);
+								}
+							?>
+							</ul>
+						</div>
+					</td>
+				</tr>
+			</table>
+		</div>
+	<?php
+		}
+
+	?>
+
+		<div class="customer-detail inner-container" style="margin-top: 0px;margin-bottom:0px;">
+			<table class="table" style="margin-bottom:0px;">
+				<tr>
+					<td style="width:380px;">
+						<table class="table table-bordered">
 							<tr>
-								<td style="width:380px;">
-									<table class="table table-bordered">
-										<tr>
-											<td style="width: 120px;"><div class="text-center" style="padding:5px;">Other Requirements</div></td>
-											<td><div class="text-center" style="padding:5px;">Passport size Photo, ID Proof, Address Proof, (Company Details, Site Details, All Contract Details)</div></td>
-										</tr>
-									</table>
-									<table class="table table-bordered" style="margin-bottom:0px;">
-										<tr>
-											<td style="width: 120px;"><div class="text-center" style="padding:5px;">Amount Payable</div></td>
-											<td><div class="text-center" style="padding:5px;">Rs. 1,43,875.00</div></td>
-										</tr>
-									</table>
-								</td>
+								<td style="width: 120px;"><div class="text-center" style="padding:5px;">Other Requirements</div></td>
+								<td><div class="text-center" style="padding:5px;">Passport size Photo, ID Proof, Address Proof, (Company Details, Site Details, All Contract Details)</div></td>
+							</tr>
+						</table>
+						<table class="table table-bordered" style="margin-bottom:0px;">
+							<tr>
+								<td style="width: 120px;"><div class="text-center" style="padding:5px;">Amount Payable</div></td>
+								<td><div class="text-center" style="padding:5px;font-weight:bold;font-size:16px;">Rs. <?php echo moneyFormatIndia($quotation_data->amount_payable); ?></div></td>
+							</tr>
+						</table>
+					</td>
+					<td>
+						<table class="table table-bordered" style="margin-bottom:0px;">
+							<tr>
 								<td>
-									<table class="table table-bordered" style="margin-bottom:0px;">
-										<tr>
-											<td>
-												<div class="text-center" style="padding:5px;    min-height: 115px;">
-													<b><u>Account Details</u></b>
-													<?php echo $quotation_data->bank_details ?>
-												</div>
-											</td>
-										</tr>
-									</table>
+									<div class="text-left" style="padding:5px;   min-height: 108px;">
+										<b><u>Banking Details</u></b><br>
+										<?php echo $quotation_data->bank_details ?>
+									</div>
 								</td>
 							</tr>
 						</table>
-						
-					</div>
-				</td>
-			</tr>
-	</tbody>
-</table>
-
-<div class="footer" style="margin-bottom:20px;">
+					</td>
+				</tr>
+			</table>
+		</div>
+</div>
 
 
 
 
-
-		<div class="inner-container" style="margin-top: 5px;">
-
-			<div class="left-float" style="width: 480px;float: left;padding-right: 10px;">
-				<div style="float: left;padding-right: 10px;font-size: 10px;margin-top: 30px;">
-					Immediate interest @ 24% p.a. will be charged if not paid within 3 days from the date of the bill
-					<ul style="margin-bottom: 2px;">
-						<li>All materials should be returned thoroughly cleaned and oiled</li>
-						<li>White waste oil should be used for oiling all materials</li>
-						<li>For all materials minimum hire charges will be for 30 days</li>
-					</ul>
-				</div>
-				<div class="clear"></div>
-			</div>
-			<div class="left-float" style="width: 154px;margin-top:15px;">
-				<div class="company-name" style="font-family: serif;font-weight: bold;font-size: 16px;">
-					For <?php echo $company_data->company_name; ?>
-				</div>
-				<div style="margin-top: 30px;">Manager / Accountant</div>
+<div class="footerb" style="margin-bottom:20px;position:fixed;bottom:0;">
+	<div class="inner-container" style="margin-top: 5px;">
+		<div class="left-float" style="width: 480px;float: left;padding-right: 10px;">
+			<div style="float: left;padding-right: 10px;font-size: 10px;margin-top: 30px;">
+				Immediate interest @ 24% p.a. will be charged if not paid within 3 days from the date of the bill
+				<ul style="margin-bottom: 2px;" class="condition-li">
+					<li>All materials should be returned thoroughly cleaned and oiled</li>
+					<li>White waste oil should be used for oiling all materials</li>
+					<li>For all materials minimum hire charges will be for 30 days</li>
+				</ul>
 			</div>
 			<div class="clear"></div>
 		</div>
-
-
-
-		<div class="inner-container foot" style="width: 810px;line-height: 20px;font-size: 14px;color: #fff !important;">
-			<div class="left-float" style="width:325px;font-size: 14px;color: #fff !important;text-align: center;">Email : infojbcaccesss@gmail.com</div>
-			<div class="left-float" style="width:325px;font-size: 14px;color: #fff !important;text-align: center;">Website : www.jcbascdfdsgdfg.in</div>
-			<div class="clear"></div>
+		<div class="left-float" style="width: 154px;margin-top:15px;">
+			<div class="company-name" style="font-family: serif;font-weight: bold;font-size: 16px;">
+				For <?php echo $company_data->company_name; ?>
+			</div>
+			<div style="margin-top: 30px;">Manager / Accountant</div>
 		</div>
+		<div class="clear"></div>
+	</div>
+
+	<div class="inner-container foot" style="width: 810px;line-height: 20px;font-size: 14px;color: #fff !important;">
+		<div class="left-float" style="width:325px;font-size: 14px;color: #fff !important;text-align: center;">Email : <?php echo $company_data->email; ?></div>
+		<div class="left-float" style="width:325px;font-size: 14px;color: #fff !important;text-align: center;">Website : <?php echo $company_data->website; ?></div>
+		<div class="clear"></div>
+	</div>
 </div>
 
 

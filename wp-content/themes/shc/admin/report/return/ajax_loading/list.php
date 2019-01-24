@@ -1,6 +1,9 @@
 <?php
     $ppage = false;
+
+    $from_dashboard = false;    
     if(!$returnlist) {
+        $from_dashboard = true;
         $returnlist = new ReturnList();
         $ppage = 5;
     }
@@ -26,7 +29,11 @@
                             <th class="column-title">#MRR</th>
                             <th class="column-title">Customer Name </th>
                             <th class="column-title">Site </th>
-                            <th class="column-title">Site Address </th>
+                            <?php 
+                                if(!$from_dashboard) {
+                                    echo '<th class="column-title">Site Address </th>';
+                                }
+                            ?>
                             <th class="column-title">return On </th>
                             <th class="column-title">Action </th>
                         </tr>
@@ -56,8 +63,11 @@
                                     </td>              
                                     <td class=""><?php echo $r_value->name; ?></td>
                                     <td class=""><?php echo $r_value->site_name; ?></td>
-                                    <td class=""><?php echo $r_value->site_address.', '.$r_value->phone_number; ?></i>
-                                    </td>
+                                    <?php 
+                                        if(!$from_dashboard) {
+                                            echo '<td class="">'.$r_value->site_address.', '.$r_value->phone_number.'</td>';
+                                        }
+                                    ?>
                                     <td class=""><?php echo $r_value->return_date; ?></td>
                                     <td>
                                         <div class="list_action">

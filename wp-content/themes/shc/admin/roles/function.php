@@ -52,7 +52,7 @@ function src_global_var() {
 				'new_delivery' => 'Create Delivery',
 				'new_return' => 'Create Return',
 				'new_bill' => 'Create Hiring Bill',
-				'new_obc' => 'Create OBC',
+				'new_obc' => 'Create Receipt',
 			),
 			'permission' => array(
 				'new_master' => (is_super_admin()) ? 'manage_options' : 'new_master',

@@ -59,6 +59,17 @@ function create_quotation() {
 		'for_thirty_days' => isset($params['hiring_tot']) ? $params['hiring_tot'] : 0.00,
 		'requirements' => isset($params['quotation_txt']) ? $params['quotation_txt'] : '',
 		'bank_details' => isset($params['bank_details']) ? $params['bank_details'] : '',
+		'deposit_times' => isset($params['deposit_times']) ? $params['deposit_times'] : '',
+		'deposit_from' => isset($params['deposit_from']) ? $params['deposit_from'] : 'h',
+		'loading_weight' => isset($params['loading_weight']) ? $params['loading_weight'] : '',
+		'loading_per_ton' => isset($params['price_per_ton']) ? $params['price_per_ton'] : '',
+		'loading_charge' => isset($params['loading_charge']) ? $params['loading_charge'] : '',
+		'loading_scope' => isset($params['loading_scope']) && $params['loading_scope'] == 'on' ? 1 : 0,
+		'unloading_scope' => isset($params['unloading_scope']) && $params['unloading_scope'] == 'on' ? 1 : 0,
+		'transport_charge' => isset($params['transport_charge']) ? $params['transport_charge'] : '',
+		'transport_scope' => isset($params['transport_scope']) && $params['transport_scope'] == 'on' ? 1 : 0,
+		'return_transport_charge' => isset($params['return_transport_charge']) ? $params['return_transport_charge'] : '',
+		'return_transport_scope' => isset($params['return_transport_scope']) && $params['return_transport_scope'] == 'on' ? 1 : 0,
 		'amount_payable' => isset($params['amount_payable']) ? $params['amount_payable'] : '',
 	);
 
@@ -95,13 +106,15 @@ function create_quotation() {
 				if(isset($d_value['lot_id_orig']) AND $d_value['lot_id_orig'] != 0) {
 
 					$detail_data = array(
-						'quotation_id' 	=> $quotation_id,
-						'lot_id' 		=> $d_value['lot_id_orig'],
-						'qty' 			=> $d_value['qty'],
-						'unit_price' 	=> $d_value['unit_price'],
-						'rate_thirty' 	=> $d_value['thirty_rs_price'],
-						'rate_ninety' 	=> $d_value['ninety_rs_price'],
-						'active' 		=> 1
+						'quotation_id' 		=> $quotation_id,
+						'lot_id' 			=> $d_value['lot_id_orig'],
+						'qty' 				=> $d_value['qty'],
+						'unit_price' 		=> $d_value['unit_price'],
+						'rate_thirty' 		=> $d_value['thirty_rs_price'],
+						'rate_ninety' 		=> $d_value['ninety_rs_price'],
+						'row_weight_unit' 	=> $d_value['row_weight_unit'],
+						'row_weight'		=> $d_value['row_weight'],
+						'active' 			=> 1
 						);
 
 					if($d_value['quotation_detail_id'] != 0) {

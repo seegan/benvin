@@ -97,7 +97,7 @@ function without_special_price_lot($value='')
 	$data['success'] = 0;
 	global $wpdb;
 	$lots_table = $wpdb->prefix.'shc_lots';
-	$query = "SELECT id, lot_no, product_name, product_type, tax1, unit_price FROM ${lots_table} l WHERE ( lot_no LIKE '${lot_id}%' OR product_name LIKE '${lot_id}%' )";
+	$query = "SELECT id, lot_no, product_name, product_type, tax1, unit_price, minimum_bill_day FROM ${lots_table} l WHERE ( lot_no LIKE '${lot_id}%' OR product_name LIKE '${lot_id}%' )";
 
 	if( $data['items'] = $wpdb->get_results( $query, ARRAY_A ) ) {
 		$data['success'] = 1;

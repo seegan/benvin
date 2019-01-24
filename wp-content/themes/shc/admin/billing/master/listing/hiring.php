@@ -3,6 +3,7 @@
     if(!$hiringlist) {
         $hiringlist = new HiringList();
         $ppage = 5;
+        $hiringlist->financial_year = '-';
     }
     $result_args = array(
         'orderby_field' => 'created_at',

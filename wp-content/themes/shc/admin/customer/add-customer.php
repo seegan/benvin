@@ -71,6 +71,29 @@
 						</div>
 						<div class="divider-dashed"></div>
 						<div class="form-group">
+							<label class="control-label col-md-3 col-sm-3 col-xs-12" for="gst-number">GST Number </label>
+							<div class="col-md-6 col-sm-6 col-xs-12">
+								<input type="text" id="gst_number" name="gst_number" class="form-control col-md-7 col-xs-12" value="<?php echo ($customer) ? $customer->gst_number : ''; ?>">
+							</div>
+						</div>
+						<div class="divider-dashed"></div>
+						<div class="form-group">
+							<label class="control-label col-md-3 col-sm-3 col-xs-12" for="attn-name">Attn. Name </label>
+							<div class="col-md-6 col-sm-6 col-xs-12">
+								<input type="text" id="attn_name" name="attn_name" required="required" class="form-control col-md-7 col-xs-12" value="<?php echo ($customer) ? $customer->attn_name : ''; ?>">
+							</div>
+						</div>
+						<div class="divider-dashed"></div>
+						<div class="form-group">
+							<label class="control-label col-md-3 col-sm-3 col-xs-12" for="customer-email">Customer Email </label>
+							<div class="col-md-6 col-sm-6 col-xs-12">
+								<input type="text" id="customer_email" name="customer_email" required="required" class="form-control col-md-7 col-xs-12" value="<?php echo ($customer) ? $customer->customer_email : ''; ?>">
+							</div>
+						</div>
+						<div class="divider-dashed"></div>
+
+
+						<div class="form-group">
 							<div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
 	                          	<button class="btn btn-primary" type="button">Cancel</button>
 							  	<button class="btn btn-primary" type="reset">Reset</button>
@@ -243,6 +266,9 @@
 												<div>Rate Per Day</div>
 											</th>
 											<th rowspan="2" class="center-th" style="width:100px;">
+												<div>Minimum Bill Days</div>
+											</th>
+											<th rowspan="2" class="center-th" style="width:100px;">
 												<div>Site</div>
 											</th>
 											<th colspan="2">
@@ -267,6 +293,9 @@
 											</td>
 											<td>
 												<input type="text" name="unit_price" class="unit_price" value="<?php echo $sp_value->price; ?>">
+											</td>
+											<td>
+												<input type="text" name="minimum_bill_day_spl" class="minimum_bill_day_spl" value="<?php echo $sp_value->minimum_bill_day_spl; ?>">
 											</td>
 											<td>
 												<select name="site_id" class="site_id">
@@ -302,6 +331,9 @@
 											</td>
 											<td>
 												<input type="text" name="unit_price" class="unit_price" value="0.00">
+											</td>
+											<td>
+												<input type="text" name="minimum_bill_day_spl" class="minimum_bill_day_spl" value="30">
 											</td>
 											<td>
 												<select name="site_id" class="site_id">

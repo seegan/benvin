@@ -4290,6 +4290,7 @@ div[data-role=editor-toolbar] {
 }
 .select2-container {
     border: 1px solid rgba(118,118,118,1.0);
+    border-radius: 5px;
 }
 .select2-container--default .select2-selection--multiple .select2-selection__rendered {
     padding-top: 3px

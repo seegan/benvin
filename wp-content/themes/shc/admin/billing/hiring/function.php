@@ -50,14 +50,13 @@ function create_billing() {
 	parse_str($_POST['data'], $params);
 
 
+
 	//unset($params['action']);
 	$master_id = isset($params['master_id']) ? $params['master_id'] : 0;
 
-
-
 	$hiring_data = array(
 		'ref_number' => isset($params['ref_number']) ? $params['ref_number'] : '',
-		'financial_year' => getFinancialYear( $params['billing_date'] ),
+		'financial_year_proforma' => getFinancialYear( $params['billing_date'] ),
 		'master_id' => isset($params['master_id']) ? $params['master_id'] : 0,
 		'bill_from' => isset($params['master_id']) ? $params['bill_from'] : '0000:00:00',
 		'bill_to'  => isset($params['master_id']) ? $params['bill_to'] : '0000:00:00',
@@ -93,10 +92,11 @@ function create_billing() {
 
 	if($params['action'] == 'create_billing') {
 		
-		$bill_no_data = getCorrectBillNumber($params['bill_no'], $params['site_id'], 'shc_hiring', $params['billing_date']);
+		$bill_no_data = getCorrectBillNumber($params['bill_no'], $params['site_id'], 'shc_hiring', $params['billing_date'], 'proforma_no', 'financial_year_proforma');
 
 		$hiring_data['bill_from_comp'] = $bill_no_data['bill_from_comp'];
-		$hiring_data['bill_no'] = $bill_no_data['bill_no'];
+		$hiring_data['proforma_no'] = $bill_no_data['bill_no'];
+
 		$hiring_data['updated_by'] = $loggdin_user;
 
 		$wpdb->insert($hiring_table, $hiring_data);
@@ -146,7 +146,7 @@ function create_billing() {
 
 		$hiring_bill_id = $params['bill_id'];
 		
-		$hiring_data['bill_no'] = $params['update_current_bill'];
+		$hiring_data['proforma_no'] = $params['update_current_bill'];
 
 		$wpdb->update($hiring_table, $hiring_data, array('id' => $hiring_bill_id));
 		create_admin_history(array('updated_by' => $loggdin_user, 'update_in' => $hiring_bill_id, 'detail' => 'hiring_update' ));
@@ -222,9 +222,27 @@ add_action( 'wp_ajax_nopriv_create_billing', 'create_billing' );
 function bill_status_update() {
 	global $wpdb;
 	$hiring_table = $wpdb->prefix.'shc_hiring';
-	$loggdin_user = get_current_user_id();	
+	$loggdin_user = get_current_user_id();
+	$bill_id = isset($_POST['bill_id']) ? $_POST['bill_id'] : 0;
+	$payment_date = isset($_POST['payment_date']) ? $_POST['payment_date'] : date('Y-m-d');
+	$siteid = isset($_POST['siteid']) ? $_POST['siteid'] : 0;
+	$status = isset($_POST['status']) ? $_POST['status'] : 1;
 
-	$wpdb->update($hiring_table, array('bill_status' => $_POST['status'], 'payment_date' => $_POST['payment_date'] ), array('id' => $_POST['bill_id']));
+	$existing_query = "SELECT bill_no FROM $hiring_table WHERE id = $bill_id AND bill_no != 0 AND financial_year = ".getFinancialYear( $payment_date );
+
+	$duplicate_query = "SELECT bill_no FROM $hiring_table  WHERE bill_no = ($existing_query) AND financial_year = ".getFinancialYear( $payment_date )." AND id != $bill_id";
+
+	$existing = $wpdb->get_row($existing_query);
+	$duplicate = $wpdb->get_row($duplicate_query);
+
+	$bill_no = (isset($existing->bill_no) && !isset($duplicate->bill_no)) ? $existing->bill_no : getNextBillNumber(0, $siteid, 'shc_hiring', $payment_date, 'bill_no', 'financial_year');
+
+	if( $status == "2") {
+		$wpdb->update($hiring_table, array('bill_no' =>$bill_no, 'financial_year' => getFinancialYear( $payment_date ), 'bill_status' => $status, 'payment_date' => $payment_date ), array('id' => $bill_id));
+	} else {
+		$wpdb->update($hiring_table, array('bill_status' => $status), array('id' => $bill_id));
+	}
+
 
 	$bill_status_txt = 'bill_status_'.$_POST['status'];
 	create_admin_history(array('updated_by' => $loggdin_user, 'update_in' => $_POST['bill_id'], 'detail' => $bill_status_txt ));

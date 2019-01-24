@@ -162,11 +162,11 @@ got_return,
 
 
 
-l.product_name, l.product_type, sdd.rate_per_unit, sdd.delivery_date,
+l.product_name, l.product_type, sdd.rate_per_unit, sdd.delivery_date, sdd.minimum_bill_day,
 
 
  ( CASE 
- WHEN bill.got_return = 'yes' AND ( DATEDIFF ( DATE(bill.bill_to) , DATE(sdd.delivery_date) )+1 ) < 30
+ WHEN bill.got_return = 'yes' AND ( DATEDIFF ( DATE(bill.bill_to) , DATE(sdd.delivery_date) )+1 ) < sdd.minimum_bill_day
  
  THEN 'yes'
  
@@ -175,9 +175,9 @@ l.product_name, l.product_type, sdd.rate_per_unit, sdd.delivery_date,
 END ) as min_bill,
 
  ( CASE 
- WHEN bill.got_return = 'yes' AND ( DATEDIFF ( DATE(bill.bill_to) , DATE(sdd.delivery_date) )+1 ) < 30
+ WHEN bill.got_return = 'yes' AND ( DATEDIFF ( DATE(bill.bill_to) , DATE(sdd.delivery_date) )+1 ) < sdd.minimum_bill_day
  
- THEN (30*sdd.rate_per_unit * bill.bill_qty)
+ THEN (sdd.minimum_bill_day*sdd.rate_per_unit * bill.bill_qty)
  
  ELSE 0
  
@@ -185,9 +185,9 @@ END ) as min_bill_amt,
 
 
  ( CASE 
- WHEN bill.got_return = 'yes' AND ( DATEDIFF ( DATE(bill.bill_to) , DATE(sdd.delivery_date) )+1 ) < 30
+ WHEN bill.got_return = 'yes' AND ( DATEDIFF ( DATE(bill.bill_to) , DATE(sdd.delivery_date) )+1 ) < sdd.minimum_bill_day
  
- THEN (30*sdd.rate_per_unit * bill.bill_qty) - 
+ THEN (sdd.minimum_bill_day*sdd.rate_per_unit * bill.bill_qty) - 
 
   	(
         (
@@ -336,9 +336,9 @@ ON bill.id = sdd.id WHERE bill.bill_qty > 0 AND
 		";
 
 
-		$query1 = "SELECT fdf.id, fdf.master_id, fdf.lot_id, SUM(fdf.bill_qty) as bill_qty, fdf.bill_from, fdf.bill_to, fdf.bill_days, fdf.total_days, SUM(fdf.bill_amount) as bill_amount, fdf.got_return, fdf.product_name, fdf.product_type, fdf.rate_per_unit, fdf.delivery_date, fdf.min_bill, fdf.min_bill_amt, fdf.min_bill_bal FROM (".$query.") as fdf WHERE fdf.got_return = 'no' GROUP BY fdf.lot_id, fdf.bill_days, fdf.rate_per_unit";
+		$query1 = "SELECT fdf.id, fdf.master_id, fdf.lot_id, SUM(fdf.bill_qty) as bill_qty, fdf.bill_from, fdf.bill_to, fdf.bill_days, fdf.total_days, SUM(fdf.bill_amount) as bill_amount, fdf.got_return, fdf.product_name, fdf.product_type, fdf.rate_per_unit, fdf.delivery_date, fdf.min_bill, fdf.min_bill_amt, fdf.min_bill_bal, fdf.minimum_bill_day FROM (".$query.") as fdf WHERE fdf.got_return = 'no' GROUP BY fdf.lot_id, fdf.bill_days, fdf.rate_per_unit";
 
-		$query2 = "SELECT fdf.id, fdf.master_id, fdf.lot_id, fdf.bill_qty as bill_qty, fdf.bill_from, fdf.bill_to, fdf.bill_days, fdf.total_days, fdf.bill_amount, fdf.got_return, fdf.product_name, fdf.product_type, fdf.rate_per_unit, fdf.delivery_date, fdf.min_bill, fdf.min_bill_amt, fdf.min_bill_bal FROM (".$query.") as fdf WHERE fdf.got_return = 'yes'";
+		$query2 = "SELECT fdf.id, fdf.master_id, fdf.lot_id, fdf.bill_qty as bill_qty, fdf.bill_from, fdf.bill_to, fdf.bill_days, fdf.total_days, fdf.bill_amount, fdf.got_return, fdf.product_name, fdf.product_type, fdf.rate_per_unit, fdf.delivery_date, fdf.min_bill, fdf.min_bill_amt, fdf.min_bill_bal, fdf.minimum_bill_day FROM (".$query.") as fdf WHERE fdf.got_return = 'yes'";
 
 		$final_query = "SELECT * FROM (".$query1 .' UNION ALL '.$query2.") as full ORDER BY full.lot_id";
 		//$final_query = $query1 .' UNION ALL '.$query2;
@@ -392,12 +392,13 @@ ON bill.id = sdd.id WHERE bill.bill_qty > 0 AND
 			/*$detail_query = "SELECT hd.*, l.product_name, l.product_type FROM ${hiring_detail_table} as hd JOIN ${lot_table} as l ON hd.lot_id = l.id WHERE hd.hiring_bill_id = ${bill_id} AND hd.active = 1";*/
 
 			$detail_query = "SELECT hd.lot_id, SUM(hd.qty) as qty, hd.bill_from, hd.bill_to, hd.bill_days, hd.rate_per_day, SUM(hd.amount) as amount, hd.min_checked, SUM(hd.hiring_amt) as hiring_amt,   l.product_name, l.product_type FROM ${hiring_detail_table} as hd JOIN ${lot_table} as l ON hd.lot_id = l.id WHERE hd.hiring_bill_id = ${bill_id} AND hd.active = 1 GROUP BY hd.lot_id, hd.bill_days, hd.rate_per_day, hd.min_checked, hd.bill_from, hd.bill_to";
-
+ 
 			$data['hiring_detail'] = $wpdb->get_results($detail_query);
 
 
 
-			$hiring_gst_query = "SELECT * FROM ${hiring_gst} WHERE hiring_id = ${bill_id} AND active = 1";
+			$hiring_gst_query = "SELECT *,`cgst_val` + `sgst_val` +`igst_val` as total_tax FROM ${hiring_gst} WHERE hiring_id = ${bill_id} AND active = 1";
+			
 			$data['hiring_gst_detail'] = $wpdb->get_results($hiring_gst_query);
 
 

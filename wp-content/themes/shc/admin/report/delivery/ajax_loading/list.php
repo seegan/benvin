@@ -1,6 +1,9 @@
 <?php
     $ppage = false;
+
+    $from_dashboard = false;
     if(!$deliverylist) {
+        $from_dashboard = true;
         $deliverylist = new DeliveryList();
         $ppage = 5;
     }
@@ -26,7 +29,11 @@
                             <th class="column-title">#DC</th>
                             <th class="column-title">Customer Name </th>
                             <th class="column-title">Site </th>
-                            <th class="column-title">Site Address </th>
+                            <?php 
+                                if(!$from_dashboard) {
+                                    echo '<th class="column-title">Site Address </th>';
+                                }
+                            ?>
                             <th class="column-title">Delivery On </th>
                             <th class="column-title">Action </th>
                         </tr>
@@ -56,8 +63,11 @@
                                     </td>
                                     <td class=""><?php echo $d_value->name; ?></td>
                                     <td class=""><?php echo $d_value->site_name; ?></td>
-                                    <td class=""><?php echo $d_value->site_address.', '.$d_value->phone_number; ?></i>
-                                    </td>
+                                    <?php 
+                                        if(!$from_dashboard) {
+                                            echo '<td class="">'.$d_value->site_address.', '.$d_value->phone_number.'</td>';
+                                        }
+                                    ?>
                                     <td class=""><?php echo $d_value->delivery_date; ?></td>
                                     <td>
                                         <div class="list_action">

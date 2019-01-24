@@ -172,6 +172,7 @@
 											</td>
 											<td>
 												<div class="align-txt unit_price_txt"><?php echo $d_value->unit_price; ?></div>
+												<input type="hidden" name="minimum_bill_day" value="<?php echo $d_value->minimum_bill_day; ?>" class="minimum_bill_day_spl">
 												<input type="hidden" name="unit_price" class="unit_price" value="<?php echo $d_value->unit_price; ?>">
 											</td>
 											<td>

@@ -36,6 +36,7 @@ function create_obc() {
 
 	$obc_id = (isset($params['obc_id']) && $params['obc_id'] != '') ? $params['obc_id'] : 0;
 	$received_by  = (isset($params['received_by']) && $params['received_by'] != '') ? $params['received_by'] : '';
+	$cd_notes  = (isset($params['cd_notes']) && $params['cd_notes'] != '') ? $params['cd_notes'] : '';
 	$cheque_no = (isset($params['cheque_no']) && $params['cheque_no'] != '') ? $params['cheque_no'] : 0;
 	$cheque_date = (isset($params['cheque_date']) && $params['cheque_date'] != '') ? $params['cheque_date'] : '0000-00-00';
 	$cheque_amt = (isset($params['cheque_amt']) && $params['cheque_amt'] != '') ? $params['cheque_amt'] : 0.00;
@@ -48,7 +49,7 @@ function create_obc() {
 
 	if(isset($params['action']) && $params['action'] == 'create_obc') {
 
-		$wpdb->insert($obc_table, array('bill_from_comp' => $bill_no_data['bill_from_comp'], 'bill_no' => $bill_no_data['bill_no'], 'ref_number' => $params['ref_number'], 'financial_year' => $financial_year, 'master_id' => $master_id,'received_by' => $received_by, 'cheque_no' => $cheque_no, 'cheque_date' => $cheque_date, 'cheque_amount' => $cheque_amt,'extra_notes' => $extra_notes, 'notes' => $notes, 'obc_date' => $obc_date_time, 'updated_by' => $loggdin_user ) );
+		$wpdb->insert($obc_table, array('bill_from_comp' => $bill_no_data['bill_from_comp'], 'bill_no' => $bill_no_data['bill_no'], 'ref_number' => $params['ref_number'], 'financial_year' => $financial_year, 'master_id' => $master_id,'received_by' => $received_by, 'cheque_no' => $cheque_no, 'cheque_date' => $cheque_date, 'cheque_amount' => $cheque_amt,'extra_notes' => $extra_notes, 'notes' => $notes, 'obc_date' => $obc_date_time,'cd_notes' => $cd_notes, 'updated_by' => $loggdin_user ) );
 
 		$obc_id = $wpdb->insert_id;
 		create_admin_history(array('updated_by' => $loggdin_user, 'update_in' => $obc_id, 'detail' => 'obc_create' ));
@@ -62,11 +63,11 @@ function create_obc() {
 
 	if(isset($params['action']) && $params['action'] == 'update_obc') {
 
-		$wpdb->update($obc_table, array( 'bill_from_comp' => $bill_no_data['bill_from_comp'], 'ref_number' => $params['ref_number'], 'financial_year' => $financial_year,'received_by' => $received_by, 'cheque_no' => $cheque_no, 'cheque_date' => $cheque_date, 'cheque_amount' => $cheque_amt,'extra_notes' => $extra_notes, 'notes' => $notes, 'obc_date' => $obc_date_time ), array('master_id' => $master_id, 'id' => $obc_id) );
+		$wpdb->update($obc_table, array( 'bill_from_comp' => $bill_no_data['bill_from_comp'], 'ref_number' => $params['ref_number'], 'financial_year' => $financial_year,'received_by' => $received_by, 'cheque_no' => $cheque_no, 'cheque_date' => $cheque_date, 'cheque_amount' => $cheque_amt,'extra_notes' => $extra_notes, 'notes' => $notes, 'obc_date' => $obc_date_time,'cd_notes' => $cd_notes ), array('master_id' => $master_id, 'id' => $obc_id) );
 		create_admin_history(array('updated_by' => $loggdin_user, 'update_in' => $obc_id, 'detail' => 'obc_update' ));
 
 		$data['success'] = 1;
-		$data['msg'] 	= 'OBC Updated!';
+		$data['msg'] 	= 'Receipt Updated!';
 		$redirect_url = 'admin.php?page=new_obc&id='.$master_id.'&obc_id='.$obc_id;
 		$data['redirect'] = network_admin_url( $redirect_url );
 	}

@@ -38,7 +38,7 @@ function getCompaniesById($comp_id = 0)
 {
 	global $wpdb;
 	$companies_table = $wpdb->prefix.'shc_companies';
-    $query = "SELECT company_id, company_name, address, phone, mobile, tin_number, gst_number FROM ${companies_table} WHERE id = ${comp_id}";
+    $query = "SELECT company_id, company_name, address, phone, mobile, tin_number, gst_number, website, email FROM ${companies_table} WHERE id = ${comp_id}";
     return $wpdb->get_row($query);
 }
 
@@ -150,11 +150,11 @@ function create_site() {
 			$site_id = ($p_value['site_id'] && $p_value['site_id']) ? $p_value['site_id'] : 0;
 
 			if($p_value['special_price_id'] == 0) {
-				$wpdb->insert($special_price, array('customer_id' => $customer_id, 'site_id' => $site_id, 'lot_id' => $p_value['lot_id_orig'], 'price' => $p_value['unit_price'], 'updated_by' => $loggdin_user));
+				$wpdb->insert($special_price, array('customer_id' => $customer_id, 'site_id' => $site_id, 'lot_id' => $p_value['lot_id_orig'], 'price' => $p_value['unit_price'], 'minimum_bill_day_spl' => $p_value['minimum_bill_day_spl'], 'updated_by' => $loggdin_user));
 				$special_price_id = $wpdb->insert_id;
 				create_admin_history(array('updated_by' => $loggdin_user, 'update_in' => $special_price_id, 'detail' => 'special_price_create' ));
 			} else {
-				$wpdb->update($special_price, array('customer_id' => $customer_id, 'site_id' => $site_id, 'lot_id' => $p_value['lot_id_orig'], 'price' => $p_value['unit_price'], 'active' => 1), array('id' => $p_value['special_price_id']));
+				$wpdb->update($special_price, array('customer_id' => $customer_id, 'site_id' => $site_id, 'lot_id' => $p_value['lot_id_orig'], 'price' => $p_value['unit_price'], 'minimum_bill_day_spl' => $p_value['minimum_bill_day_spl'], 'active' => 1), array('id' => $p_value['special_price_id']));
 			}
 
 		}
@@ -188,7 +188,7 @@ function getSpecialPrice($customer_id = 0) {
 	$special_price_table = $wpdb->prefix.'shc_special_price';
 	$lots_table = $wpdb->prefix.'shc_lots';
 
-	$query = "SELECT sp.id,sp.customer_id,sp.site_id,sp.lot_id,sp.price, l.product_name, l.product_type FROM ${special_price_table} as sp JOIN ${lots_table} as l ON sp.lot_id = l.id WHERE sp.customer_id = ${customer_id} AND sp.active = 1 ORDER BY sp.site_id ASC";
+	$query = "SELECT sp.id,sp.customer_id,sp.site_id,sp.lot_id,sp.price, sp.minimum_bill_day_spl, l.product_name, l.product_type FROM ${special_price_table} as sp JOIN ${lots_table} as l ON sp.lot_id = l.id WHERE sp.customer_id = ${customer_id} AND sp.active = 1 ORDER BY sp.site_id ASC";
 
 	return $wpdb->get_results($query);
 }
@@ -234,7 +234,7 @@ function getCustomerData($customer_id = 0) {
 	return $customer->get_CustomerData($customer_id);
 }
 
-function getSiteData($site_id = 0, $bill_for = false, $financialdate = ''  ) {
+function getSiteData($site_id = 0, $bill_for = false, $financialdate = '', $bill_no_field = '', $financial_year_field = ''  ) {
 	$customer = new Customer();
-	return $customer->get_SiteData($site_id, $bill_for, $financialdate);
+	return $customer->get_SiteData($site_id, $bill_for, $financialdate, $bill_no_field , $financial_year_field);
 }

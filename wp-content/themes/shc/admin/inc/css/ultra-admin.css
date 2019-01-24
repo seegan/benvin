@@ -120,6 +120,7 @@ ul{
 
 #wpcontent, #wpfooter{
 	margin-left: 210px; /*230px*/
+    position: relative;
 }
 
 #wpcontent{
@@ -4150,4 +4151,8 @@ div.checker span.checked {
 
 #dashboard-widgets .postbox-container {
     width: 50%;
+}
+
+.submit_loder {
+	display: none;
 }

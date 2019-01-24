@@ -191,6 +191,9 @@
 											<td>
 												<a href="#" data-repeater-delete="" style="font-size: 16px;font-weight: bold; color: #ff0000;line-height: 30px;">x</a>
 												<input type="hidden" value="Delete">
+												<input type="hidden" name="row_weight_unit" class="row_weight_unit" value="<?php echo $q_value->row_weight_unit; ?>">
+												<span class="weight"><?php echo $q_value->row_weight; ?> kg</span>
+												<input type="hidden" name="row_weight" class="row_weight" value="<?php echo $q_value->row_weight; ?>">
 											</td>
 										</tr>
 										<?php
@@ -231,6 +234,9 @@
 											<td>
 												<a href="#" data-repeater-delete="" style="font-size: 16px;font-weight: bold; color: #ff0000;line-height: 30px;">x</a>
 												<input type="hidden" value="Delete">
+												<input type="hidden" name="row_weight_unit" class="row_weight_unit" value="0.00">
+												<span class="weight">0.00 kg</span>
+												<input type="hidden" name="row_weight" class="row_weight" value="0.00">
 											</td>
 										</tr>
 									<?php
@@ -279,6 +285,21 @@
 										$for_thirty_days= (isset( $quotation_detail->for_thirty_days ) && $quotation_detail->for_thirty_days) ? $quotation_detail->for_thirty_days : 0.00;
 										$thirty_days_data = splitCurrency($for_thirty_days);
 
+										$deposit_times = (isset( $quotation_detail->deposit_times ) && $quotation_detail->deposit_times) ? $quotation_detail->deposit_times : 0;
+										$deposit_from = (isset( $quotation_detail->deposit_from ) && $quotation_detail->deposit_from) ? $quotation_detail->deposit_from : 'h';
+
+										$loading_weight  = (isset( $quotation_detail->loading_weight ) && $quotation_detail->loading_weight) ? $quotation_detail->loading_weight : 0.00;
+										$loading_per_ton = (isset( $quotation_detail->loading_per_ton ) && $quotation_detail->loading_per_ton) ? $quotation_detail->loading_per_ton : 0.00;
+										$loading_charge = (isset( $quotation_detail->loading_charge ) && $quotation_detail->loading_charge) ? $quotation_detail->loading_charge : 0.00;
+										$loading_scope = (isset( $quotation_detail->loading_scope ) && $quotation_detail->loading_scope) ? $quotation_detail->loading_scope : 0;
+										$unloading_scope = (isset( $quotation_detail->unloading_scope ) && $quotation_detail->unloading_scope) ? $quotation_detail->unloading_scope : 0;
+
+										$transport_charge = (isset( $quotation_detail->transport_charge ) && $quotation_detail->transport_charge) ? $quotation_detail->transport_charge : 0.00;
+										$transport_scope = (isset( $quotation_detail->transport_scope ) && $quotation_detail->transport_scope) ? $quotation_detail->transport_scope : 0;
+
+										$return_transport_charge = (isset( $quotation_detail->return_transport_charge ) && $quotation_detail->return_transport_charge) ? $quotation_detail->return_transport_charge : 0.00;
+										$return_transport_scope = (isset( $quotation_detail->return_transport_scope ) && $quotation_detail->return_transport_scope) ? $quotation_detail->return_transport_scope : 0;
+
 									?>
 										<tr class="discount_tr" style="display: <?php echo $discount_display; ?>">
 											<td colspan="6" style="text-align:right">
@@ -303,7 +324,7 @@
 											<td colspan="6" style="text-align: right;">
 												<div class="align-txt">
 													<b>Discount % </b>
-													<input type="text" name="discount_percentage" class="discount_percentage" value="<?php echo $discount_percentage; ?>" style="width:45px;height: 30px;" readonly="readonly">
+													<input type="text" name="discount_percentage" class="discount_percentage" value="<?php echo $discount_percentage; ?>" style="width:45px;height: 30px;">
 												</div>
 											</td>
 											<td>
@@ -342,7 +363,7 @@
 									<?php if(isset($quotation_detail->gst_for) && $quotation_detail->gst_for == 'igst') { ?>
 										<tr class="gst_tr tax_tr" style="display:<?php echo $igst_avail; ?>"> <!-- gst_tr tax_tr -->
 											<td colspan="6" style="text-align: right;">
-												<div class="align-txt">IGST - 9%: </div>
+												<div class="align-txt">IGST - 18%: </div>
 												<input type="hidden" class="gst_percentage" value="18.00">
 											</td>
 											<td>
@@ -481,16 +502,39 @@
 								<div class="col-lg-12">
 									<ul>
 										<li>
-											<h2><u>Requirements</u></h2>
+											<h2><u>Requirements</u></h2> Security Deposit <input style="width: 50px;" type="text" class="deposit_times" name="deposit_times" value="<?php echo $deposit_times; ?>"> Times From <b>Hire Charge</b> <input type="radio" name="deposit_from" style="margin: -2px 0 0;" class="deposit_from" value="h" <?php echo ($deposit_from == 'h') ? 'checked' : ''; ?>> or <b>GST Include Total</b> <input type="radio" name="deposit_from" style="margin: -2px 0 0;" class="deposit_from" value="g"  <?php echo ($deposit_from == 'g') ? 'checked' : ''; ?>>
+											<br>
+											Loading charge (Weight in MT) <input type="text" name="loading_weight" class="loading_weight" value="<?php echo $loading_weight; ?>" style="width: 70px;"> x <input type="text" name="price_per_ton" class="price_per_ton" value="<?php echo $loading_per_ton; ?>" style="width: 50px;"> = <input type="text" name="loading_charge" class="loading_charge" value="<?php echo $loading_charge; ?>" style="width: 70px;"> Loading Charges (User Scope) <input type="checkbox" name="loading_scope" class="loading_scope" style="margin-top:0;" <?php echo ($loading_scope == 1) ? 'checked' : ''; ?>> Un Loading Charges (User Scope) <input type="checkbox" name="unloading_scope" class="unloading_scope" style="margin-top:0;" <?php echo ($unloading_scope == 1) ? 'checked' : ''; ?>> 
+											<br>
+											Transport Charge <input type="text" name="transport_charge" class="transport_charge" value="<?php echo $transport_charge ?>" style="width: 100px;"> Transport Charges (User Scope) <input type="checkbox" name="transport_scope" class="transport_scope" style="margin-top:0;" <?php echo ($transport_scope == 1) ? 'checked' : ''; ?>>
+											<br>
+											Return Transport Charge <input type="text" name="return_transport_charge" class="return_transport_charge" value="<?php echo $return_transport_charge ?>" style="width: 100px;"> Return Transport Charges (User Scope) <input type="checkbox" name="return_transport_scope" class="return_transport_scope" style="margin-top:0;" <?php echo ($return_transport_scope == 1) ? 'checked' : ''; ?>>
+											<br>
+
 											<textarea class="txtEditor1" name="quotation_txt"><?php echo $quotation_detail->requirements ?></textarea> 
 										</li>
 										<li>
-											<h2><u>Bank Details</u></h2>
-											<textarea class="txtEditor2" name="bank_details"><?php echo $quotation_detail->bank_details ?></textarea>
+											<h2><u>Banking Details</u></h2>
+											<?php
+												if($banks && count($banks) > 1) {
+													echo "<br>";
+													echo "Bank Account ";
+													echo "<select class='company_bank'>";
+													foreach ($banks as $b_value) {
+														echo "<option value='".urldecode ($b_value->bank_detail)."'>".$b_value->bank_name."</option>";
+													}
+													echo "</select>";
+												}
+											?>
+											<textarea class="txtEditor2" name="bank_details">
+												<span class="bank_detail_span">
+													<?php echo $quotation_detail->bank_details ?>
+												</span>
+											</textarea>
 										</li>
 									</ul>
 									<div>
-										Amount Payable : <input type="text" name="amount_payable" value="<?php echo $quotation_detail->amount_payable ?>">
+										Amount Payable : <input type="text" name="amount_payable" value="<?php echo $quotation_detail->amount_payable ?>" class="amount_payable">
 									</div>
 								</div>
 							</div>

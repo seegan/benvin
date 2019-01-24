@@ -21,21 +21,20 @@
 			$site_id = $master_data['master_data']->site_id;
 
 			$customer_detail = getCustomerData($customer_id);
-			$site_detail = getSiteData($site_id, 'shc_hiring', $billing_date);
+			$site_detail = getSiteData($site_id, 'shc_hiring', $billing_date, 'proforma_no', 'financial_year_proforma');
 
 			$bill_from = (isset($_GET['bill_from']) && $_GET['bill_from'] != '') ? $_GET['bill_from'] : date('Y-m-01');
 			$bill_to = (isset($_GET['bill_to']) && $_GET['bill_to'] != '') ? $_GET['bill_to'] : date('Y-m-d', strtotime('last day of this month'));
 			$hiring_items = getHiringItems($_GET['id'], $bill_from, $bill_to);
 			$existin_bill = getExistBillData($_GET['id'], $bill_from, $bill_to);
 
-			$current_bill_no = isset($existin_bill->bill_no) ? $existin_bill->bill_no : $site_detail->next_bill_no;
+			$current_bill_no = isset($existin_bill->proforma_no) ? $existin_bill->proforma_no : $site_detail->next_bill_no;
+			$billing_date = isset($existin_bill->bill_date) ? $existin_bill->bill_date : $billing_date;
+			$billing_time = isset($existin_bill->bill_date) ? $existin_bill->bill_time : $billing_time;
 		}
-
 	}
 ?>
-
 <div class="container">
-
 	<div class="row">
 	<?php 
 		include( get_template_directory().'/admin/side-menu.php' );
@@ -46,32 +45,32 @@
 			<div class="col-lg-9">
 				<div class="x_panel">
 					<div class="x_title">
-						<h2>Passed Bill Data</h2>
+						<h2>Proforma Exist</h2>
 						<div class="clearfix"></div>
 					</div>
 					<div class="x_content">
 						<table class="table table-bordered">
 							<thead>
 								<tr>
-									<td>Bill ID</td>
-									<td>Bill Date</td>
 									<td>Master Id</td>
+									<td>Proforma Date</td>
 									<td>Bill From</td>
 									<td>Bill To</td>
 									<td>Transport Charge</td>
 									<td>Bill Total</td>
+									<td>HB Status</td>
 									<td>Action</td>
 								</tr>
 							</thead>
 							<tbody>
 								<tr>
-									<td><?php echo $existin_bill->id; ?></td>
-									<td><?php echo $existin_bill->bill_date.' '.$existin_bill->bill_time; ?></td>
 									<td><?php echo $existin_bill->master_id; ?></td>
+									<td><?php echo $existin_bill->bill_date.' '.$existin_bill->bill_time; ?></td>
 									<td><?php echo $existin_bill->bill_from; ?></td>
 									<td><?php echo $existin_bill->bill_to; ?></td>
 									<td><?php echo $existin_bill->transportation_charge; ?></td>
 									<td><?php echo $existin_bill->hiring_total; ?></td>
+									<td><?php echo ($existin_bill->bill_status == 2) ? '<img src="'.get_template_directory_uri() . '/admin/billing/inc/images/paid.png'.'">' : '<img src="'.get_template_directory_uri() . '/admin/billing/inc/images/pending.png'.'">'; ?></td>
 									<td>
 										<a href="<?php echo admin_url('admin.php?page=new_hiring').'&page=new_hiring&id='.$existin_bill->master_id.'&bill_id='.$existin_bill->id; ?>"><button type="submit" class="btn btn-success">View Detail</button></a>
 										<button type="submit" class="btn btn-success">Print Bill</button>
@@ -85,7 +84,6 @@
 		<?php
 		}
 		?>
-
 		<div class="col-lg-9">
 			<div class="x_panel">
 				<div class="x_title">
@@ -112,14 +110,16 @@
 
 									echo"<input type='hidden' name='site_id' class='site_id' value='".$site_id."'>";
 
-									echo '<div class="address-line">Bill No : ';
+									echo '<div class="address-line">Preforma No : ';
 									echo '	<span class="deposit-time">';
-									echo $site_detail->company_id."/HB <input type='text' style='border-color: rgba(118, 118, 118, 0);height: 34px;margin: 0;' value='".$current_bill_no."' name='bill_no' class='bill bill_no'>";
+									echo $site_detail->company_id."/PFA <input type='text' style='border-color: rgba(118, 118, 118, 0);height: 34px;margin: 0;' value='".$current_bill_no."' name='bill_no' class='bill bill_no'>";
 									echo '<img src="'.get_template_directory_uri() . '/admin/inc/images/5.gif" style="width: 20px;display:none;" class="loadin-billfrom">';
 									echo '<img src="'.get_template_directory_uri() . '/admin/inc/images/check.png" style="width: 20px;display:none;" class="loadin-check">';
 									echo '<img src="'.get_template_directory_uri() . '/admin/inc/images/cross.png" style="width: 20px;display:none;" class="loadin-cross">';
 									echo '	</span>';
 									echo '<input type="hidden" class="billno_action" value="shc_hiring">';
+									echo '<input type="hidden" class="bill_no_field" value="proforma_no">';
+									echo '<input type="hidden" class="financial_year_field" value="financial_year_proforma">';
 									echo '</div>';
 								}
 							?>
@@ -292,7 +292,8 @@
 																<input type="checkbox" name="hiring_detail[][min_checked]" class="bill_min_days">
 																<div class="tooltipo tootip-black" data-stockalert="1">
 																	<span class="tooltiptext" style="width:400px;">
-																		Payment For 30 Days : <span class="slab_sys_txt"><?php echo $h_value->min_bill_amt; ?></span>
+
+																		Payment For <?php echo $h_value->minimum_bill_day ?> Days : <span class="slab_sys_txt"><?php echo $h_value->min_bill_amt; ?></span>
 																		<input type="hidden" name="hiring_detail[][for_thirty_days]" value="<?php echo $h_value->min_bill_amt; ?>">
 																		<hr class="tooltip-hr">
 																		Previous Paid : <span class="slab_sys_txt"><?php echo ($h_value->min_bill_amt - $h_value->min_bill_bal); ?></span>
@@ -535,8 +536,8 @@
 										} else {
 									?>
 										<tr data-repeater-item class="repeterin div-table-row" class="repeterin div-table-row" data-lotid="0" data-stockbal="0">
-											<td>
-												No Pending Items
+											<td colspan="9">
+												<center><b>No Pending Items</b></center>
 											</td>
 										</tr>
 									<?php

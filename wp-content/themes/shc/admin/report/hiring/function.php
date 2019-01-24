@@ -15,4 +15,13 @@ function hiring_filter() {
 add_action( 'wp_ajax_hiring_filter', 'hiring_filter' );
 add_action( 'wp_ajax_nopriv_hiring_filter', 'hiring_filter' );
 
+
+function proforma_filter() {
+	$hiringlist = new HiringList();
+	include( get_template_directory().'/admin/report/hiring/ajax_loading/proforma_list.php' );
+	die();
+}
+add_action( 'wp_ajax_proforma_filter', 'proforma_filter' );
+add_action( 'wp_ajax_nopriv_proforma_filter', 'proforma_filter' );
+
 ?>

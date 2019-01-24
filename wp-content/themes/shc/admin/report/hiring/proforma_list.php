@@ -4,7 +4,7 @@
 <div class="col-md-12 col-sm-12 col-xs-12">
     <div class="x_panel">
         <div class="x_title">
-            <h2>Table design <small>Custom design</small></h2>
+            <h2>Proforma List</h2>
             <ul class="nav navbar-right panel_toolbox">
                 <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                 </li>
@@ -127,10 +127,10 @@
               </div>
 
               
-              <input type="hidden" name="filter_action" class="filter_action" value="hiring_filter">
+              <input type="hidden" name="filter_action" class="filter_action" value="proforma_filter">
             </div>
         </div>
-        <div class="hiring_filter">
+        <div class="proforma_filter">
         <?php
             include( get_template_directory().'/admin/report/hiring/ajax_loading/proforma_list.php' );
         ?>

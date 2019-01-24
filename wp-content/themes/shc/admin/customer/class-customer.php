@@ -143,19 +143,21 @@
 		}
 
 
-		function get_SiteData($site_id = 0, $bill_for = false, $financial_date = '') { 
+		function get_SiteData($site_id = 0, $bill_for = false, $financial_date = '', $bill_no_field = '' , $financial_year_field = '') { 
 		    global $wpdb;
-
 		    $financial_year = getFinancialYear($financial_date);
+
+		    $bill_no_field = (isset($bill_no_field) && $bill_no_field != '') ? $bill_no_field : 'bill_no';
+		    $financial_year_field = (isset($financial_year_field) && $financial_year_field != '') ? $financial_year_field : 'financial_year';
+
 
 		    $bill_for_table = $wpdb->prefix.$bill_for;
 		    $site_table =  $wpdb->prefix.'shc_customer_site';
 		    if($bill_for) {
-		    	$query = "SELECT fc.*, comp.company_id, (CASE WHEN fc.bill_no is null THEN 1 ELSE fc.bill_no + 1 END) next_bill_no FROM (SELECT cs.*, c.bill_from_comp, (SELECT d.bill_no from ${bill_for_table} as d WHERE d.bill_from_comp = c.bill_from_comp AND d.financial_year = ${financial_year} ORDER BY bill_no DESC LIMIT 1 ) as bill_no FROM `wp_shc_customer_site` as cs JOIN wp_shc_customers as c ON c.id = cs.customer_id WHERE cs.id = ${site_id} ) as fc JOIN wp_shc_companies as comp ON comp.id = fc.bill_from_comp";
+		    	$query = "SELECT fc.*, comp.company_id, (CASE WHEN fc.".$bill_no_field." is null THEN 1 ELSE fc.".$bill_no_field." + 1 END) next_bill_no FROM (SELECT cs.*, c.bill_from_comp, (SELECT d.".$bill_no_field." from ${bill_for_table} as d WHERE d.bill_from_comp = c.bill_from_comp AND d.".$financial_year_field." = ${financial_year} ORDER BY ".$bill_no_field." DESC LIMIT 1 ) as ".$bill_no_field." FROM wp_shc_customer_site as cs JOIN wp_shc_customers as c ON c.id = cs.customer_id WHERE cs.id = ${site_id} ) as fc JOIN wp_shc_companies as comp ON comp.id = fc.bill_from_comp";
 		    } else {
 		    	$query = "SELECT * FROM ${site_table} WHERE active = 1 AND id = ${site_id}";
 		    }
-		    
 		    return $wpdb->get_row($query);
 		}
 

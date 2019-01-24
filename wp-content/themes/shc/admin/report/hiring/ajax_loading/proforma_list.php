@@ -12,7 +12,7 @@
         'condition' => '',
     );
     $hiring_list = $hiringlist->proforma_list_pagination($result_args);
-    $company_ids = getCompanies('to_list');    
+    $company_ids = getCompanies('to_list');
 ?>
         <div class="x_content">
             <div class="table-responsive">
@@ -24,8 +24,8 @@
                             <th>Bill No</th>
                             <th class="column-title">Customer Name </th>
                             <th class="column-title">Site Name </th>
-                            <th class="column-title">Bill Date</th>
-                            <th class="column-title">Payment Status</th>
+                            <th class="column-title">Billing Date</th>
+                            <th class="column-title">Hire Bill Status</th>
                             <th class="column-title">Bill Amount</th>
                             <th>Action</th>
                         </tr>
@@ -40,7 +40,7 @@
                                 $bill_id = $c_value->id;
                                 $master_id = $c_value->master_id;
 
-                                $hiring_bill = $c_value->bill_no;
+                                $proforma_no = $c_value->proforma_no;
                                 $company_id = $c_value->bill_from_comp;
                     ?>
                                 <tr class="odd pointer">
@@ -50,7 +50,7 @@
                                     <td class=""><?php echo 'MRI '.$c_value->master_id; ?></td>
                                     <td class="">
                                         <a class="bill_txt" href="<?php echo admin_url('admin.php?page=new_hiring')."&id=".$master_id."&bill_id=${bill_id}"; ?>">
-                                            <?php echo $company_ids[$company_id].'/HB '.$hiring_bill; ?> 
+                                            <?php echo $company_ids[$company_id].'/PFA '.$proforma_no; ?> 
                                         </a>
                                     </td>
                                     <td class=""><?php echo $c_value->name; ?></i></td>

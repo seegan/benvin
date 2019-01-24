@@ -26,9 +26,10 @@
                             <th class="column-title">#MRR</th>
                             <th class="column-title">Customer Name </th>
                             <th class="column-title">Site </th>
-                            <th class="column-title">Cheque Detail </th>
+                            <th class="column-title">Payment Detail </th>
+                            <th class="column-title">Receipt type </th>
                             <th class="column-title">Amount </th>
-                            <th class="column-title">OBC Date </th>
+                            <th class="column-title">Receipt Date </th>
                             <th class="column-title">Action </th>
                         </tr>
                     </thead>
@@ -60,6 +61,9 @@
                                     <td class="">
                                         No : <?php echo $r_value->cheque_no; ?><br/>
                                         Date : <?php echo $r_value->cheque_date; ?><br/>
+                                    </td>
+                                    <td>
+                                        <?php echo $r_value->cd_notes; ?>
                                     </td>
                                     <td>
                                         <?php echo $r_value->cheque_amount; ?>

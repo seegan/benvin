@@ -5,7 +5,6 @@ jQuery(document).ready(function () {
 	populate_site_select_search('old', 'quotation');
 
 
-
   jQuery('.round_off_rs, .round_off_ps').on('change',function(){
     processDepositFull();
   });
@@ -37,6 +36,49 @@ jQuery(document).ready(function () {
   jQuery('.discount_percentage').on('change keyup', function(){
     processDepositFull();
   });
+  
+  jQuery('.deposit_times').on('change keyup', function(){
+    processDepositFull();
+  });
+
+  jQuery('.loading_weight, .price_per_ton, .loading_scope, .unloading_scope').on('change keyup', function(){
+    var metric_ton = parseFloat(jQuery('.loading_weight').val());
+    calculate_loading(metric_ton);
+    calculateAmountPayable();
+  });
+
+  jQuery('.transport_charge, .transport_scope').on('change keyup', function(){
+    var transport_scope = (jQuery('.transport_charge').val()) ? parseFloat(jQuery('.transport_charge').val()) : 0.00;
+    calculate_transport(transport_scope);
+    calculateAmountPayable();
+  });
+  jQuery('.return_transport_charge, .return_transport_scope').on('change keyup', function(){
+    var return_transport_scope = (jQuery('.return_transport_charge').val()) ? parseFloat(jQuery('.return_transport_charge').val()) : 0.00;
+    calculate_return_transport(return_transport_scope);
+    calculateAmountPayable();
+  });
+
+
+  jQuery('.loading_scope, .loading_scope, .transport_scope, .return_transport_scope').on('click', function () {
+    jQuery('li .loading_scope').change();
+    jQuery('li .unloading_scope').change();
+    jQuery('li .transport_scope').change();
+    jQuery('li .return_transport_scope').change();
+    calculateAmountPayable();
+  });
+
+
+  jQuery('.deposit_from').on('change', function () {
+    processDepositFull();
+  });
+
+
+
+
+  jQuery('.company_bank').on('change', function () {
+    jQuery('.bank_detail_span').text(jQuery(this).val()).change();
+  });
+
 
   jQuery('.hiring_discount_avail').on('change', function(){
     var discount_avail = jQuery('input[name=hiring_discount_avail]:checked').val();
@@ -53,20 +95,30 @@ jQuery(document).ready(function () {
     }
   });
 
-
-
-
 });
 
-
 function processDepositFull() {
-  var n_total = 0.00, ninety_days_total;
+  var n_total = 0.00, ninety_days_total, w_total = 0.00;
   jQuery('.deposit-repeater .repeterin').each(function() {
+
+    var w_cur_tot = parseFloat(jQuery(this).find('.row_weight').val())
+    w_cur_tot = (isNaN(w_cur_tot)) ? 0.00 : w_cur_tot;
+    w_total = w_total + w_cur_tot;
 
     var n_cur_tot = parseFloat(jQuery(this).find('.ninety_rs_price').val())
     n_cur_tot = (isNaN(n_cur_tot)) ? 0.00 : n_cur_tot;
     n_total = n_total + n_cur_tot;
   });
+
+  var metric_ton = (w_total * 0.001).toFixed(2);
+  jQuery('.loading_weight').val(metric_ton);
+  calculate_loading(metric_ton);
+
+  var transport_scope = (jQuery('.transport_charge').val()) ? parseFloat(jQuery('.transport_charge').val()) : 0.00;
+  calculate_transport(transport_scope);
+
+  var return_transport_scope = (jQuery('.return_transport_charge').val()) ? parseFloat(jQuery('.return_transport_charge').val()) : 0.00;
+  calculate_return_transport(return_transport_scope);
 
 
   ninety_days_total = Math.round10(n_total.toFixed(3), -2);
@@ -95,14 +147,9 @@ function processDepositFull() {
   total_after_discount = total_after_discount.toFixed(2);
   jQuery('.after_discount_amt').val(total_after_discount);
 
-  var security_amt = (total_after_discount*3 ).toFixed(2)
-  jQuery('li .security_amt').text(security_amt).change();;
-
   var total_after_discount_sp = splitRupee(total_after_discount);
   jQuery('.after_discount_txt').text(total_after_discount_sp[0]);
   jQuery('.after_discount_txt_p').text(total_after_discount_sp[1]);
-
-
   
   var tax = getTaxPrice(total_after_discount);
   var tax_include = parseFloat(total_after_discount) + parseFloat(tax);
@@ -120,22 +167,90 @@ function processDepositFull() {
 
   round_off = Math.round10(round_off.toFixed(3), -2);
 
-  var final_total = (tax_include - round_off);
+  var final_total = parseFloat(tax_include) + parseFloat(round_off);
   final_total = Math.round10(final_total.toFixed(3), -2);
   final_total = final_total.toFixed(2);
   jQuery('.hiring_tot_val').val(final_total);
 
-  jQuery('li .pdc_amt').text(final_total).change();
+
+
+
+  var deposit_times = parseFloat(jQuery('.deposit_times').val());
+  var security_from = ( jQuery('.deposit_from:checked').val() == 'h') ? total_after_discount : final_total;
+  var security_amt = (security_from*deposit_times ).toFixed(2);
+
+  jQuery('li .security_amt').text(moneyFormatIndia(security_amt)).change();
+  jQuery('li .pdc_amt').text(moneyFormatIndia(final_total)).change();
 
   var final_total_sp = splitRupee(final_total);
   jQuery('.hiring_tot_txt').text(final_total_sp[0]);
   jQuery('.hiring_tot_txt_p').text(final_total_sp[1]);
 
-
+  calculateAmountPayable();
 }
 
+function calculateAmountPayable() {
+  var security_amt = jQuery('span.security_amt').text(); 
+  security_amt = parseFloat(security_amt.replace(/[^0-9\.-]+/g,"")).toFixed(2);
 
+  var loading_scope = jQuery('span.loading_scope').text();
+  loading_scope = parseFloat(loading_scope.replace(/Rs\./,"").replace(/,/g ,'')); 
+  loading_charge = isNaN(loading_scope) ? (0).toFixed(2) : loading_scope;
 
+  var unloading_scope = jQuery('span.unloading_scope').text();
+  unloading_scope = parseFloat(unloading_scope.replace(/Rs\./,"").replace(/,/g ,'')); 
+  unloading_scope = isNaN(unloading_scope) ? (0).toFixed(2) : unloading_scope;
+
+  var transport_scope = jQuery('span.transport_scope').text();
+  transport_scope = parseFloat(transport_scope.replace(/Rs\./,"").replace(/,/g ,''));
+  transport_charge = isNaN(transport_scope) ? (0).toFixed(2) : transport_scope;
+
+  var return_transport_scope = jQuery('span.return_transport_scope').text();
+  return_transport_scope = parseFloat(return_transport_scope.replace(/Rs\./,"").replace(/,/g ,''));
+  return_transport_charge = isNaN(return_transport_scope) ? (0).toFixed(2) : return_transport_scope;
+
+  var amount_payable = (parseFloat(security_amt)+parseFloat(loading_charge)+parseFloat(unloading_scope)+parseFloat(transport_charge)+parseFloat(return_transport_charge));
+
+  jQuery('.amount_payable').val(amount_payable.toFixed(2));
+}
+
+function calculate_transport(transport_scope) {
+  transport_scope = transport_scope.toFixed(2);
+  transport_scope = 'Rs. '+moneyFormatIndia(transport_scope);
+  if(jQuery('.transport_scope').is(':checked')) {
+    transport_scope = 'Your Scope';
+  }
+  jQuery('li .transport_scope').text(transport_scope);
+}
+function calculate_return_transport(transport_scope) {
+  transport_scope = transport_scope.toFixed(2);
+  transport_scope = 'Rs. '+moneyFormatIndia(transport_scope);
+  if(jQuery('.return_transport_scope').is(':checked')) {
+    transport_scope = 'Your Scope';
+  }
+  jQuery('li .return_transport_scope').text(transport_scope);
+}
+
+function calculate_loading(metric_ton) {
+  jQuery('li .mt_weight').text(metric_ton).change();
+  var price_per_ton = parseFloat(jQuery('.price_per_ton').val());
+  var loading_charge = price_per_ton*metric_ton;
+
+  loading_charge = (Math.round10(loading_charge, -2)).toFixed(2);
+  jQuery('.loading_charge').val(loading_charge);
+
+  var loading_scope = 'Rs. '+moneyFormatIndia(loading_charge);
+  var unloading_scope = 'Rs. '+moneyFormatIndia(loading_charge);
+  if(jQuery('.loading_scope').is(':checked')) {
+    loading_scope = 'Your Scope';
+  }
+  if(jQuery('.unloading_scope').is(':checked')) {
+    unloading_scope = 'Your Scope';
+  }
+
+  jQuery('li .loading_scope').text(loading_scope);
+  jQuery('li .unloading_scope').text(unloading_scope);
+}
 
 
 function getTaxPrice(sub_tot = 0) {
@@ -180,7 +295,7 @@ function getTaxPrice(sub_tot = 0) {
 
   }
   if(tax_from == 'no_tax') {
-    tax_total = parseFloat(0.00);
+    tax_total = 0.00;
   }
 
   tax_total = tax_total.toFixed(3);  
@@ -225,7 +340,7 @@ function calculateGst(gst_for = '', sub_tot = 0) {
     jQuery('.gst_igst_txt').text(igst_sp[0]);
     jQuery('.gst_igst_txt_p').text(igst_sp[1]);
     jQuery('.gst_igst').val(igst);
-    return igst;
+    return parseFloat(igst);
   }
 }
 
@@ -238,19 +353,18 @@ function calculateGst(gst_for = '', sub_tot = 0) {
 
 
 
-
-
-
-
-
-
 function processDepositRow(selector = '') {
+  var weight = parseFloat(selector.find('.row_weight_unit').val());
+
   var dpt_qty = parseFloat(selector.find('.dpt_qty').val());
   dpt_qty = (isNaN(dpt_qty)) ? 0.00 : dpt_qty;
 
+  var row_wight = dpt_qty*weight;
+  selector.find('.row_weight').val(row_wight);
+  selector.find('.weight').text(row_wight+' kg');
+
   var unit_price = parseFloat(selector.find('.unit_price').val());
   var thirty_days_total, ninety_days_total;
-
 
 
   //thirty_days_total = (dpt_qty * unit_price * 30);

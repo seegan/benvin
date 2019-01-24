@@ -86,6 +86,8 @@
 								<input type="hidden" name="discount_yes" class="discount_yes" value="<?php echo $site_detail->discount; ?>">
 								<input type="hidden" name="discount_no" class="discount_no" value="0.00">
 							</div>
+
+
 						</div>
 						<div class="col-lg-6">
 							<div class="address-line">Date : <span class="deposit-date"><input type="text" name="date" id="datepicker" class="financial_date" value="<?php echo $deposit_date; ?>" style="border-color: rgba(118, 118, 118, 0);height: 34px;margin: 0;"></span></div>
@@ -147,6 +149,7 @@
 											</td>
 											<td>
 												<div class="align-txt unit_price_txt">0.00</div>
+												<input type="hidden" name="minimum_bill_day" value="" class="minimum_bill_day_spl">
 												<input type="hidden" name="unit_price" class="unit_price" value="0.00">
 											</td>
 											<td>
@@ -204,6 +207,23 @@
 											</td>
 											<td colspan="2"></td>
 										</tr>
+
+										<tr>
+											<td colspan="6" style="text-align: right;">
+												<div class="align-txt">Round Off : </div>
+											</td>
+											<td>
+												<div class="align-txt right-align-txt">
+													<input type="text" class="round_off_rs right-align-txt" value="0" style="border-color: rgba(118, 118, 118, 0);height:34px;margin:0;width: 45px;padding: 0;text-align:right;">
+													<input type="hidden" name="round_off" value="0.00" class="round_off">
+												</div>
+											</td>
+											<td>
+												<input type="text" class="round_off_ps right-align-txt" value="00" style="border-color: rgba(118, 118, 118, 0);height:34px;margin:0;width: 45px;padding: 0;text-align:left;">
+											</td>
+											<td></td>
+										</tr>
+										
 										<tr>
 											<td colspan="6" style="text-align:center">
 												<div>

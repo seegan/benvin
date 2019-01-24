@@ -10,7 +10,13 @@ if(isset($_GET['id']) && $lot = get_lot($_GET['id']) ) {
 		<div class="col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-2">
 			<div class="x_panel">
 				<div class="x_title">
-					<h2>Add New Lot <small>Sessions</small></h2>
+				<?php 
+					if($lot_id) {
+						echo "<h2>Update Product</h2>";
+					} else {
+						echo "<h2>New Product</h2>";
+					}
+				?>
 					<div class="clearfix"></div>
 				</div>
 				<div class="x_content">
@@ -56,10 +62,18 @@ if(isset($_GET['id']) && $lot = get_lot($_GET['id']) ) {
 						</div>
 						<div class="divider-dashed"></div>
 						<div class="form-group">
-							<label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Weight<span class="required"></span>
+							<label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Weight (in kg per unit)<span class="required"></span>
 							</label>
 							<div class="col-md-6 col-sm-6 col-xs-12">
 								<input type="text" id="weight" name="weight" required="required" class="form-control col-md-7 col-xs-12" value="<?php echo ($lot) ? $lot->weight : ''; ?>">
+							</div>
+						</div>
+						<div class="divider-dashed"></div>
+						<div class="form-group">
+							<label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Minimum Bill Days<span class="required"></span>
+							</label>
+							<div class="col-md-6 col-sm-6 col-xs-12">
+								<input type="text" id="minimum_bill_day" name="minimum_bill_day" required="required" class="form-control col-md-7 col-xs-12" value="<?php echo ($lot) ? $lot->minimum_bill_day : 30; ?>">
 							</div>
 						</div>
 						<div class="divider-dashed"></div>

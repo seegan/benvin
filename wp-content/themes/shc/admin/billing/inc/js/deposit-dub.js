@@ -1,11 +1,13 @@
 jQuery(document).ready(function () { 
 	populate_site_select_search('old', 'deposit');
 
-
+  jQuery('.round_off_rs, .round_off_ps').on('change',function(){
+    processDepositFull();
+  });
+  
 	jQuery('.loading, .transportation').on('change keyup', function(){
 		calculateloadingCharge();
 	});
-
 
 });
 
@@ -38,7 +40,6 @@ function processDepositRow(selector = '') {
 
   var unit_price = parseFloat(selector.find('.unit_price').val());
   var thirty_days_total, ninety_days_total;
-
 
 
   //thirty_days_total = (dpt_qty * unit_price * 30);
@@ -104,9 +105,6 @@ function processDepositFull() {
   jQuery('.n_ps_tot_txt').text(ninety_ps);
 
 
-  jQuery('.rupee-words').text( inWordsFull(n_str) );
-
-
   var discount_percentage = jQuery('.discount_percentage_deposit').val();
   var discount_amt = (ninety_days_total*discount_percentage) / 100;
   var discount_amt = Math.round10(discount_amt.toFixed(3), -2);
@@ -120,7 +118,31 @@ function processDepositFull() {
   jQuery('.p_discount_txt').text(discount_ps);
 
 
-  var final_total = ( parseFloat(ninety_days_total) - parseFloat(discount_amt) );
+  var total_after_discount = ( parseFloat(ninety_days_total) - parseFloat(discount_amt) );
+  total_after_discount = Math.round10(total_after_discount.toFixed(3), -2);
+  total_after_discount = total_after_discount.toFixed(2);
+
+
+  var round_off = jQuery('.round_off_rs').val() +'.'+ jQuery('.round_off_ps').val()
+  round_off = parseFloat(round_off);
+  jQuery('.round_off').val(round_off);
+
+  round_off = Math.round10(round_off.toFixed(3), -2);
+
+  var final_total = parseFloat(total_after_discount) + parseFloat(round_off);
+  final_total = Math.round10(final_total.toFixed(3), -2);
+  final_total = final_total.toFixed(2);
+  jQuery('.total').val(final_total)
+
+  jQuery('.rupee-words').text( inWordsFull(final_total) );
+  
+  var ft_substr = final_total.toString().split('.');
+  var final_total_rs = ft_substr[0];
+  var final_total_ps = ft_substr[1];
+  jQuery('.rs_tot_txt').text(final_total_rs);
+  jQuery('.ps_tot_txt').text(final_total_ps);
+
+/*  var final_total = ( parseFloat(ninety_days_total) - parseFloat(discount_amt) );
   jQuery('.total').val(final_total)
 
   var ft_str = (final_total).toFixed(2);
@@ -128,6 +150,7 @@ function processDepositFull() {
   var final_total_rs = ft_substr[0];
   var final_total_ps = ft_substr[1];
   jQuery('.rs_tot_txt').text(final_total_rs);
-  jQuery('.ps_tot_txt').text(final_total_ps);
+  jQuery('.ps_tot_txt').text(final_total_ps);*/
 
 }
+

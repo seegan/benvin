@@ -3,6 +3,7 @@
     if(!$returnlist) {
         $returnlist = new ReturnList();
         $ppage = 5;
+        $returnlist->financial_year = '-';
     }
 
     $result_args = array(

@@ -10,7 +10,7 @@ if(isset($_GET['stock_id']) && $stock = get_stock($_GET['stock_id']) ) {
 		<div class="col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-2">
 			<div class="x_panel">
 				<div class="x_title">
-					<h2>Add New Lot <small>Sessions</small></h2>
+					<h2>Add Stock</h2>
 					<div class="clearfix"></div>
 				</div>
 				<div class="x_content">

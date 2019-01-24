@@ -19,17 +19,20 @@ jQuery(document).ready(function(){
           action : 'billno_check',
           bill_no : jQuery('.bill.bill_no').val(),
           bill_for : jQuery('.billno_action').val(),
+          bill_no_field : jQuery('.bill_no_field').val(),
+          financial_year_field : jQuery('.financial_year_field').val(),
           site_id : jQuery('.site_id').val(),
           financial_date : jQuery('.financial_date').val(),
       },
       success: function (data) {
         jQuery('.loadin-billfrom').css('display', 'none');
+
         if(data.success) {
           jQuery('.loadin-check').css('display', 'inline-block');
           jQuery('.loadin-cross').css('display', 'none');
         } else {
           jQuery('.loadin-check').css('display', 'none');
-          jQuery('.loadin-cross').css('display', 'inline-block');
+          jQuery('.bill.bill_no').val(data.bill_no);
         }
       }
     });
@@ -151,6 +154,8 @@ jQuery(document).ready(function(){
       var bill_id = jQuery(this).attr('data-billid');
       var bill_date = jQuery(this).attr('data-billdate');
       var status = jQuery(this).attr('data-status');
+      var siteid = jQuery(this).attr('data-siteid');
+
 
       var bill_txt = "<div style='text-align:center;'>Are you Sure to change Invoice Status to Paid?</div>";
           bill_txt += "<div style='text-align:center;'>Payment Date :&nbsp;&nbsp;<input type='text' value='"+bill_date+"' class='status_date datepicker' style='height: 25px;width: 120px;'></div>";
@@ -173,6 +178,7 @@ jQuery(document).ready(function(){
                       action : action,
                       bill_id : bill_id,
                       payment_date : date,
+                      siteid : siteid,
                       status : status,
                     },
                     success: function (data) {
@@ -185,12 +191,16 @@ jQuery(document).ready(function(){
               Cancel: function() {
                 jQuery( this ).dialog( "close" );
               }
-          }
+          },
+          open: function( event, ui ) {
+            //console.log(jQuery( ".print-box .datepicker" ));
+          }      
       });
 
       jQuery( ".print-box .action-block" ).html(bill_txt);
-      console.log(action);
-      console.log(bill_id);
+      jQuery( ".print-box .datepicker").datepicker({dateFormat: "yy-mm-dd"});
+      jQuery('.status_date').focus().change()
+
   });
 
 

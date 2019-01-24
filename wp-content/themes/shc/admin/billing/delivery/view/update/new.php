@@ -122,6 +122,7 @@
 											</td>
 											<td>
 												<input type="text" name="qty" value="1" style="border-color: rgba(118, 118, 118, 0);width:80px;height:34px;margin:0;" class="dpt_qty">
+												<input type="hidden" name="minimum_bill_day" value="" class="minimum_bill_day_spl">
 											</td>
 											<td>
 												<input type="hidden" name="unit_price" value="0" class="unit_price">

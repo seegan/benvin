@@ -69,4 +69,22 @@ function getMasterDetail($master_id = '') {
 }
 
 
+function check_master_duplicate() {
+	global $wpdb;
+
+	$company_id = isset($_POST['company_id']) ? $_POST['company_id'] : 0;
+	$site_id = isset($_POST['site_id']) ? $_POST['site_id'] : 0;
+
+	$master_table = $wpdb->prefix.'shc_master';
+	$query = "SELECT m.id from ${master_table} as m WHERE m.customer_id = ${company_id} AND m.site_id = ${site_id} AND m.active = 1";
+
+	if( $wpdb->get_row($query) ) {
+		echo "1";
+		die();
+	}
+	echo "0";
+	die();
+}
+add_action( 'wp_ajax_check_master_duplicate', 'check_master_duplicate' );
+add_action( 'wp_ajax_nopriv_check_master_duplicate', 'check_master_duplicate' );
 ?>

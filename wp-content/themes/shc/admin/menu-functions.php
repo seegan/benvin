@@ -74,8 +74,7 @@ global $src_capabilities;
 	add_submenu_page('master', 'New Delivery', 'Delivery', $src_capabilities['billing']['permission']['new_delivery'], 'new_delivery', 'new_delivery' );
 	add_submenu_page('master', 'New Return', 'Return', $src_capabilities['billing']['permission']['new_return'], 'new_return', 'new_return' );
 	add_submenu_page('master', 'New Hiring', 'Hiring Bill', $src_capabilities['billing']['permission']['new_bill'], 'new_hiring', 'new_hiring' );
-	add_submenu_page('master', 'New Receipt', 'Receipt', $src_capabilities['billing']['permission']['new_obc'], 'new_obc', 'new_obc' );
-
+	add_submenu_page('master', 'New Receipt (Credit/Debit)', 'Receipt', $src_capabilities['billing']['permission']['new_obc'], 'new_obc', 'new_obc' );
 
 	add_menu_page(
 	    __( 'Report', 'shc'),
@@ -96,10 +95,9 @@ global $src_capabilities;
 	add_submenu_page('master_report', 'Receipt List', 'Receipt List', $src_capabilities['report']['permission']['obc_report'], 'obc_report', 'obc_report' );
 	add_submenu_page('master_report', 'Statement', 'Statement', $src_capabilities['report']['permission']['statement'], 'new_statement', 'new_statement' );
 
-
 	add_menu_page(
-	    __( 'Admin Users', 'src'),
-	    'Admins',
+	    __( 'Admin', 'src'),
+	    'Admin',
 	    $src_capabilities['admin_user']['permission']['add_admin'],
 	    'admin_users',
 	    'add_admin',
@@ -109,17 +107,31 @@ global $src_capabilities;
 	add_submenu_page('admin_users', 'New Admin User', 'New Admin User', $src_capabilities['admin_user']['permission']['add_admin'], 'add_admin', 'add_admin' );
 	add_submenu_page('admin_users', 'Admin Users List', 'Admin Users List', $src_capabilities['admin_user']['permission']['admin_list'], 'list_admin_users', 'list_admin_users' );
 
+
 	add_menu_page(
 	    __( 'Admin Roles', 'src'),
 	    'Roles',
 	    $src_capabilities['roles']['permission']['add_roles'],
 	    'user_roles',
-	    'add_role',
+	    'add_admin_role',
 	    'dashicons-awards',
 	    9
 	);
-	add_submenu_page('user_roles', 'New Role', 'New Role', $src_capabilities['roles']['permission']['add_roles'], 'add_admin_role', 'add_admin_role' );
+	add_submenu_page('user_roles', 'New Role', 'New Role', $src_capabilities['roles']['permission']['add_roles'], 'user_roles', 'add_admin_role' );
 	add_submenu_page('user_roles', 'Role List', 'Role List', $src_capabilities['roles']['permission']['role_list'], 'list_roles', 'list_roles' );
+
+
+	add_menu_page(
+	    __( 'Admin Settings', 'src'),
+	    'Admin Settings',
+	    $src_capabilities['roles']['permission']['add_roles'],
+	    'admin_settings',
+	    'bank_settings',
+	    'dashicons-awards',
+	    9
+	);
+	add_submenu_page('admin_settings', 'Bank Accounts', 'Bank Accounts', $src_capabilities['admin_user']['permission']['admin_list'], 'admin_settings', 'bank_settings' );
+
 }
 
 
@@ -178,6 +190,14 @@ function add_admin_role() {
 function list_roles() {
     require 'roles/listing/role-list.php';
 }
+
+
+function bank_settings()
+{
+    require 'settings/bank_settings.php';
+}
+
+
 
 function master() {
     require 'billing/master/add-master.php';

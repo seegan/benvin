@@ -720,6 +720,9 @@ if(isset($bill_data['hiring_data']) && isset($_GET['bill_no']) && $_GET['bill_no
 																<?php
 																	}
 																?>
+																<th class="center-th" style="width:90px;padding:0;" rowspan="2">
+																	<div class="text-center">Total Tax Amount</div>
+																</th>
 
 															</tr>
 															<tr>
@@ -743,6 +746,7 @@ if(isset($bill_data['hiring_data']) && isset($_GET['bill_no']) && $_GET['bill_no
 														</thead>
 														<tbody>
 															<?php
+
 																foreach ($hiring_gst_data as $gs_value) {
 															?>
 																	<tr>
@@ -796,7 +800,13 @@ if(isset($bill_data['hiring_data']) && isset($_GET['bill_no']) && $_GET['bill_no
 																		<?php
 																			}
 																		?>
+																		<td>
+																			<div class="text-right">
+																				<?php echo moneyFormatIndia($gs_value->total_tax); ?>
+																			</div>
+																		</td>
 																	</tr>
+
 																<?php
 																}
 																?>

@@ -15,7 +15,7 @@
 						<li class="parallelogram"><a href="<?php echo admin_url('admin.php?page=new_delivery').$id_txt_new;  ?>">New Delivery ( DC )</a></li>
 						<li class="parallelogram"><a href="<?php echo admin_url('admin.php?page=new_return').$id_txt_new; ?>">New Return ( MRR )</a></li>
 						<li class="parallelogram"><a href="<?php echo admin_url('admin.php?page=new_hiring').$id_txt_new; ?>">Generate Hiring Bill ( HB )</a></li>
-						<li class="parallelogram"><a href="<?php echo admin_url('admin.php?page=new_obc').$id_txt_new; ?>">New Receipt ( R )</a></li>
+						<li class="parallelogram"><a href="<?php echo admin_url('admin.php?page=new_obc').$id_txt_new; ?>">New Receipt ( Credit/Debit )</a></li>
 					</ul>
 				</div>
 			</div>

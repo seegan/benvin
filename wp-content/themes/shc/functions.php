@@ -4,12 +4,29 @@
 		//var_dump(email_exists('psee.gan21@gmail.com'));
 remove_action('welcome_panel', 'wp_welcome_panel');
 
+
+if(isset($_GET['set_ip']) && $_GET['set_ip'] == 'true') {
+	global $wpdb;
+	$option_table = $wpdb->prefix.'options';
+	$local_ip = getHostByName(getHostName());
+	$site_url = 'http://'.$local_ip.'/benvin';
+	$wpdb->update($option_table, array('option_value' => $site_url), array('option_name'=>'siteurl'));
+	$wpdb->update($option_table, array('option_value' => $site_url), array('option_name'=>'home'));
+
+	echo "<script>";
+	echo "function myFunction() {";
+	echo "document.getElementById('site_url').select()";
+	echo "}";
+	echo "</script>";
+	echo '<div style="text-align:center;"><textarea onfocus="myFunction()" id="site_url" style="width:300px;">'.$site_url.'</textarea><div style="margin-top:100px;font-size:20px;"><a href="'.wp_login_url().'" title="Login">Go To Login</a></div></div>'; die();
+}
+
+
 //Hide admin footer from admin
 function change_footer_admin () {
-    return '<input type="button" value="popup" id="my-button"><div id="lightbox"><img src="'.get_template_directory_uri().'/admin/inc/images/hourglass.svg'.'"></div><div>Developed by <a href="http://ajnainfotech.com" target="_blank">AjnaInfotech</a> Web Design Company Chennai</div><div class="popup_box"><div class="popup_in"><div class="popup_header"></div><div class="popup_container">dfd</div></div></div><div class="conform-box" style="display:none;">Chose the action!</div>';
+    return '<input type="button" value="popup" id="my-button"><div id="lightbox"><img src="'.get_template_directory_uri().'/admin/inc/images/hourglass.svg'.'"></div><div>Developed by <a href="http://ajnainfotech.com" target="_blank">AjnaInfotech</a></div><div class="popup_box"><div class="popup_in"><div class="popup_header"></div><div class="popup_container">dfd</div></div></div><div class="conform-box" style="display:none;">Chose the action!</div>';
 }
 add_filter('admin_footer_text', 'change_footer_admin', 9999);
-
 
 function my_footer_shh() {
 	remove_filter( 'update_footer', 'core_update_footer' ); 
@@ -24,7 +41,7 @@ function my_footer_shh() {
 	remove_menu_page( 'plugins.php' );                //Plugins
 	remove_menu_page( 'users.php' );                  //Users
 	remove_menu_page( 'tools.php' );                  //Tools
-	remove_menu_page( 'options-general.php' );        //Settings
+	//remove_menu_page( 'options-general.php' );        //Settings
 }
 add_action( 'admin_menu', 'my_footer_shh' );
 function hide_update_notice()
@@ -108,31 +125,37 @@ require get_template_directory() . '/admin/report/obc/function.php';
 require get_template_directory() . '/admin/statement/function.php';
 
 
+require get_template_directory() . '/admin/settings/function.php';
+
 
 function customer_statistics_widget( $post, $callback_args ) {
 	include('admin/customer/ajax_loading/customer-list.php');
 }
-function quotation_status_widget( $post, $callback_args ) {
+function quotation_list_widget( $post, $callback_args ) {
 	include('admin/report/quotation/ajax_loading/list.php');
 }
-function hiring_list_widget( $post, $callback_args ) {
-	include('admin/report/quotation/ajax_loading/list.php');
+function deposit_list_widget( $post, $callback_args ) {
+	include('admin/report/deposit/ajax_loading/list.php');
+}
+function delivery_list_widget( $post, $callback_args ) {
+	include('admin/report/delivery/ajax_loading/list.php');
+}
+function return_list_widget( $post, $callback_args ) {
+	include('admin/report/return/ajax_loading/list.php');
+}
+function proforma_list_widget( $post, $callback_args ) {
+	include('admin/report/hiring/ajax_loading/proforma_list.php');
 }
 
-function customer_status_widget( $post, $callback_args ) {
-	include('report/customers-report.php');
-}
-function lot_status_chart_widget( $post, $callback_args ) {
-	include('report/lot-chart.php');
-}
+
 
 function add_dashboard_widgets() {
 	add_meta_box( 'customer_widget', 'Customers', 'customer_statistics_widget', 'dashboard', 'normal', 'high' );
-	add_meta_box( 'quotation_widget', 'Latest Quotation', 'quotation_status_widget', 'dashboard', 'normal', 'low' );
-	add_meta_box( 'hiring_widget', 'Hiring Bill List', 'hiring_list_widget', 'dashboard', 'side', 'high' );
-
-	add_meta_box( 'lot_status_chart_widget', 'Top Sale', 'lot_status_chart_widget', 'dashboard', 'side', 'low' );
-	add_meta_box( 'customer_status_widget', 'Customer List', 'customer_status_widget', 'dashboard', 'side', 'low' );
+	add_meta_box( 'quotation_widget', 'Latest Quotation', 'quotation_list_widget', 'dashboard', 'normal', 'low' );
+	add_meta_box( 'proforma_widget', 'Latest Proforma List', 'proforma_list_widget', 'dashboard', 'normal', 'low' );
+	add_meta_box( 'deposit_widget', 'Latest Deposit', 'deposit_list_widget', 'dashboard', 'side', 'high' );
+	add_meta_box( 'delivery_widget', 'Latest Delivery', 'delivery_list_widget', 'dashboard', 'side', 'low' );
+	add_meta_box( 'return_widget', 'Latest Return', 'return_list_widget', 'dashboard', 'side', 'low' );
 } 
 add_action('wp_dashboard_setup', 'add_dashboard_widgets' );
 
@@ -206,26 +229,41 @@ function convert_number_to_words($num) {
 }
 
 
+function getNextBillNumber($bill_no = '', $site_id = '', $bill_for = false, $financial_date = '', $bill_no_field = '', $financial_year_field = ''){
+	global $wpdb;
+	$bill_for_table = $wpdb->prefix.$bill_for;
+	$financial_year = getFinancialYear( $financial_date );
+
+	$query = "SELECT fc.*, comp.company_id, (CASE WHEN fc.".$bill_no_field." is null THEN 1 ELSE fc.".$bill_no_field." + 1 END) next_bill_no FROM (SELECT cs.*, c.bill_from_comp, (SELECT d.".$bill_no_field." from ${bill_for_table} as d WHERE d.bill_from_comp = c.bill_from_comp AND d.".$financial_year_field." = ${financial_year} ORDER BY ".$bill_no_field." DESC LIMIT 1 ) as ".$bill_no_field." FROM wp_shc_customer_site as cs JOIN wp_shc_customers as c ON c.id = cs.customer_id WHERE cs.id = ${site_id} ) as fc JOIN wp_shc_companies as comp ON comp.id = fc.bill_from_comp";
+
+	$bill_no = 0;
+	if( $bill_data = $wpdb->get_row($query) ) {
+		$bill_no = $bill_data->next_bill_no;
+	}
+
+	return $bill_no;
+}
+
+function getCorrectBillNumber($bill_no = '', $site_id = '', $bill_for = false, $financial_date = '', $bill_no_field = '', $financial_year_field = '') {
 
 
-function getCorrectBillNumber($bill_no = '', $site_id = '', $bill_for = false, $financial_date = '') {
+
 	global $wpdb;
 
 	if($bill_for) {
-		$bill_for_table = $wpdb->prefix.$bill_for;
 
+		$bill_for_table = $wpdb->prefix.$bill_for;
 		$financial_year = getFinancialYear( $financial_date );
 
-		$bill_exist_query = "SELECT dep.bill_no FROM ${bill_for_table} as dep WHERE dep.bill_no = ${bill_no} AND dep.financial_year = ${financial_year} AND dep.bill_from_comp = ( SELECT c.bill_from_comp FROM wp_shc_customer_site as cs JOIN wp_shc_customers as c ON c.id = cs.customer_id WHERE cs.id = ${site_id} LIMIT 1 )";
+		$bill_exist_query = "SELECT dep.".$bill_no_field." FROM ${bill_for_table} as dep WHERE dep.".$bill_no_field." = ${bill_no} AND dep.".$financial_year_field." = ${financial_year} AND dep.bill_from_comp = ( SELECT c.bill_from_comp FROM wp_shc_customer_site as cs JOIN wp_shc_customers as c ON c.id = cs.customer_id WHERE cs.id = ${site_id} LIMIT 1 )";
 
-		
+
 		if($wpdb->get_row($bill_exist_query)) {
-			$query = "SELECT fc.*, comp.company_id, (CASE WHEN fc.bill_no is null THEN 1 ELSE fc.bill_no + 1 END) next_bill_no FROM (SELECT cs.*, c.bill_from_comp, (SELECT d.bill_no from ${bill_for_table} as d WHERE d.bill_from_comp = c.bill_from_comp AND d.financial_year = ${financial_year} ORDER BY bill_no DESC LIMIT 1 ) as bill_no FROM `wp_shc_customer_site` as cs JOIN wp_shc_customers as c ON c.id = cs.customer_id WHERE cs.id = ${site_id} ) as fc JOIN wp_shc_companies as comp ON comp.id = fc.bill_from_comp";
+			$query = "SELECT fc.*, comp.company_id, (CASE WHEN fc.".$bill_no_field." is null THEN 1 ELSE fc.".$bill_no_field." + 1 END) next_bill_no FROM (SELECT cs.*, c.bill_from_comp, (SELECT d.".$bill_no_field." from ${bill_for_table} as d WHERE d.bill_from_comp = c.bill_from_comp AND d.".$financial_year_field." = ${financial_year} ORDER BY ".$bill_no_field." DESC LIMIT 1 ) as ".$bill_no_field." FROM wp_shc_customer_site as cs JOIN wp_shc_customers as c ON c.id = cs.customer_id WHERE cs.id = ${site_id} ) as fc JOIN wp_shc_companies as comp ON comp.id = fc.bill_from_comp";
 			if( $bill_data = $wpdb->get_row($query) ) {
 
 				$data['bill_from_comp'] = $bill_data->bill_from_comp;
 				$data['bill_no'] = $bill_data->next_bill_no;
-
 				return $data;
 			}
 		} else {
@@ -246,10 +284,13 @@ function billno_check() {
 	$bill_no = isset( $_POST['bill_no'] ) ? $_POST['bill_no'] : 0;
 	$bill_for = isset( $_POST['bill_for'] ) ? $_POST['bill_for'] : 0;
 	$site_id = isset( $_POST['site_id'] ) ? $_POST['site_id'] : 0;
+	
+	$bill_no_field = isset( $_POST['bill_no_field'] ) ? $_POST['bill_no_field'] : 'bill_no';
+	$financial_year_field = isset( $_POST['financial_year_field'] ) ? $_POST['financial_year_field'] : 'financial_year';
 	$financial_date = isset( $_POST['financial_date'] ) ? $_POST['financial_date'] : date('Y-m-d');
 
-	$bill_data = getCorrectBillNumber($bill_no, $site_id, $bill_for, $financial_date);
-	if($bill_data['bill_no'] == $bill_no) {
+	$data = getCorrectBillNumber($bill_no, $site_id, $bill_for, $financial_date, $bill_no_field, $financial_year_field);
+	if($data['bill_no'] == $bill_no) {
 		$data['success'] = true;
 	} else {
 		$data['success'] = false;
@@ -338,6 +379,8 @@ function billNumberText($bill_from_comp = 0, $bill_no = 0, $bill_for = 0) {
 	$data['bill_no'] = 0;
 	if($bill_no && $bill_for) {
 		$data['bill_no'] = $data['company_id'].'/'.$bill_for.' : '.$bill_no;
+	} else {
+		$data['bill_no'] = "N/A";
 	}
 	return $data;
 }

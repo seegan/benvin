@@ -6,6 +6,10 @@
 	$master_data = getMasterDetail($master_id);
 	$master_data = ($master_data) ? $master_data : false;
 
+	$hire_data = false;	
+	$bill_no = 'N/A';
+	$proforma_no = 'N/A';
+
 
 	if($master_data['master_data']) {
 		$customer_id = $master_data['master_data']->customer_id;
@@ -20,9 +24,17 @@
 
 		$billing_date = (isset($bill_data['hiring_data']->bill_date) && $bill_data['hiring_data']->bill_date != '') ? $bill_data['hiring_data']->bill_date : date('Y-m-d');
 		$billing_time = (isset($bill_data['hiring_data']->bill_time)) ? date('H:i', strtotime($bill_data['hiring_data']->bill_time)) : date('H:i');
+
+
+		if(isset($bill_data['hiring_data'])) {
+			$hire_data = $bill_data['hiring_data'];
+			$proforma_no = $hire_data->proforma_no;
+			$bill_no = ($hire_data->bill_status == '2' ) ? $hire_data->bill_no : 'N/A';
+		}
+		$bill_number = billNumberText($bill_data['hiring_data']->bill_from_comp, $bill_no, 'HB');
+		$proforma_number = billNumberText($bill_data['hiring_data']->bill_from_comp, $proforma_no, 'PFA');
 	}
 ?>
-
 <div class="container">
 
 	<div class="row">
@@ -36,11 +48,11 @@
 					
 						<?php
 							if($bill_data['hiring_data']->bill_status == 1) {
-								echo '<div class="bill_ststus_change left-right" data-action="bill_status_update" data-status="2" data-billdate="'.date('Y-m-d').'" data-billid="'.$_GET['bill_id'].'">';
+								echo '<div class="bill_ststus_change left-right" data-action="bill_status_update" data-status="2" data-billdate="'.date('Y-m-d').'" data-billid="'.$_GET['bill_id'].'" data-siteid="'.$site_detail->id.'">';
 								echo '<img class="pay-now" src="'.get_template_directory_uri().'/admin/billing/inc/images/pay-now.png">';
 								echo '</div>';
 							} else {
-								echo '<div class="bill_ststus_change left-right" data-action="bill_status_update" data-status="1" data-billdate="0000-00-00" data-billid="'.$_GET['bill_id'].'">';
+								echo '<div class="bill_ststus_change left-right" data-action="bill_status_update" data-status="1" data-billdate="0000-00-00" data-billid="'.$_GET['bill_id'].'" data-siteid="'.$site_detail->id.'">';
 								echo '<img class="paid" src="'.get_template_directory_uri().'/admin/billing/inc/images/paid.jpg">';
 								echo '</div>';
 							}
@@ -66,10 +78,9 @@
 								echo "<div style='clear:both;'></div>";
 								echo "</div>";
 
-
 								if($bill_data) {
-									$bill_number = billNumberText($bill_data['hiring_data']->bill_from_comp, $bill_data['hiring_data']->bill_no, 'HB');
-									echo "<div class='address-line'>No. ".$bill_number['bill_no']."</div>";
+									echo "<div class='address-line'>Profroma No. ".$proforma_number['bill_no']."</div>";
+									echo "<div class='address-line'>Bill No. ".$bill_number['bill_no']."</div>";
 								}
 							}
 							?>

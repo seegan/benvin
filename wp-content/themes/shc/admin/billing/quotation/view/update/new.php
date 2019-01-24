@@ -10,6 +10,7 @@
 
 	$deposit_date = date('Y-m-d');
 	$deposit_time = date('H:i');
+	$banks = false;
 
 	if(isset($_GET['id'])) {
 		$master_data = getMasterDetail($_GET['id']);
@@ -20,6 +21,7 @@
 			$site_id = $master_data['master_data']->site_id;
 			$customer_detail = getCustomerData($customer_id);
 			$site_detail = getSiteData($site_id, $bill_for = 'shc_quotation', $deposit_date);
+			$banks = getBanksByCompanyId($site_detail->bill_from_comp);
 		}
 	}
 ?>
@@ -103,6 +105,7 @@
 								<input type="hidden" name="site_id" class="site_id" value="<?php echo $site_id; ?>">
 							</div>
 							<div class="address-line">Phone : <span class="site-phone"><?php echo ($site_detail) ? $site_detail->phone_number : ''; ?></span></div>
+							<div class="address-line">GST : <span class="site-phone"><?php echo ($site_detail) ? $site_detail->gst_number : ''; ?></span></div>
 						</div>
 
 
@@ -174,6 +177,10 @@
 											<td>
 												<a href="#" data-repeater-delete="" style="font-size: 16px;font-weight: bold; color: #ff0000;line-height: 30px;">x</a>
 												<input type="hidden" value="Delete">
+												<input type="hidden" name="row_weight_unit" class="row_weight_unit" value="0.00">
+												<span class="weight">0.00 kg</span>
+												<input type="hidden" name="row_weight" class="row_weight" value="0.00">
+													
 											</td>
 										</tr>
 									</tbody>
@@ -201,7 +208,7 @@
 											<td colspan="6" style="text-align: right;">
 												<div class="align-txt">
 													<b>Discount % </b>
-													<input type="text" name="discount_percentage" class="discount_percentage" value="0.00" style="width:45px;height: 30px;" readonly="readonly">
+													<input type="text" name="discount_percentage" class="discount_percentage" value="0.00" style="width:45px;height: 30px;">
 												</div>
 											</td>
 											<td>
@@ -240,7 +247,7 @@
 									<?php if(isset($site_detail->gst_for) && $site_detail->gst_for == 'igst') { ?>
 										<tr class="gst_tr tax_tr"> <!-- gst_tr tax_tr -->
 											<td colspan="6" style="text-align: right;">
-												<div class="align-txt">IGST - 9%: </div>
+												<div class="align-txt">IGST - 18%: </div>
 												<input type="hidden" class="gst_percentage" value="18.00">
 											</td>
 											<td>
@@ -380,15 +387,45 @@
 									
 									<ul>
 										<li>
-											<h2><u>Requirements</u></h2>
-											<textarea class="txtEditor1" name="quotation_txt"><ol><li>Security Deposit - Advance For Rs. <span class="security_amt">0.00</span></li><li>Confermation Throw your Work Order</li><li>6 nos PDC Cheques of Rs. <span class="pdc_amt">0.00</span> payable towards hire charges + GST ( If PDCs given and Honoured on respective dates aditional Discount of 5% is Eligible )</li><li>Agreement and Indemnity Bond to be executed before delivery of materials</li><li>Loading Charges at warehouse Rs. 1000.00</li><li>Unloading and Loading at Site - Your Scope</li><li>Transportation charges up from warehouseat Ponmar to site - Your Scope ( app Weight <span class="mt_weight">0</span> MT )</li><li>Return Transportation charges from Site to our warehouse at Ponmar (Your Scope)</li></ol></textarea> 
+											<h2><u>Requirements</u></h2> Security Deposit <input style="width: 50px;" type="text" class="deposit_times" name="deposit_times" value="3"> Times From <b>Hire Charge</b> <input type="radio" name="deposit_from" style="margin: -2px 0 0;" class="deposit_from" checked value="h"> or <b>GST Include Total</b> <input type="radio" name="deposit_from" style="margin: -2px 0 0;" class="deposit_from" value="g">
+											<br>
+											Loading charge (Weight in MT) <input type="text" name="loading_weight" class="loading_weight" value="0.00" style="width: 70px;"> x <input type="text" name="price_per_ton" class="price_per_ton" value="200" style="width: 50px;"> = <input type="text" name="loading_charge" class="loading_charge" value="0.00" style="width: 70px;"> Loading Charges (User Scope) <input type="checkbox" name="loading_scope" class="loading_scope" style="margin-top:0;"> Un Loading Charges (User Scope) <input type="checkbox" name="unloading_scope" class="unloading_scope" style="margin-top:0;" checked> 
+											<br>
+											Transport Charge <input type="text" name="transport_charge" class="transport_charge" value="0.00" style="width: 100px;"> Transport Charges (User Scope) <input type="checkbox" name="transport_scope" class="transport_scope" style="margin-top:0;">
+											<br>
+											Return Transport Charge <input type="text" name="return_transport_charge" class="return_transport_charge" value="0.00" style="width: 100px;"> Return Transport_charge Charges (User Scope) <input type="checkbox" name="return_transport_scope" class="return_transport_scope" style="margin-top:0;">											
+
+											<textarea class="txtEditor1" name="quotation_txt"><ol><li>Security Deposit - Advance For Rs. <b><span class="security_amt">0.00</span></b></li><li>Confirmation Through your Work Order</li><li>3 nos PDCs of Rs. <b><span class="pdc_amt">0.00</span></b> for monthly(30 days) hire charges. ( Incl - GST) (10% Discount will be given on Hire Charges for Prompt Clearance of the Cheques on Given Dates)</li><li>Agreement and Indemnity Bond to be executed before delivery of materials</li><li>Loading Charges at warehouse <b><span class="loading_scope">Your Scope</span></b></li><li>Unloading and Loading at Site - <b><span class="unloading_scope">Your Scope</span></b></li><li>Transportation charges from our warehouse at Ponmar to your site - <b><span class="transport_scope">Your Scope</span></b> ( Appr Weight <span class="mt_weight">0</span> MT )</li><li>Return Transportation charges from your site to our warehouse at Ponmar <b><span class="return_transport_scope">Your Scope</span></b></li></ol></textarea> 
 										</li>
 										<li>
-											<h2><u>Bank Details</u></h2>
-											<textarea class="txtEditor2" name="bank_details"></textarea> 
+											<h2><u>Banking Details</u></h2>
+
+											<?php
+												if($banks && count($banks) > 1) {
+													echo "<br>";
+													echo "Bank Account ";
+													echo "<select class='company_bank'>";
+													foreach ($banks as $b_value) {
+														echo "<option value='".urldecode ($b_value->bank_detail)."'>".$b_value->bank_name."</option>";
+													}
+													echo "</select>";
+												}
+											?> 
+
+
+											<textarea class="txtEditor2" name="bank_details">
+												<span class="bank_detail_span">
+													<?php 
+														if($banks && count($banks) > 0) {
+															echo str_replace(",", "</br>", $banks[0]->bank_detail);
+														}
+													?>													
+												</span>
+
+											</textarea> 
 										</li>
 									</ul>
-										Amount Payable : <input type="text" name="amount_payable" value="0.00">
+										Amount Payable : <input type="text" name="amount_payable" value="0.00" class="amount_payable">
 									</div>
 								</div>
 							</div>

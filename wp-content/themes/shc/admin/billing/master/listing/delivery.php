@@ -3,6 +3,7 @@
     if(!$deliverylist) {
         $deliverylist = new DeliveryList();
         $ppage = 5;
+        $deliverylist->financial_year = '-';
     }
     $result_args = array(
         'orderby_field' => 'd.delivery_date',

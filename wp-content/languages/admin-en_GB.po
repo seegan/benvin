@@ -1476,37 +1476,37 @@ msgstr "Add New Theme"
 msgid "Add Themes"
 msgstr "Add Themes"
 
-#: wp-admin/theme-editor.php:273
+#: wp-admin/theme-editor.php:275
 msgid "This is a file in your current parent theme."
 msgstr "This is a file in your current parent theme."
 
-#: wp-admin/theme-editor.php:252
+#: wp-admin/theme-editor.php:254
 msgid "Oops, no such file exists! Double check the name and try again, merci."
 msgstr "Oops, no such file exists! Double check the name and try again, merci."
 
 #. translators: %s: file extension
-#: wp-admin/theme-editor.php:226
+#: wp-admin/theme-editor.php:228
 msgid "%s files"
 msgstr "%s files"
 
-#: wp-admin/theme-editor.php:222
+#: wp-admin/theme-editor.php:224
 msgctxt "Theme stylesheets in theme editor"
 msgid "Styles"
 msgstr "Styles"
 
-#: wp-admin/theme-editor.php:212
+#: wp-admin/theme-editor.php:214
 msgid "This child theme inherits templates from a parent theme, %s."
 msgstr "This child theme inherits templates from a parent theme, %s."
 
-#: wp-admin/theme-editor.php:210
+#: wp-admin/theme-editor.php:212
 msgid "Templates"
 msgstr "Templates"
 
-#: wp-admin/theme-editor.php:192
+#: wp-admin/theme-editor.php:194
 msgid "This theme is broken."
 msgstr "This theme is broken."
 
-#: wp-admin/theme-editor.php:173
+#: wp-admin/theme-editor.php:175
 msgid "Select theme to edit:"
 msgstr "Select theme to edit:"
 
@@ -1969,11 +1969,11 @@ msgstr "Plugins hook into WordPress to extend its functionality with custom feat
 msgid "Add Plugins"
 msgstr "Add Plugins"
 
-#: wp-admin/plugin-editor.php:292 wp-admin/theme-editor.php:279
+#: wp-admin/plugin-editor.php:292 wp-admin/theme-editor.php:281
 msgid "You need to make this file writable before you can save your changes. See <a href=\"https://codex.wordpress.org/Changing_File_Permissions\">the Codex</a> for more information."
 msgstr "You need to make this file writable before you can save your changes. See <a href=\"https://codex.wordpress.org/Changing_File_Permissions\">the Codex</a> for more information."
 
-#: wp-admin/plugin-editor.php:287 wp-admin/theme-editor.php:277
+#: wp-admin/plugin-editor.php:287 wp-admin/theme-editor.php:279
 msgid "Update File"
 msgstr "Update File"
 
@@ -1985,11 +1985,11 @@ msgstr "Update File and Attempt to Reactivate"
 msgid "<strong>Warning:</strong> Making changes to active plugins is not recommended. If your changes cause a fatal error, the plugin will be automatically deactivated."
 msgstr "<strong>Warning:</strong> Making changes to active plugins is not recommended. If your changes cause a fatal error, the plugin will be automatically deactivated."
 
-#: wp-admin/plugin-editor.php:275 wp-admin/theme-editor.php:266
+#: wp-admin/plugin-editor.php:275 wp-admin/theme-editor.php:268
 msgid "Look Up"
 msgstr "Look Up"
 
-#: wp-admin/plugin-editor.php:275 wp-admin/theme-editor.php:264
+#: wp-admin/plugin-editor.php:275 wp-admin/theme-editor.php:266
 msgid "Documentation:"
 msgstr "Documentation:"
 
@@ -6152,113 +6152,114 @@ msgstr "Scale Image"
 msgid "Image data does not exist. Please re-upload the image."
 msgstr "Image data does not exist. Please re-upload the image."
 
-#: wp-admin/includes/file.php:1264
+#: wp-admin/includes/file.php:1287
 msgid "Proceed"
 msgstr "Proceed"
 
-#: wp-admin/includes/file.php:1252
+#: wp-admin/includes/file.php:1274
 msgid "Enter the location on the server where the public and private keys are located. If a passphrase is needed, enter that in the password field above."
 msgstr "Enter the location on the server where the public and private keys are located. If a passphrase is needed, enter that in the password field above."
 
-#: wp-admin/includes/file.php:1249
+#: wp-admin/includes/file.php:1271
 msgid "Private Key:"
 msgstr "Private Key:"
 
-#: wp-admin/includes/file.php:1245
+#: wp-admin/includes/file.php:1267
 msgid "Public Key:"
 msgstr "Public Key:"
 
-#: wp-admin/includes/file.php:1243
+#: wp-admin/includes/file.php:1265
 msgid "Authentication Keys"
 msgstr "Authentication Keys"
 
-#: wp-admin/includes/file.php:1223
+#: wp-admin/includes/file.php:1245
 msgid "Connection Type"
 msgstr "Connection Type"
 
-#: wp-admin/includes/file.php:1219
+#: wp-admin/includes/file.php:1241
 msgid "This password will not be stored on the server."
 msgstr "This password will not be stored on the server."
 
-#: wp-admin/includes/file.php:1207
+#: wp-admin/includes/file.php:1229
 msgid "example: www.wordpress.org"
 msgstr "example: www.wordpress.org"
 
-#: wp-admin/includes/file.php:1206
+#: wp-admin/includes/file.php:1228
 msgid "Hostname"
 msgstr "Hostname"
 
-#: wp-admin/includes/file.php:1203
+#: wp-admin/includes/file.php:1225
 msgid "If you do not remember your credentials, you should contact your web host."
 msgstr "If you do not remember your credentials, you should contact your web host."
 
-#: wp-admin/includes/file.php:1199
+#: wp-admin/includes/file.php:1221
 msgid "FTP Password"
 msgstr "FTP Password"
 
-#: wp-admin/includes/file.php:1198
+#: wp-admin/includes/file.php:1220
 msgid "FTP Username"
 msgstr "FTP Username"
 
-#: wp-admin/includes/file.php:1197
+#: wp-admin/includes/file.php:1219
 msgid "Please enter your FTP credentials to proceed."
 msgstr "Please enter your FTP credentials to proceed."
 
-#: wp-admin/includes/file.php:1195
+#: wp-admin/includes/file.php:1217
 msgid "FTP/SSH Password"
 msgstr "FTP/SSH Password"
 
-#: wp-admin/includes/file.php:1194
+#: wp-admin/includes/file.php:1216
 msgid "FTP/SSH Username"
 msgstr "FTP/SSH Username"
 
-#: wp-admin/includes/file.php:1193
+#: wp-admin/includes/file.php:1215
 msgid "Please enter your FTP or SSH credentials to proceed."
 msgstr "Please enter your FTP or SSH credentials to proceed."
 
-#: wp-admin/includes/file.php:1189
+#: wp-admin/includes/file.php:1211
 msgid "To perform the requested action, WordPress needs to access your web server."
 msgstr "To perform the requested action, WordPress needs to access your web server."
 
-#: wp-admin/includes/file.php:1184
+#: wp-admin/includes/file.php:1206
 msgid "Connection Information"
 msgstr "Connection Information"
 
-#: wp-admin/includes/file.php:1158
+#: wp-admin/includes/file.php:1180
 msgid "SSH2"
 msgstr "SSH2"
 
-#: wp-admin/includes/file.php:1156
+#: wp-admin/includes/file.php:1178
 msgid "FTPS (SSL)"
 msgstr "FTPS (SSL)"
 
-#: wp-admin/includes/file.php:1154
+#: wp-admin/includes/file.php:1176
 msgid "FTP"
 msgstr "FTP"
 
-#: wp-admin/includes/file.php:1146
+#: wp-admin/includes/file.php:1168
 msgid "<strong>ERROR:</strong> There was an error connecting to the server, Please verify the settings are correct."
 msgstr "<strong>ERROR:</strong> There was an error connecting to the server, Please verify the settings are correct."
 
-#: wp-admin/includes/file.php:753
+#: wp-admin/includes/file.php:757
 msgid "Empty archive."
 msgstr "Empty archive."
 
-#: wp-admin/includes/file.php:712 wp-admin/includes/file.php:811
-#: wp-admin/includes/file.php:846 wp-admin/includes/update-core.php:1057
+#: wp-admin/includes/file.php:716 wp-admin/includes/file.php:819
+#: wp-admin/includes/file.php:854 wp-admin/includes/update-core.php:1057
 #: wp-admin/includes/update-core.php:1168
 msgid "Could not copy file."
 msgstr "Could not copy file."
 
-#: wp-admin/includes/file.php:709
+#: wp-admin/includes/file.php:651 wp-admin/includes/file.php:713
+#: wp-admin/includes/file.php:815
 msgid "Could not extract file from archive."
 msgstr "Could not extract file from archive."
 
-#: wp-admin/includes/file.php:645 wp-admin/includes/file.php:699
+#: wp-admin/includes/file.php:645 wp-admin/includes/file.php:703
 msgid "Could not retrieve file from archive."
 msgstr "Could not retrieve file from archive."
 
-#: wp-admin/includes/file.php:639 wp-admin/includes/file.php:750
+#: wp-admin/includes/file.php:639 wp-admin/includes/file.php:754
 msgid "Incompatible Archive."
 msgstr "Incompatible Archive."
 
@@ -6938,8 +6939,8 @@ msgstr "Enabling Maintenance mode&#8230;"
 msgid "The package could not be installed."
 msgstr "The package could not be installed."
 
-#: wp-admin/includes/class-wp-upgrader.php:170 wp-admin/includes/file.php:692
-#: wp-admin/includes/file.php:798 wp-admin/includes/file.php:851
+#: wp-admin/includes/class-wp-upgrader.php:170 wp-admin/includes/file.php:696
+#: wp-admin/includes/file.php:802 wp-admin/includes/file.php:859
 #: wp-admin/includes/update-core.php:1173
 msgid "Could not create directory."
 msgstr "Could not create directory."
@@ -8704,8 +8705,8 @@ msgstr "Due to an error during updating, WordPress has rolled back to your previ
 msgid "Attempting to roll back to previous version."
 msgstr "Attempting to roll back to previous version."
 
-#: wp-admin/includes/class-core-upgrader.php:36 wp-admin/includes/file.php:669
-#: wp-admin/includes/file.php:775
+#: wp-admin/includes/class-core-upgrader.php:36 wp-admin/includes/file.php:673
+#: wp-admin/includes/file.php:779
 msgid "Could not copy files. You may have run out of disk space."
 msgstr "Could not copy files. You may have run out of disk space."
 
@@ -10489,7 +10490,7 @@ msgid "In Response To"
 msgstr "In Response To"
 
 #: wp-admin/comment.php:149 wp-admin/plugins.php:298 wp-admin/plugins.php:304
-#: wp-admin/theme-editor.php:272
+#: wp-admin/theme-editor.php:274
 msgid "Caution:"
 msgstr "Caution:"
 
@@ -10686,220 +10687,222 @@ msgstr "Thank you for creating with <a href=\"%s\">WordPress</a>."
 
 #. translators: 1: WordPress version number, 2: plural number of bugs. Singular
 #. security issue.
-#: wp-admin/about.php:280
+#: wp-admin/about.php:290
 msgid "<strong>Version %1$s</strong> addressed a security issue and fixed %2$s bug."
 msgid_plural "<strong>Version %1$s</strong> addressed a security issue and fixed %2$s bugs."
 msgstr[0] "<strong>Version %1$s</strong> addressed a security issue and fixed %2$s bug."
 msgstr[1] "<strong>Version %1$s</strong> addressed a security issue and fixed %2$s bugs."
 
 #. translators: %s: WordPress version number
-#: wp-admin/about.php:271
+#: wp-admin/about.php:48 wp-admin/about.php:281
 msgid "<strong>Version %s</strong> addressed one security issue."
 msgstr "<strong>Version %s</strong> addressed one security issue."
 
-#: wp-admin/about.php:267
+#: wp-admin/about.php:277
 msgid "Maintenance and Security Release"
 msgstr "Maintenance and Security Release"
 
-#: wp-admin/about.php:265
+#: wp-admin/about.php:275
 msgid "Security Releases"
 msgstr "Security Releases"
 
-#: wp-admin/about.php:264
+#: wp-admin/about.php:274
 msgid "Security Release"
 msgstr "Security Release"
 
-#: wp-admin/about.php:262
+#: wp-admin/about.php:272
 msgid "Maintenance Releases"
 msgstr "Maintenance Releases"
 
-#: wp-admin/about.php:261
+#: wp-admin/about.php:271
 msgid "Maintenance Release"
 msgstr "Maintenance Release"
 
-#: wp-admin/about.php:250
+#: wp-admin/about.php:260
 msgid "Go to Dashboard"
 msgstr "Go to Dashboard"
 
-#: wp-admin/about.php:250
+#: wp-admin/about.php:260
 msgid "Go to Dashboard &rarr; Home"
 msgstr "Go to Dashboard &rarr; Home"
 
-#: wp-admin/about.php:247
+#: wp-admin/about.php:257
 msgid "Return to Dashboard &rarr; Updates"
 msgstr "Return to Dashboard &rarr; Updates"
 
-#: wp-admin/about.php:247
+#: wp-admin/about.php:257
 msgid "Return to Updates"
 msgstr "Return to Updates"
 
-#: wp-admin/about.php:236
+#: wp-admin/about.php:246
 msgid "Customize changesets make changes in the customizer persistent, like autosave drafts. They also make exciting new features like starter content possible."
 msgstr "Customise changesets make changes in the customiser persistent, like autosave drafts. They also make exciting new features like starter content possible."
 
-#: wp-admin/about.php:235
+#: wp-admin/about.php:245
 msgid "Customize Changesets"
 msgstr "Customise Changesets"
 
 #. translators: 1: register_setting(), 2:
 #. https://make.wordpress.org/core/2016/10/26/registering-your-settings-in-wordpress-4-7/
-#: wp-admin/about.php:228
+#: wp-admin/about.php:238
 msgid "%1$s <a href=\"%2$s\">has been enhanced</a> to include type, description, and REST API visibility."
 msgstr "%1$s <a href=\"%2$s\">has been enhanced</a> to include type, description, and REST API visibility."
 
-#: wp-admin/about.php:224
+#: wp-admin/about.php:234
 msgid "Settings Registration API"
 msgstr "Settings Registration API"
 
 #. translators: %s:
 #. https://make.wordpress.org/core/2016/09/08/wp_hook-next-generation-actions-and-filters/
-#: wp-admin/about.php:218
+#: wp-admin/about.php:228
 msgid "The code that lies beneath actions and filters has been overhauled and modernized, fixing bugs along the way."
 msgstr "The code that lies beneath actions and filters has been overhauled and modernised, fixing bugs along the way."
 
-#: wp-admin/about.php:208
+#: wp-admin/about.php:218
 msgid "List tables, now with more than bulk edit and delete."
 msgstr "List tables, now with more than bulk edit and delete."
 
-#: wp-admin/about.php:207
+#: wp-admin/about.php:217
 msgid "Custom Bulk Actions"
 msgstr "Custom Bulk Actions"
 
 #. translators: %s:
 #. https://make.wordpress.org/core/2016/09/09/new-functions-hooks-and-behaviour-for-theme-developers-in-wordpress-4-7/
-#: wp-admin/about.php:201
+#: wp-admin/about.php:211
 msgid "WordPress 4.7 includes <a href=\"%s\">new functions, hooks, and behavior</a> for theme developers."
 msgstr "WordPress 4.7 includes <a href=\"%s\">new functions, hooks, and behaviour</a> for theme developers."
 
-#: wp-admin/about.php:197
+#: wp-admin/about.php:207
 msgid "More Theme API Goodies"
 msgstr "More Theme API Goodies"
 
-#: wp-admin/about.php:194
+#: wp-admin/about.php:204
 msgid "By opening up the page template functionality to all post types, theme developers have even more flexibility with the WordPress template hierarchy."
 msgstr "By opening up the page template functionality to all post types, theme developers have even more flexibility with the WordPress template hierarchy."
 
-#: wp-admin/about.php:193
+#: wp-admin/about.php:203
 msgid "Post Type Templates"
 msgstr "Post Type Templates"
 
 #. translators: %s: smiling face with smiling eyes emoji
-#: wp-admin/about.php:186
+#: wp-admin/about.php:196
 msgid "Even More Developer Happiness %s"
 msgstr "Even More Developer Happiness %s"
 
 #. translators: %s: https://developer.wordpress.org/rest-api/
-#: wp-admin/about.php:174
+#: wp-admin/about.php:184
 msgid "Content endpoints provide machine-readable external access to your WordPress site with a clear, standards-driven interface, paving the way for new and innovative methods of interacting with sites through plugins, themes, apps, and beyond. Ready to get started with development? <a href=\"%s\">Check out the REST API reference.</a>"
 msgstr "Content endpoints provide machine-readable external access to your WordPress site with a clear, standards-driven interface, paving the way for new and innovative methods of interacting with sites through plugins, themes, apps, and beyond. Ready to get started with development? <a href=\"%s\">Check out the REST API reference.</a>"
 
-#: wp-admin/about.php:169
+#: wp-admin/about.php:179
 msgid "WordPress 4.7 comes with REST API endpoints for posts, comments, terms, users, meta, and settings."
 msgstr "WordPress 4.7 comes with REST API endpoints for posts, comments, terms, users, meta, and settings."
 
-#: wp-admin/about.php:168
+#: wp-admin/about.php:178
 msgid "Introducing REST API Content Endpoints"
 msgstr "Introducing REST API Content Endpoints"
 
-#: wp-admin/about.php:161
+#: wp-admin/about.php:171
 msgid "Just because your site is in one language doesn&#8217;t mean that everybody helping manage it prefers that language for their admin. Add more languages to your site and a user language option will show up in your user&#8217;s profiles."
 msgstr "Just because your site is in one language doesn&#8217;t mean that everybody helping manage it prefers that language for their admin. Add more languages to your site and a user language option will show up in your user&#8217;s profiles."
 
-#: wp-admin/about.php:159
+#: wp-admin/about.php:169
 msgid "Dashboard in your language"
 msgstr "Dashboard in your language"
 
-#: wp-admin/about.php:156
+#: wp-admin/about.php:166
 msgid "Managing your document collection is easier with WordPress 4.7. Uploading PDFs will generate thumbnail images so you can more easily distinguish between all your documents."
 msgstr "Managing your document collection is easier with WordPress 4.7. Uploading PDFs will generate thumbnail images so you can more easily distinguish between all your documents."
 
-#: wp-admin/about.php:154
+#: wp-admin/about.php:164
 msgid "PDF Thumbnail Previews"
 msgstr "PDF Thumbnail Previews"
 
-#: wp-admin/about.php:146
+#: wp-admin/about.php:156
 msgid "Sometimes you just need a few visual tweaks to make your site perfect. WordPress 4.7 allows you to add custom CSS and instantly see how your changes affect your site. The live preview allows you to work quickly without page refreshes slowing you down."
 msgstr "Sometimes you just need a few visual tweaks to make your site perfect. WordPress 4.7 allows you to add custom CSS and instantly see how your changes affect your site. The live preview allows you to work quickly without page refreshes slowing you down."
 
-#: wp-admin/about.php:141
+#: wp-admin/about.php:151
 msgid "Many menus for sites contain links to the pages of your site, but what happens when you don&#8217;t have any pages yet? Now you can add new pages while building menus instead of leaving the customizer and abandoning your changes. Once you&#8217;ve published your customizations, you&#8217;ll have new pages ready for you to fill with content."
 msgstr "Many menus for sites contain links to the pages of your site, but what happens when you don&#8217;t have any pages yet? Now you can add new pages while building menus instead of leaving the customiser and abandoning your changes. Once you&#8217;ve published your customisations, you&#8217;ll have new pages ready for you to fill with content."
 
-#: wp-admin/about.php:139
+#: wp-admin/about.php:149
 msgid "Smoother Menu Building"
 msgstr "Smoother Menu Building"
 
-#: wp-admin/about.php:133
+#: wp-admin/about.php:143
 msgid "Sometimes a big atmospheric video as a moving header image is just what you need to showcase your wares; go ahead and try it out with Twenty Seventeen. Need some video inspiration? Try searching for sites with video headers available for download and use."
 msgstr "Sometimes a big atmospheric video as a moving header image is just what you need to showcase your wares; go ahead and try it out with Twenty Seventeen. Need some video inspiration? Try searching for sites with video headers available for download and use."
 
-#: wp-admin/about.php:123
+#: wp-admin/about.php:133
 msgid "Video Headers"
 msgstr "Video Headers"
 
-#: wp-admin/about.php:120
+#: wp-admin/about.php:130
 msgid "Visible icons appear to show you which parts of your site can be customized while live previewing. Click on a shortcut and get straight to editing. Paired with starter content, getting started with customizing your site is faster than ever."
 msgstr "Visible icons appear to show you which parts of your site can be customised while live previewing. Click on a shortcut and get straight to editing. Paired with starter content, getting started with customising your site is faster than ever."
 
-#: wp-admin/about.php:110
+#: wp-admin/about.php:120
 msgid "Edit Shortcuts"
 msgstr "Edit Shortcuts"
 
-#: wp-admin/about.php:93
+#: wp-admin/about.php:103
 msgid "To help give you a solid base to build from, individual themes can provide starter content that appears when you go to customize your brand new site. This can range from placing a business information widget in the best location to providing a sample menu with social icon links to a static front page complete with beautiful images. Don&#8217;t worry - nothing new will appear on the live site until you&#8217;re ready to save and publish your initial theme setup."
 msgstr "To help give you a solid base to build from, individual themes can provide starter content that appears when you go to customise your brand new site. This can range from placing a business information widget in the best location to providing a sample menu with social icon links to a static front page complete with beautiful images. Don&#8217;t worry - nothing new will appear on the live site until you&#8217;re ready to save and publish your initial theme setup."
 
-#: wp-admin/about.php:92
+#: wp-admin/about.php:102
 msgid "Theme Starter Content"
 msgstr "Theme Starter Content"
 
-#: wp-admin/about.php:87
+#: wp-admin/about.php:97
 msgid "WordPress 4.7 adds new features to the customizer to help take you through the initial setup of a theme, with non-destructive live previews of all your changes in one uninterrupted workflow."
 msgstr "WordPress 4.7 adds new features to the customiser to help take you through the initial setup of a theme, with non-destructive live previews of all your changes in one uninterrupted workflow."
 
-#: wp-admin/about.php:86
+#: wp-admin/about.php:96
 msgid "Your Site, Your Way"
 msgstr "Your Site, Your Way"
 
-#: wp-admin/about.php:80
+#: wp-admin/about.php:90
 msgid "Twenty Seventeen focuses on business sites and features a customizable front page with multiple sections. Personalize it with widgets, navigation, social menus, a logo, custom colors, and more. Our default theme for 2017 works great in many languages, on any device, and for a wide range of users."
 msgstr "Twenty Seventeen focuses on business sites and features a customisable front page with multiple sections. Personalise it with widgets, navigation, social menus, a logo, custom colours, and more. Our default theme for 2017 works great in many languages, on any device, and for a wide range of users."
 
-#: wp-admin/about.php:74
+#: wp-admin/about.php:84
 msgid "A brand new default theme brings your site to life with immersive featured images and video headers."
 msgstr "A brand new default theme brings your site to life with immersive featured images and video headers."
 
-#: wp-admin/about.php:73
+#: wp-admin/about.php:83
 msgid "Presenting Twenty Seventeen"
 msgstr "Presenting Twenty Seventeen"
 
 #. translators: %s: WordPress version number
-#: wp-admin/about.php:56 wp-admin/about.php:273
+#: wp-admin/about.php:51 wp-admin/about.php:66 wp-admin/about.php:283
 msgid "<strong>Version %s</strong> addressed some security issues."
 msgstr "<strong>Version %s</strong> addressed some security issues."
 
 #. translators: 1: WordPress version number, 2: plural number of bugs. More
 #. than one security issue.
-#: wp-admin/about.php:52 wp-admin/about.php:59 wp-admin/about.php:284
+#: wp-admin/about.php:54 wp-admin/about.php:62 wp-admin/about.php:69
+#: wp-admin/about.php:294
 msgid "<strong>Version %1$s</strong> addressed some security issues and fixed %2$s bug."
 msgid_plural "<strong>Version %1$s</strong> addressed some security issues and fixed %2$s bugs."
 msgstr[0] "<strong>Version %1$s</strong> addressed some security issues and fixed %2$s bug."
 msgstr[1] "<strong>Version %1$s</strong> addressed some security issues and fixed %2$s bugs."
 
 #. translators: %s: Codex URL
-#: wp-admin/about.php:50 wp-admin/about.php:54 wp-admin/about.php:57
-#: wp-admin/about.php:61 wp-admin/about.php:288
+#: wp-admin/about.php:49 wp-admin/about.php:52 wp-admin/about.php:56
+#: wp-admin/about.php:60 wp-admin/about.php:64 wp-admin/about.php:67
+#: wp-admin/about.php:71 wp-admin/about.php:298
 msgid "For more information, see <a href=\"%s\">the release notes</a>."
 msgstr "For more information, see <a href=\"%s\">the release notes</a>."
 
 #. translators: 1: WordPress version number, 2: plural number of bugs.
-#: wp-admin/about.php:48 wp-admin/about.php:276
+#: wp-admin/about.php:58 wp-admin/about.php:286
 msgid "<strong>Version %1$s</strong> addressed %2$s bug."
 msgid_plural "<strong>Version %1$s</strong> addressed %2$s bugs."
 msgstr[0] "<strong>Version %1$s</strong> addressed %2$s bug."
 msgstr[1] "<strong>Version %1$s</strong> addressed %2$s bugs."
 
-#: wp-admin/about.php:47 wp-admin/about.php:268
+#: wp-admin/about.php:47 wp-admin/about.php:278
 msgid "Maintenance and Security Releases"
 msgstr "Maintenance and Security Releases"
 

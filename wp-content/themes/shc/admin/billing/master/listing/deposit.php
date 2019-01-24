@@ -3,6 +3,7 @@
     if(!$depositlist) { 
         $depositlist = new DepositList();
         $ppage = 5;
+        $depositlist->financial_year = '-';
     }
     $result_args = array(
         'orderby_field' => 'd.deposit_date',

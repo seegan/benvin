@@ -52,7 +52,7 @@ function create_delivery() {
 			foreach ($params['delivery_detail'] as $value) {
 
 				if($value['lot_id_orig'] != 0 && $value['lot_id_orig'] != '') {
-					$wpdb->insert($delivery_detail_table, array('delivery_id' => $delivery_id, 'master_id' => $master_id, 'lot_id' => $value['lot_id_orig'], 'qty' => $value['qty'], 'rate_per_unit' => $value['unit_price'], 'delivery_date' => $delivery_date, 'last_billed_date' => $last_billed_date ));
+					$wpdb->insert($delivery_detail_table, array('delivery_id' => $delivery_id, 'master_id' => $master_id, 'lot_id' => $value['lot_id_orig'], 'qty' => $value['qty'], 'rate_per_unit' => $value['unit_price'], 'minimum_bill_day' => $value['minimum_bill_day'], 'delivery_date' => $delivery_date, 'last_billed_date' => $last_billed_date ));
 				}
 
 			}
@@ -82,13 +82,13 @@ function create_delivery() {
 
 					if($u_value['lot_id_orig'] != 0 && $u_value['lot_id_orig'] != '') {
 
-						$wpdb->update($delivery_detail_table, array('delivery_id' => $delivery_id, 'master_id' => $master_id, 'lot_id' => $u_value['lot_id_orig'], 'qty' => $u_value['qty'], 'rate_per_unit' => $u_value['unit_price'], 'delivery_date' => $delivery_date, 'last_billed_date' => $last_billed_date, 'active' => 1 ), array('id' => $u_value['delivery_detail_id']));
+						$wpdb->update($delivery_detail_table, array('delivery_id' => $delivery_id, 'master_id' => $master_id, 'lot_id' => $u_value['lot_id_orig'], 'qty' => $u_value['qty'], 'rate_per_unit' => $u_value['unit_price'], 'minimum_bill_day' => $u_value['minimum_bill_day'], 'delivery_date' => $delivery_date, 'last_billed_date' => $last_billed_date, 'active' => 1 ), array('id' => $u_value['delivery_detail_id']));
 					}
 
 				} else {
 
 					if($u_value['lot_id_orig'] != 0 && $u_value['lot_id_orig'] != '') {
-						$wpdb->insert($delivery_detail_table, array('delivery_id' => $delivery_id, 'master_id' => $master_id, 'lot_id' => $u_value['lot_id_orig'], 'qty' => $u_value['qty'], 'rate_per_unit' => $u_value['unit_price'], 'delivery_date' => $delivery_date, 'last_billed_date' => $last_billed_date ));
+						$wpdb->insert($delivery_detail_table, array('delivery_id' => $delivery_id, 'master_id' => $master_id, 'lot_id' => $u_value['lot_id_orig'], 'qty' => $u_value['qty'], 'rate_per_unit' => $u_value['unit_price'], 'minimum_bill_day' => $u_value['minimum_bill_day'], 'delivery_date' => $delivery_date, 'last_billed_date' => $last_billed_date ));
 					}
 
 				}

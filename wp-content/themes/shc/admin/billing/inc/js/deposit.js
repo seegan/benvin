@@ -136,7 +136,7 @@ function populate_select2(this_data = '', v) {
             var results = [];
             return {
                 results: jQuery.map(data.items, function(obj) {
-                    return { id: obj.id, lot_number:obj.lot_no, product_name: obj.product_name, product_type:obj.product_type, unit_price:obj.unit_price};
+                    return { id: obj.id, lot_number:obj.lot_no, product_name: obj.product_name, product_type:obj.product_type, unit_price:obj.unit_price, minimum_bill_day:obj.minimum_bill_day, weight:obj.weight };
                 })
             };
           },
@@ -156,7 +156,11 @@ function populate_select2(this_data = '', v) {
     var current_sel = jQuery(this).parent().parent();
     current_sel.find('.unit_price_txt').text(e.params.data.unit_price);
     current_sel.find('.unit_price').val(e.params.data.unit_price);
+    current_sel.find('.minimum_bill_day_spl').val(e.params.data.minimum_bill_day);
     current_sel.find('.lot_id_orig').val(e.params.data.id);
+
+
+    current_sel.find('.row_weight_unit').val(e.params.data.weight);
 
     processDepositRow(current_sel);
     processDepositFull();
@@ -279,14 +283,15 @@ function populate_customer_select(v = 'new') {
       templateSelection: formatCustomerState1
   }).on("select2:select", function (e) {
 
-
-  jQuery(".customer_name option[value!="+jQuery(this).val()+"]").remove()
-
+    jQuery(".customer_name option[value!="+jQuery(this).val()+"]").remove()
     jQuery(".site_name").val(null).trigger("change");
-
-
     jQuery(this).parents('#create_master').find('.address-txt').text(e.params.data.address);
     jQuery(this).parents('#create_master').find('.customer_id').val(e.params.data.id);
+
+    var in_page =  (jQuery('.in_page').length == 1) ? jQuery('.in_page').val() : false;
+    if(in_page) {
+      jQuery('.create_master').prop("disabled", true);
+    }
 
   });
 
@@ -341,8 +346,67 @@ function populate_site_select(v = 'new') {
     jQuery(this).parents('#create_master').find('.site_id').val(e.params.data.id);
 
 
+    var in_page =  (jQuery('.in_page').length == 1) ? jQuery('.in_page').val() : false;
+    if(in_page) {
+      window[in_page](e.params.data.id);
+    }
+
   });
 
+}
+
+function master_duplicate_check(site_id) {
+
+  jQuery('.create_master').prop("disabled", true);
+
+  jQuery('.submit_loder').css('display','block');
+  var company_id = jQuery('.customer_name').val();
+
+  jQuery.ajax({
+    type: "POST",
+    url: frontendajax.ajaxurl,
+    data: {
+      action : 'check_master_duplicate',
+      company_id : company_id,
+      site_id : site_id
+    },
+    success: function (data) {
+      jQuery('.submit_loder').css('display', 'none');
+      
+
+
+      if(data == "1") {
+        jQuery('.print-box').html('Duplicat Found, Do you want to add this?');
+        jQuery( ".print-box" ).dialog({
+            resizable: false,
+            height: "auto",
+            width: 400,
+            modal: true,
+            title: "Duplicate Found!",
+            buttons: {
+                Yes: function() {
+                  jQuery( this ).dialog( "close" );
+                  jQuery('.create_master').prop("disabled", false);
+                },
+                No: function() {
+                  jQuery( this ).dialog( "close" );
+                  jQuery('.create_master').prop("disabled", true);
+                  jQuery('.customer_name').val(null).trigger('change');
+                  jQuery('.site_name').val(null).trigger('change');
+                }
+            }
+        });
+      } else {
+        jQuery('.create_master').prop("disabled", false);
+      }
+
+
+
+
+
+
+    }
+  });
 }
 
 
